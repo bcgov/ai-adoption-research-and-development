@@ -1,0 +1,5 @@
+label_name,bbox_x,bbox_y,bbox_width,bbox_height,image_name,image_width,image_height
+sin,714,1841,611,114,template.jpg,2610,3348
+name,126,1759,1196,98,template.jpg,2610,3348
+need_assistance_yes,761,626,70,70,template.jpg,2610,3348
+need_assistance_no,897,636,57,57,template.jpg,2610,3348
