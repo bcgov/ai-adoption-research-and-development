@@ -1,7 +1,7 @@
 {
   "name": {
-    "text": "Jennifer dee",
-    "confidence": 0.8890891075134277,
+    "text": "John Smith",
+    "confidence": 0.964957594871521,
     "bbox": {
       "x": 126,
       "y": 1764,
@@ -10,8 +10,8 @@
     }
   },
   "explain_changes": {
-    "text": "No changes, Continne to receive Cpp. OAS, Private pension",
-    "confidence": 0.8857928216457367,
+    "text": "Besan looking for work",
+    "confidence": 0.9081571698188782,
     "bbox": {
       "x": 128,
       "y": 1333,
@@ -20,8 +20,8 @@
     }
   },
   "signature": {
-    "text": "Jdee",
-    "confidence": 0.9404885172843933,
+    "text": "In",
+    "confidence": 0.4508526921272278,
     "bbox": {
       "x": 126,
       "y": 1672,
@@ -30,8 +30,8 @@
     }
   },
   "date": {
-    "text": "2025-Ju1-13",
-    "confidence": 0.9044797420501709,
+    "text": "2025-No√-12",
+    "confidence": 0.9171895384788513,
     "bbox": {
       "x": 870,
       "y": 1670,
@@ -40,8 +40,8 @@
     }
   },
   "phone": {
-    "text": "234-556-7890",
-    "confidence": 0.9842522740364075,
+    "text": "123-450-7789",
+    "confidence": 0.9541082382202148,
     "bbox": {
       "x": 132,
       "y": 1853,
@@ -50,8 +50,8 @@
     }
   },
   "sin": {
-    "text": "235-678-012",
-    "confidence": 0.9679108262062073,
+    "text": "123-456-789",
+    "confidence": 0.9156627058982849,
     "bbox": {
       "x": 719,
       "y": 1855,
@@ -60,8 +60,8 @@
     }
   },
   "spouse_signature": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "Masth",
+    "confidence": 0.611167311668396,
     "bbox": {
       "x": 1319,
       "y": 1672,
@@ -70,8 +70,8 @@
     }
   },
   "spouse_date": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "2025-Nov-12",
+    "confidence": 0.8393617272377014,
     "bbox": {
       "x": 2016,
       "y": 1666,
@@ -80,8 +80,8 @@
     }
   },
   "spouse_name": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "Maria Smith",
+    "confidence": 0.9344865381717682,
     "bbox": {
       "x": 1315,
       "y": 1760,
@@ -90,8 +90,8 @@
     }
   },
   "spouse_phone": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "456-789-012",
+    "confidence": 0.973344087600708,
     "bbox": {
       "x": 1890,
       "y": 1849,
@@ -100,8 +100,8 @@
     }
   },
   "income1": {
-    "text": "2,546",
-    "confidence": 0.9172922372817993,
+    "text": "0",
+    "confidence": 0.9129388332366943,
     "bbox": {
       "x": 1948,
       "y": 525,
@@ -110,8 +110,8 @@
     }
   },
   "income2": {
-    "text": "d30",
-    "confidence": 0.8030229210853577,
+    "text": "0",
+    "confidence": 0.7859007716178894,
     "bbox": {
       "x": 1953,
       "y": 587,
@@ -120,8 +120,8 @@
     }
   },
   "income3": {
-    "text": "6 0",
-    "confidence": 0.49962926656007767,
+    "text": "0",
+    "confidence": 0.9743821620941162,
     "bbox": {
       "x": 1953,
       "y": 642,
@@ -130,8 +130,8 @@
     }
   },
   "income4": {
-    "text": "0.0",
-    "confidence": 0.0,
+    "text": "G O",
+    "confidence": 0.46730367839336395,
     "bbox": {
       "x": 1956,
       "y": 700,
@@ -140,8 +140,8 @@
     }
   },
   "income5": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "0",
+    "confidence": 0.9272662997245789,
     "bbox": {
       "x": 1954,
       "y": 753,
@@ -150,8 +150,8 @@
     }
   },
   "income6": {
-    "text": "none",
-    "confidence": 0.9927854537963867,
+    "text": "",
+    "confidence": 0.0,
     "bbox": {
       "x": 1953,
       "y": 814,
@@ -160,8 +160,8 @@
     }
   },
   "income7": {
-    "text": "N/A",
-    "confidence": 0.0,
+    "text": "0",
+    "confidence": 0.943569004535675,
     "bbox": {
       "x": 1951,
       "y": 869,
@@ -170,8 +170,8 @@
     }
   },
   "income8": {
-    "text": "O",
-    "confidence": 0.5832171440124512,
+    "text": "0",
+    "confidence": 0.893149197101593,
     "bbox": {
       "x": 1953,
       "y": 931,
@@ -181,7 +181,7 @@
   },
   "income9": {
     "text": "0",
-    "confidence": 0.5911867022514343,
+    "confidence": 0.9765086770057678,
     "bbox": {
       "x": 1950,
       "y": 986,
@@ -191,7 +191,7 @@
   },
   "income10": {
     "text": "0",
-    "confidence": 0.8388437628746033,
+    "confidence": 0.8758480548858643,
     "bbox": {
       "x": 1950,
       "y": 1039,
@@ -201,7 +201,7 @@
   },
   "income11": {
     "text": "0",
-    "confidence": 0.5228623151779175,
+    "confidence": 0.9711315631866455,
     "bbox": {
       "x": 1950,
       "y": 1098,
@@ -211,7 +211,7 @@
   },
   "income12": {
     "text": "0",
-    "confidence": 0.8219010233879089,
+    "confidence": 0.9806946516036987,
     "bbox": {
       "x": 1951,
       "y": 1159,
@@ -220,8 +220,8 @@
     }
   },
   "income13": {
-    "text": "a 0",
-    "confidence": 0.5286407507956028,
+    "text": "",
+    "confidence": 0.0,
     "bbox": {
       "x": 1953,
       "y": 1214,
@@ -230,8 +230,8 @@
     }
   },
   "income14": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "0",
+    "confidence": 0.9200018048286438,
     "bbox": {
       "x": 1954,
       "y": 1269,
@@ -250,8 +250,8 @@
     }
   },
   "income16": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "0",
+    "confidence": 0.6750735640525818,
     "bbox": {
       "x": 1956,
       "y": 1380,
@@ -261,7 +261,7 @@
   },
   "income17": {
     "text": "0",
-    "confidence": 0.0,
+    "confidence": 0.9248886704444885,
     "bbox": {
       "x": 1954,
       "y": 1439,
@@ -270,8 +270,8 @@
     }
   },
   "income18": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "0",
+    "confidence": 0.8590929508209229,
     "bbox": {
       "x": 1954,
       "y": 1497,
@@ -280,8 +280,8 @@
     }
   },
   "spouse_income1": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "0",
+    "confidence": 0.9398346543312073,
     "bbox": {
       "x": 2219,
       "y": 525,
@@ -290,8 +290,8 @@
     }
   },
   "spouse_income2": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "C 0",
+    "confidence": 0.7526814639568329,
     "bbox": {
       "x": 2221,
       "y": 586,
@@ -310,8 +310,8 @@
     }
   },
   "spouse_income4": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "C O",
+    "confidence": 0.45214663445949554,
     "bbox": {
       "x": 2219,
       "y": 697,
@@ -320,8 +320,8 @@
     }
   },
   "spouse_income5": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "0",
+    "confidence": 0.7138479948043823,
     "bbox": {
       "x": 2219,
       "y": 754,
@@ -330,8 +330,8 @@
     }
   },
   "spouse_income6": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "0",
+    "confidence": 0.7834967970848083,
     "bbox": {
       "x": 2221,
       "y": 808,
@@ -340,8 +340,8 @@
     }
   },
   "spouse_income7": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "0",
+    "confidence": 0.9322692155838013,
     "bbox": {
       "x": 2217,
       "y": 869,
@@ -350,8 +350,8 @@
     }
   },
   "spouse_income8": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "0",
+    "confidence": 0.8893517851829529,
     "bbox": {
       "x": 2217,
       "y": 925,
@@ -360,8 +360,8 @@
     }
   },
   "spouse_income9": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "0",
+    "confidence": 0.9564059376716614,
     "bbox": {
       "x": 2219,
       "y": 983,
@@ -370,8 +370,8 @@
     }
   },
   "spouse_income10": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "0",
+    "confidence": 0.9790061116218567,
     "bbox": {
       "x": 2221,
       "y": 1042,
@@ -410,8 +410,8 @@
     }
   },
   "spouse_income14": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "0",
+    "confidence": 0.8725147247314453,
     "bbox": {
       "x": 2221,
       "y": 1267,
@@ -420,8 +420,8 @@
     }
   },
   "spouse_income15": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "0",
+    "confidence": 0.959764301776886,
     "bbox": {
       "x": 2219,
       "y": 1326,
@@ -430,8 +430,8 @@
     }
   },
   "spouse_income16": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "0",
+    "confidence": 0.8680762648582458,
     "bbox": {
       "x": 2221,
       "y": 1381,
@@ -440,8 +440,8 @@
     }
   },
   "spouse_income17": {
-    "text": "",
-    "confidence": 0.0,
+    "text": "0",
+    "confidence": 0.9564871191978455,
     "bbox": {
       "x": 2221,
       "y": 1437,
@@ -461,19 +461,19 @@
   },
   "checkbox_need_assistance_yes": {
     "checked": true,
-    "confidence": 0.9010712035286705
+    "confidence": 1.0
   },
   "checkbox_need_assistance_no": {
     "checked": true,
-    "confidence": 1.0
+    "confidence": 0.8521412037037037
   },
   "checkbox_family_assets_yes": {
     "checked": true,
-    "confidence": 1.0
+    "confidence": 0.6146001073537305
   },
   "checkbox_family_assets_no": {
     "checked": true,
-    "confidence": 0.6409143518518519
+    "confidence": 1.0
   },
   "checkbox_shelter_yes": {
     "checked": true,
@@ -481,11 +481,11 @@
   },
   "checkbox_shelter_no": {
     "checked": true,
-    "confidence": 0.8893280632411068
+    "confidence": 1.0
   },
   "checkbox_dependants_yes": {
     "checked": true,
-    "confidence": 0.6854423868312758
+    "confidence": 0.6893004115226338
   },
   "checkbox_dependants_no": {
     "checked": true,
@@ -493,23 +493,23 @@
   },
   "checkbox_employment_changes_yes": {
     "checked": true,
-    "confidence": 1.0
+    "confidence": 0.7130434782608696
   },
   "checkbox_employment_changes_no": {
     "checked": true,
-    "confidence": 0.8854166666666667
+    "confidence": 1.0
   },
   "checkbox_employment_changes_spouse_yes": {
     "checked": true,
-    "confidence": 0.8481554677206851
+    "confidence": 0.9617918313570488
   },
   "checkbox_employment_changes_spouse_no": {
     "checked": true,
-    "confidence": 0.6107660455486543
+    "confidence": 1.0
   },
   "checkbox_school_yes": {
     "checked": true,
-    "confidence": 0.6166666666666667
+    "confidence": 0.6969696969696969
   },
   "checkbox_school_no": {
     "checked": true,
@@ -517,11 +517,11 @@
   },
   "checkbox_school_spouse_yes": {
     "checked": true,
-    "confidence": 0.8396345305608066
+    "confidence": 0.7340894770006301
   },
   "checkbox_school_spouse_no": {
     "checked": true,
-    "confidence": 0.5537518037518038
+    "confidence": 1.0
   },
   "checkbox_work_yes": {
     "checked": true,
@@ -529,19 +529,19 @@
   },
   "checkbox_work_no": {
     "checked": true,
-    "confidence": 0.6642512077294687
+    "confidence": 0.7568438003220612
   },
   "checkbox_work_souse_yes": {
     "checked": true,
-    "confidence": 0.640495867768595
+    "confidence": 0.8006198347107438
   },
   "checkbox_work_souse_no": {
     "checked": true,
-    "confidence": 0.7595486111111112
+    "confidence": 1.0
   },
   "checkbox_moved_yes": {
     "checked": true,
-    "confidence": 0.576923076923077
+    "confidence": 0.5128205128205129
   },
   "checkbox_moved_no": {
     "checked": true,
@@ -549,15 +549,15 @@
   },
   "checkbox_moved_spouse_yes": {
     "checked": false,
-    "confidence": 0.24641148325358853
+    "confidence": 0.3381180223285486
   },
   "checkbox_moved_spouse_no": {
     "checked": true,
-    "confidence": 0.5177626606198035
+    "confidence": 1.0
   },
   "checkbox_warrant_yes": {
     "checked": true,
-    "confidence": 0.7987483530961792
+    "confidence": 0.6110013175230566
   },
   "checkbox_warrant_no": {
     "checked": true,
@@ -565,10 +565,10 @@
   },
   "checkbox_warrant_spouse_yes": {
     "checked": true,
-    "confidence": 0.7505175983436854
+    "confidence": 0.655624568668047
   },
   "checkbox_warrant_spouse_no": {
     "checked": true,
-    "confidence": 0.727788279773157
+    "confidence": 1.0
   }
 }

@@ -9,12 +9,24 @@ from typing import Dict, List, Tuple
 import csv
 
 
-def load_extraction_zones(csv_path: str) -> List[Dict]:
-    """Load extraction zones from CSV file."""
+def load_extraction_zones(csv_path: str, field_type: str = None) -> List[Dict]:
+    """
+    Load extraction zones from CSV file.
+
+    Args:
+        csv_path: Path to CSV file
+        field_type: Optional filter - only load zones of this type ('text', 'checkbox', etc.)
+                   If None, loads all zones.
+    """
     zones = []
     with open(csv_path, 'r') as f:
         reader = csv.DictReader(f)
         for row in reader:
+            # Filter by type if specified
+            if field_type is not None and 'type' in row:
+                if row['type'] != field_type:
+                    continue
+
             zone = {
                 'name': row['label_name'],
                 'bbox': {
@@ -28,20 +40,38 @@ def load_extraction_zones(csv_path: str) -> List[Dict]:
     return zones
 
 
-def extract_roi(image: np.ndarray, bbox: Dict) -> np.ndarray:
-    """Extract region of interest from image."""
+def extract_roi(image: np.ndarray, bbox: Dict, padding: int = 0) -> np.ndarray:
+    """
+    Extract region of interest from image with optional padding.
+    
+    Args:
+        image: Source image
+        bbox: Dict with x, y, width, height
+        padding: Padding in pixels to add around ROI (default: 0)
+    
+    Returns:
+        Extracted ROI with padding applied (clamped to image bounds)
+    """
     x = bbox['x']
     y = bbox['y']
     w = bbox['width']
     h = bbox['height']
     
     img_h, img_w = image.shape[:2]
-    x = max(0, min(x, img_w - 1))
-    y = max(0, min(y, img_h - 1))
-    w = min(w, img_w - x)
-    h = min(h, img_h - y)
     
-    roi = image[y:y+h, x:x+w]
+    # Apply padding with clamping
+    x_padded = max(0, x - padding)
+    y_padded = max(0, y - padding)
+    w_padded = min(w + 2 * padding, img_w - x_padded)
+    h_padded = min(h + 2 * padding, img_h - y_padded)
+    
+    # Ensure we don't go out of bounds
+    x_padded = max(0, min(x_padded, img_w - 1))
+    y_padded = max(0, min(y_padded, img_h - 1))
+    w_padded = min(w_padded, img_w - x_padded)
+    h_padded = min(h_padded, img_h - y_padded)
+    
+    roi = image[y_padded:y_padded+h_padded, x_padded:x_padded+w_padded]
     return roi
 
 
@@ -70,13 +100,31 @@ class FastOCRExtractor:
     https://github.com/PaddlePaddle/PaddleOCR
     """
     
-    def __init__(self, lang: str = 'en', verbose: bool = True):
+    def __init__(
+        self,
+        lang: str = 'en',
+        verbose: bool = True,
+        det_db_thresh: float = None,
+        det_db_box_thresh: float = None,
+        det_db_unclip_ratio: float = None,
+        det_limit_side_len: int = None,
+        det_limit_type: str = 'max',
+        use_doc_orientation_classify: bool = False,
+        use_doc_unwarping: bool = False,
+        use_textline_orientation: bool = True,
+        use_angle_cls: bool = None,  # deprecated in PaddleOCR 3.x; prefer textline orientation
+        use_doc_preprocessor: bool = None,  # optional; only on newer versions
+    ):
         """
         Initialize PaddleOCR extractor.
         
         Args:
             lang: Language code ('en', 'ch', 'fr', 'german', 'korean', 'japan')
             verbose: Print progress
+            det_db_thresh: Optional DB detector threshold override (lower = more sensitive)
+            det_db_box_thresh: Optional DB box filter threshold override
+            det_db_unclip_ratio: Optional DB box expansion ratio
+            det_limit_side_len: Optional detector input size limit
         """
         try:
             from paddleocr import PaddleOCR
@@ -92,10 +140,32 @@ class FastOCRExtractor:
             print("[OCR] Initializing PaddleOCR...")
             print(f"      Language: {lang}")
         
+        ocr_kwargs = {}
+        if det_db_thresh is not None:
+            ocr_kwargs["det_db_thresh"] = det_db_thresh
+        if det_db_box_thresh is not None:
+            ocr_kwargs["det_db_box_thresh"] = det_db_box_thresh
+        if det_db_unclip_ratio is not None:
+            ocr_kwargs["det_db_unclip_ratio"] = det_db_unclip_ratio
+        if det_limit_side_len is not None:
+            ocr_kwargs["det_limit_side_len"] = det_limit_side_len
+        if det_limit_type is not None:
+            ocr_kwargs["det_limit_type"] = det_limit_type
+        if use_doc_orientation_classify is not None:
+            ocr_kwargs["use_doc_orientation_classify"] = use_doc_orientation_classify
+        if use_doc_unwarping is not None:
+            ocr_kwargs["use_doc_unwarping"] = use_doc_unwarping
+        if use_textline_orientation is not None:
+            ocr_kwargs["use_textline_orientation"] = use_textline_orientation
+        if use_angle_cls is not None:
+            ocr_kwargs["use_angle_cls"] = use_angle_cls
+        if use_doc_preprocessor is not None:
+            ocr_kwargs["use_doc_preprocessor"] = use_doc_preprocessor
+            
         # CORRECT API - Based on official docs
         self.ocr = PaddleOCR(
-            use_angle_cls=True,  # Enable text angle detection
-            lang=lang
+            lang=lang,
+            **ocr_kwargs,
             # Note: No show_log or use_gpu parameters in constructor
         )
         

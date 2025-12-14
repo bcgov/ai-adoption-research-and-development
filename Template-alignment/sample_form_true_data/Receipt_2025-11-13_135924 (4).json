@@ -1,0 +1,94 @@
+{
+    "checkbox_need_assistance_yes": true,
+    "checkbox_need_assistance_no": false,
+  
+    "checkbox_family_assets_yes": true,
+    "checkbox_family_assets_no": false,
+  
+    "checkbox_shelter_yes": false,
+    "checkbox_shelter_no": true,
+  
+    "checkbox_dependants_yes": false,
+    "checkbox_dependants_no": true,
+  
+    "checkbox_employment_changes_yes": false,
+    "checkbox_employment_changes_no": true,
+    "checkbox_employment_changes_spouse_yes": false,
+    "checkbox_employment_changes_spouse_no": true,
+  
+    "checkbox_school_yes": true,
+    "checkbox_school_no": false,
+    "checkbox_school_spouse_yes": false,
+    "checkbox_school_spouse_no": false,
+  
+    "checkbox_work_yes": false,
+    "checkbox_work_no": true,
+    "checkbox_work_souse_yes": false,
+    "checkbox_work_souse_no": false,
+  
+    "checkbox_moved_yes": true,
+    "checkbox_moved_no": false,
+    "checkbox_moved_spouse_yes": false,
+    "checkbox_moved_spouse_no": false,
+  
+    "checkbox_warrant_yes": false,
+    "checkbox_warrant_no": true,
+    "checkbox_warrant_spouse_yes": false,
+    "checkbox_warrant_spouse_no": false,
+  
+    "explain_changes": "Received EI, statement submitted",
+  
+    "signature": "A M J",
+    "spouse_signature": null,
+  
+    "date": "2025-11-23",
+    "spouse_date": null,
+  
+    "name": "Amanda Martinez-Jones",
+    "spouse_name": null,
+  
+    "phone": "236-783-4854",
+    "spouse_phone": null,
+  
+    "sin": "123-456-789",
+    "spouse_sin": null,
+  
+    "income1": 300,
+    "income2": 0,
+    "income3": 400,
+    "income4": 0,
+    "income5": 0,
+    "income6": 525.25,
+    "income7": 0,
+    "income8": 0,
+    "income9": 0,
+    "income10": 0,
+    "income11": 0,
+    "income12": 0,
+    "income13": 0,
+    "income14": 0,
+    "income15": 0,
+    "income16": 0,
+    "income17": 0,
+    "income18": 0,
+  
+    "spouse_income1": null,
+    "spouse_income2": null,
+    "spouse_income3": null,
+    "spouse_income4": null,
+    "spouse_income5": null,
+    "spouse_income6": null,
+    "spouse_income7": null,
+    "spouse_income8": null,
+    "spouse_income9": null,
+    "spouse_income10": null,
+    "spouse_income11": null,
+    "spouse_income12": null,
+    "spouse_income13": null,
+    "spouse_income14": null,
+    "spouse_income15": null,
+    "spouse_income16": null,
+    "spouse_income17": null,
+    "spouse_income18": null
+  }
+  

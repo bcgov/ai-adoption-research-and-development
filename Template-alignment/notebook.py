@@ -4,6 +4,7 @@
 # Use this to understand how misaligned the input document is initially.
 
 # %%
+
 import cv2
 from diff_visualization import create_red_overlay_diff
 
@@ -27,74 +28,31 @@ cv2.imwrite('baseline_before_alignment_red_overlay.jpg', baseline_red_overlay)
 
 # %%
 import cv2
-import json
 from phase_1_alignment import FeatureBasedAligner, AlignmentConfig
 from diff_visualization import create_red_overlay_diff
-from ocr_extraction import FastOCRExtractor, load_extraction_zones, visualize_extractions
 
+template = cv2.imread("template.jpg")
+input_img = cv2.imread("input_document.jpg")
 
-# Load your images
-template = cv2.imread('template.jpg')
-input_img = cv2.imread('input_document.jpg')
-
-
-# Configure and align
 config = AlignmentConfig(
     feature_detector="ORB",
     max_features=5000,
     ratio_test_threshold=0.7,
     ransac_threshold=5.0,
     min_matches=10,
-    verbose=True
+    verbose=True,
 )
 
 aligner = FeatureBasedAligner(config)
 result = aligner.align(input_img, template)
 
-# Save outputs
-cv2.imwrite('aligned_default_orb.jpg', result.aligned_image)
+cv2.imwrite("aligned_default_orb.jpg", result.aligned_image)
 
 red_overlay = create_red_overlay_diff(template, result.aligned_image, threshold=30, alpha=0.6)
-cv2.imwrite('aligned_default_orb_red_overlay.jpg', red_overlay)
+cv2.imwrite("aligned_default_orb_red_overlay.jpg", red_overlay)
 
 print(f"[DEFAULT] Error: {result.reprojection_error:.2f}px, Inliers: {result.inlier_ratio:.1f}%")
-
-
-# ============================================================================
-# FAST OCR EXTRACTION (PaddleOCR - CORRECT API)
-# ============================================================================
-
-# Load extraction zones
-zones = load_extraction_zones('labels_my-project-name_2025-12-11-01-43-24.csv')
-print(f"\n[OCR] Found {len(zones)} fields to extract")
-
-# Initialize FAST OCR extractor (CORRECT - only lang parameter)
-extractor = FastOCRExtractor(lang='en', verbose=True)
-
-# Extract text (FAST - typically 0.5-2 seconds total)
-extracted_data = extractor.extract_fields(
-    result.aligned_image,
-    zones,
-    preprocess=True
-)
-
-# Save JSON
-output = {name: data['text'] for name, data in extracted_data.items()}
-with open('extracted_data.json', 'w', encoding='utf-8') as f:
-    json.dump(output, f, indent=2, ensure_ascii=False)
-
-# Visualize
-visualize_extractions(result.aligned_image, extracted_data, 'extraction_visualization.jpg')
-
-# Print results
-print("\n[OCR] Extracted data:")
-for name, data in extracted_data.items():
-    conf_icon = "✓" if data['confidence'] > 0.5 else "⚠"
-    print(f"  {conf_icon} {name:25s}: '{data['text']}' (conf: {data['confidence']:.2f})")
-
-print(f"\n[OCR] Saved JSON to: extracted_data.json")
-
-
+# For the full template-driven checkbox + OCR pipeline, see template_ocr_pipeline.py
 
 
 # %%
@@ -216,4 +174,5 @@ print(f"[STRICT QC] Error: {result.reprojection_error:.2f}px, Inliers: {result.i
 # Optional simple pass/fail:
 ok = (result.inlier_ratio > 50 and result.reprojection_error < 3)
 print(f"[STRICT QC] PASS: {ok}")
-# %%
+
+
