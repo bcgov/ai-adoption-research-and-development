@@ -9,6 +9,7 @@ from .template_processing import (
     apply_mask,
     extract_polygon_roi,
     detect_checkboxes_from_template_image,
+    subtract_template_from_aligned,
 )
 from .config import (
     ROI_PADDING,
@@ -29,6 +30,7 @@ __all__ = [
     "apply_mask",
     "extract_polygon_roi",
     "detect_checkboxes_from_template_image",
+    "subtract_template_from_aligned",
     "ROI_PADDING",
     "DET_DB_THRESH",
     "DET_DB_BOX_THRESH",

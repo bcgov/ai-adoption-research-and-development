@@ -36,6 +36,71 @@ def apply_mask(image: np.ndarray, mask: np.ndarray) -> np.ndarray:
     return np.where(mask[:, :, None] > 0, image, white_bg)
 
 
+def subtract_template_from_aligned(
+    aligned_image: np.ndarray,
+    template_image: np.ndarray,
+    similarity_threshold: int = 15,
+    bleed_pixels: int = 0,
+    preserve_color: bool = True
+) -> np.ndarray:
+    """
+    Subtract template structure from aligned document, leaving only user-entered content.
+    
+    Where template and aligned pixels are similar (within threshold), sets pixel to white.
+    This removes form structure (boxes, lines) while preserving filled-in content.
+    Optionally expands removed areas by a bleed amount to ensure clean removal.
+    
+    Args:
+        aligned_image: Aligned document image with filled information (BGR)
+        template_image: Blank template form image (BGR)
+        similarity_threshold: Pixel difference threshold (0-255). 
+                             Higher = more aggressive removal (removes pixels with diff < threshold).
+                             Lower = less aggressive (only removes very similar pixels).
+                             Typical range: 5-30 for most documents.
+        bleed_pixels: Number of pixels to expand removed areas (default: 0). 
+                     Uses morphological dilation to expand white areas.
+        preserve_color: If True, preserves color of differences; if False, converts to grayscale
+    
+    Returns:
+        BGR image with template structure removed (white where template matches)
+    """
+    # Ensure same dimensions
+    if template_image.shape != aligned_image.shape:
+        template_image = cv2.resize(template_image, (aligned_image.shape[1], aligned_image.shape[0]))
+    
+    # Convert to grayscale for comparison
+    gray_template = cv2.cvtColor(template_image, cv2.COLOR_BGR2GRAY)
+    gray_aligned = cv2.cvtColor(aligned_image, cv2.COLOR_BGR2GRAY)
+    
+    # Compute absolute difference
+    diff = cv2.absdiff(gray_template, gray_aligned)
+    
+    # Create mask: where difference is small, template structure exists (set to white)
+    # Threshold: if diff < threshold, it's template structure
+    _, template_mask = cv2.threshold(diff, similarity_threshold, 255, cv2.THRESH_BINARY_INV)
+    # template_mask is 255 where template matches (should be removed), 0 where content differs
+    
+    # Apply bleed: expand the white (removed) areas
+    if bleed_pixels > 0:
+        kernel_size = 2 * bleed_pixels + 1
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kernel_size, kernel_size))
+        template_mask = cv2.dilate(template_mask, kernel, iterations=1)
+    
+    # Create result: where mask is 255 (template structure), set to white; otherwise keep aligned
+    result = aligned_image.copy()
+    
+    # Apply mask: set template structure areas to white
+    white_bg = np.full_like(aligned_image, 255)
+    result = np.where(template_mask[:, :, np.newaxis] > 0, white_bg, result)
+    
+    # If not preserving color, convert to grayscale and back to BGR
+    if not preserve_color:
+        gray_result = cv2.cvtColor(result, cv2.COLOR_BGR2GRAY)
+        result = cv2.cvtColor(gray_result, cv2.COLOR_GRAY2BGR)
+    
+    return result
+
+
 def extract_polygon_roi(image: np.ndarray, polygon: List[Tuple[int, int]], padding: int = 0) -> np.ndarray:
     """
     Extract text region using polygon mask (white background outside polygon).
@@ -76,19 +141,38 @@ def extract_polygon_roi(image: np.ndarray, polygon: List[Tuple[int, int]], paddi
 
 
 def detect_checkboxes_from_template_image(
-    image: np.ndarray, checkbox_boxes: List[Dict], checked_threshold: float = 0.15, verbose: bool = True
+    image: np.ndarray, 
+    checkbox_boxes: List[Dict], 
+    checked_threshold: float = 0.15, 
+    padding: int = 0,
+    verbose: bool = True
 ) -> Dict:
-    """Detect checkboxes from template-defined boxes."""
+    """
+    Detect checkboxes from template-defined boxes.
+    
+    Args:
+        image: Document image
+        checkbox_boxes: List of checkbox box definitions from template.json
+        checked_threshold: Density threshold for checked state (0.10-0.25 typical)
+        padding: Padding in pixels to add/subtract from checkbox boxes (can be negative to crop).
+                Positive values expand the box, negative values shrink it.
+                Useful for cropping out visible box borders that interfere with detection.
+        verbose: Print debug info
+        
+    Returns:
+        Dict mapping checkbox names to {checked: bool, confidence: float}
+    """
     detector = SimpleCheckboxDetector(checked_threshold=checked_threshold, verbose=verbose)
     results = {}
     if verbose:
-        print(f"\n[CHECKBOX] Processing {len(checkbox_boxes)} checkbox fields from template.json")
+        padding_str = f" (padding: {padding:+d}px)" if padding != 0 else ""
+        print(f"\n[CHECKBOX] Processing {len(checkbox_boxes)} checkbox fields from template.json{padding_str}")
     for box in checkbox_boxes:
         name = box["name"]
         bbox = box["bbox"]
         if verbose:
             print(f"\n[CHECKBOX] '{name}'")
-        result = detector.extract_checkbox(image, bbox, name)
+        result = detector.extract_checkbox(image, bbox, name, padding=padding)
         results[name] = {"checked": result["checked"], "confidence": result["confidence"]}
     if verbose:
         print(f"\n{'='*70}\n")

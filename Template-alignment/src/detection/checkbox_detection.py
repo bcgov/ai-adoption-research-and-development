@@ -72,7 +72,8 @@ class SimpleCheckboxDetector:
     def extract_checkbox(self, 
                         image: np.ndarray, 
                         bbox: Dict,
-                        name: str) -> Dict:
+                        name: str,
+                        padding: int = 0) -> Dict:
         """
         Extract single checkbox from image.
         
@@ -80,17 +81,32 @@ class SimpleCheckboxDetector:
             image: Document image
             bbox: Dict with x, y, width, height
             name: Checkbox field name
+            padding: Padding in pixels to add/subtract from bbox (can be negative to crop)
+                    Positive values expand the box, negative values shrink it
             
         Returns:
             Dict with checkbox state and confidence
         """
-        # Extract ROI
+        # Extract ROI with padding support
         x = bbox['x']
         y = bbox['y']
         w = bbox['width']
         h = bbox['height']
         
-        roi = image[y:y+h, x:x+w]
+        # Apply padding (can be negative to crop)
+        x_padded = x + padding
+        y_padded = y + padding
+        w_padded = w - (2 * padding)  # Subtract padding from both sides
+        h_padded = h - (2 * padding)
+        
+        # Clamp to image bounds
+        img_h, img_w = image.shape[:2]
+        x_padded = max(0, min(x_padded, img_w - 1))
+        y_padded = max(0, min(y_padded, img_h - 1))
+        w_padded = max(1, min(w_padded, img_w - x_padded))
+        h_padded = max(1, min(h_padded, img_h - y_padded))
+        
+        roi = image[y_padded:y_padded+h_padded, x_padded:x_padded+w_padded]
         
         if roi.size == 0:
             return {
