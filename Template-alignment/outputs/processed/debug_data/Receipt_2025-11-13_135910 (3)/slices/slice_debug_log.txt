@@ -1,0 +1,189 @@
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/name_processed_doc_preproc_output.jpg (shape=(116, 1214, 3))
+[DEBUG] Detected 2 text boxes for name_processed
+  Box 0: [[236, 1], [481, 6], [478, 116], [234, 112]] -> 'Patrick' (conf: 0.97)
+  Box 1: [[534, 12], [817, 16], [816, 115], [533, 111]] -> 'O'Connor' (conf: 0.87)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/name_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/explain_changes_processed_doc_preproc_output.jpg (shape=(258, 1214, 3))
+[DEBUG] Detected 1 text boxes for explain_changes_processed
+  Box 0: [[18, 34], [932, 42], [931, 159], [17, 151]] -> 'changed address, proof of move' (conf: 0.89)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/explain_changes_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/signature_processed_doc_preproc_output.jpg (shape=(115, 767, 3))
+[DEBUG] Detected 1 text boxes for signature_processed
+  Box 0: [[260, 7], [530, 13], [527, 114], [257, 108]] -> 'Be' (conf: 0.40)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/signature_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/date_processed_doc_preproc_output.jpg (shape=(119, 474, 3))
+[DEBUG] Detected 1 text boxes for date_processed
+  Box 0: [[6, 36], [385, 34], [385, 110], [6, 112]] -> '2025-0T-22' (conf: 0.75)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/date_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/phone_processed_doc_preproc_output.jpg (shape=(119, 614, 3))
+[DEBUG] Detected 1 text boxes for phone_processed
+  Box 0: [[84, 39], [559, 36], [560, 108], [84, 111]] -> '1234)-568-2890' (conf: 0.88)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/phone_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/sin_processed_doc_preproc_output.jpg (shape=(117, 627, 3))
+[DEBUG] Detected 1 text boxes for sin_processed
+  Box 0: [[60, 35], [456, 33], [457, 106], [60, 108]] -> '123-456-789' (conf: 0.98)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/sin_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_signature_processed_doc_preproc_output.jpg (shape=(117, 725, 3))
+[DEBUG] Detected 1 text boxes for spouse_signature_processed
+  Box 0: [[255, 24], [570, 24], [570, 106], [255, 106]] -> 'NOor' (conf: 0.61)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_signature_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_date_processed_doc_preproc_output.jpg (shape=(123, 473, 3))
+[DEBUG] Detected 1 text boxes for spouse_date_processed
+  Box 0: [[7, 34], [379, 41], [377, 121], [5, 114]] -> '2025-Nov-23' (conf: 0.77)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_date_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_name_processed_doc_preproc_output.jpg (shape=(122, 1174, 3))
+[DEBUG] Detected 1 text boxes for spouse_name_processed
+  Box 0: [[262, 4], [734, 4], [734, 119], [262, 119]] -> 'disa O'honnor' (conf: 0.91)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_name_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_phone_processed_doc_preproc_output.jpg (shape=(123, 598, 3))
+[DEBUG] Detected 1 text boxes for spouse_phone_processed
+  Box 0: [[70, 44], [502, 44], [502, 111], [70, 111]] -> '1321)-246-2143' (conf: 0.94)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_phone_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_phone_processed_doc_preproc_output.jpg (shape=(121, 605, 3))
+[DEBUG] Detected 1 text boxes for spouse_phone_processed
+  Box 0: [[73, 41], [421, 41], [421, 111], [73, 111]] -> '123-456-78p' (conf: 0.90)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_phone_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income1_processed_doc_preproc_output.jpg (shape=(92, 270, 3))
+[DEBUG] Detected 1 text boxes for income1_processed
+  Box 0: [[101, 28], [159, 28], [159, 90], [101, 90]] -> '0' (conf: 0.92)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income1_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income2_processed_doc_preproc_output.jpg (shape=(85, 264, 3))
+[DEBUG] Detected 1 text boxes for income2_processed
+  Box 0: [[39, 18], [232, 16], [233, 80], [40, 83]] -> '343.25' (conf: 0.91)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income2_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income3_processed_doc_preproc_output.jpg (shape=(88, 264, 3))
+[DEBUG] Detected 1 text boxes for income3_processed
+  Box 0: [[101, 28], [143, 28], [143, 73], [101, 73]] -> '0' (conf: 0.99)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income3_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income4_processed_doc_preproc_output.jpg (shape=(89, 261, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for income4_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income4_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income5_processed_doc_preproc_output.jpg (shape=(91, 266, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for income5_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income5_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income6_processed_doc_preproc_output.jpg (shape=(86, 269, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for income6_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income6_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income7_processed_doc_preproc_output.jpg (shape=(92, 270, 3))
+[DEBUG] Detected 1 text boxes for income7_processed
+  Box 0: [[110, 36], [151, 36], [151, 77], [110, 77]] -> '0' (conf: 0.61)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income7_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income8_processed_doc_preproc_output.jpg (shape=(83, 270, 3))
+[DEBUG] Detected 1 text boxes for income8_processed
+  Box 0: [[26, 19], [218, 11], [222, 72], [30, 80]] -> '333.85' (conf: 0.99)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income8_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income9_processed_doc_preproc_output.jpg (shape=(85, 269, 3))
+[DEBUG] Detected 1 text boxes for income9_processed
+  Box 0: [[37, 0], [166, 0], [168, 14], [39, 21]] -> '' (conf: 0.00)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income9_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income10_processed_doc_preproc_output.jpg (shape=(91, 275, 3))
+[DEBUG] Detected 1 text boxes for income10_processed
+  Box 0: [[104, 49], [138, 49], [138, 78], [104, 78]] -> 'D' (conf: 0.63)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income10_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income11_processed_doc_preproc_output.jpg (shape=(89, 272, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for income11_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income11_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income12_processed_doc_preproc_output.jpg (shape=(85, 270, 3))
+[DEBUG] Detected 1 text boxes for income12_processed
+  Box 0: [[96, 11], [127, 11], [127, 46], [96, 46]] -> '}$' (conf: 0.56)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income12_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income13_processed_doc_preproc_output.jpg (shape=(86, 270, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for income13_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income13_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income14_processed_doc_preproc_output.jpg (shape=(91, 267, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for income14_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income14_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income15_processed_doc_preproc_output.jpg (shape=(88, 272, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for income15_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income15_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income16_processed_doc_preproc_output.jpg (shape=(89, 266, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for income16_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income16_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income17_processed_doc_preproc_output.jpg (shape=(94, 267, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for income17_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income17_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income18_processed_doc_preproc_output.jpg (shape=(85, 272, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for income18_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/income18_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income1_processed_doc_preproc_output.jpg (shape=(89, 267, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for spouse_income1_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income1_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income2_processed_doc_preproc_output.jpg (shape=(86, 264, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for spouse_income2_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income2_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income3_processed_doc_preproc_output.jpg (shape=(85, 266, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for spouse_income3_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income3_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income4_processed_doc_preproc_output.jpg (shape=(88, 264, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for spouse_income4_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income4_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income5_processed_doc_preproc_output.jpg (shape=(85, 269, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for spouse_income5_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income5_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income6_processed_doc_preproc_output.jpg (shape=(89, 267, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for spouse_income6_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income6_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income7_processed_doc_preproc_output.jpg (shape=(91, 269, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for spouse_income7_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income7_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income8_processed_doc_preproc_output.jpg (shape=(89, 273, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for spouse_income8_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income8_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income9_processed_doc_preproc_output.jpg (shape=(88, 272, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for spouse_income9_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income9_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income10_processed_doc_preproc_output.jpg (shape=(89, 269, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for spouse_income10_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income10_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income11_processed_doc_preproc_output.jpg (shape=(86, 267, 3))
+[DEBUG] Detected 1 text boxes for spouse_income11_processed
+  Box 0: [[19, 5], [242, 14], [239, 85], [15, 77]] -> '1580.23' (conf: 0.96)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income11_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income12_processed_doc_preproc_output.jpg (shape=(86, 267, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for spouse_income12_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income12_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income13_processed_doc_preproc_output.jpg (shape=(88, 269, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for spouse_income13_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income13_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income14_processed_doc_preproc_output.jpg (shape=(91, 267, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for spouse_income14_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income14_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income15_processed_doc_preproc_output.jpg (shape=(86, 266, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for spouse_income15_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income15_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income16_processed_doc_preproc_output.jpg (shape=(91, 267, 3))
+[DEBUG] Detected 1 text boxes for spouse_income16_processed
+  Box 0: [[48, 15], [220, 15], [220, 82], [48, 82]] -> '26,80' (conf: 0.91)
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income16_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income17_processed_doc_preproc_output.jpg (shape=(91, 272, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for spouse_income17_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income17_processed_detection_boxes.jpg
+[DOC_PREPROC] Saved output_img -> /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income18_processed_doc_preproc_output.jpg (shape=(92, 295, 3))
+[DEBUG] predict(det-only) failed: PaddleOCR.predict() got an unexpected keyword argument 'det'
+[DEBUG] Detected 0 text boxes for spouse_income18_processed
+[SAVED] Detection boxes visualization: /home/lex/GitHub/ai-adoption-research-and-development/Template-alignment/outputs/processed/debug_data/Receipt_2025-11-13_135910 (3)/slices/spouse_income18_processed_detection_boxes.jpg
