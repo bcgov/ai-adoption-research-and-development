@@ -1,7 +1,7 @@
 {
   "name": {
     "text": "Robert Chen",
-    "confidence": 0.9754181504249573,
+    "confidence": 0.9796024560928345,
     "bbox": {
       "x": 126,
       "y": 1764,
@@ -10,8 +10,8 @@
     }
   },
   "explain_changes": {
-    "text": "Begin school, student loan received",
-    "confidence": 0.7898201942443848,
+    "text": "Began schl student loam received",
+    "confidence": 0.809545636177063,
     "bbox": {
       "x": 128,
       "y": 1333,
@@ -20,8 +20,8 @@
     }
   },
   "signature": {
-    "text": "kohn",
-    "confidence": 0.4123230278491974,
+    "text": "ledn",
+    "confidence": 0.5232839584350586,
     "bbox": {
       "x": 126,
       "y": 1672,
@@ -31,7 +31,7 @@
   },
   "date": {
     "text": "2025-Nv-12",
-    "confidence": 0.9075297117233276,
+    "confidence": 0.9161812663078308,
     "bbox": {
       "x": 870,
       "y": 1670,
@@ -41,7 +41,7 @@
   },
   "phone": {
     "text": "123-456-7789",
-    "confidence": 0.9619832038879395,
+    "confidence": 0.9591994285583496,
     "bbox": {
       "x": 132,
       "y": 1853,
@@ -51,7 +51,7 @@
   },
   "sin": {
     "text": "123-456-789",
-    "confidence": 0.9890431761741638,
+    "confidence": 0.9854353070259094,
     "bbox": {
       "x": 719,
       "y": 1855,
@@ -101,7 +101,7 @@
   },
   "income1": {
     "text": "0",
-    "confidence": 0.9245915412902832,
+    "confidence": 0.8853481411933899,
     "bbox": {
       "x": 1948,
       "y": 525,
@@ -111,7 +111,7 @@
   },
   "income2": {
     "text": "0",
-    "confidence": 0.9853627681732178,
+    "confidence": 0.979808509349823,
     "bbox": {
       "x": 1953,
       "y": 587,
@@ -121,7 +121,7 @@
   },
   "income3": {
     "text": "0",
-    "confidence": 0.6600270867347717,
+    "confidence": 0.6254486441612244,
     "bbox": {
       "x": 1953,
       "y": 642,
@@ -130,8 +130,8 @@
     }
   },
   "income4": {
-    "text": "'",
-    "confidence": 0.33879217505455017,
+    "text": "0",
+    "confidence": 0.8343029022216797,
     "bbox": {
       "x": 1956,
       "y": 700,
@@ -140,8 +140,8 @@
     }
   },
   "income5": {
-    "text": "560.24",
-    "confidence": 0.87162184715271,
+    "text": "560.29",
+    "confidence": 0.8632631301879883,
     "bbox": {
       "x": 1954,
       "y": 753,
@@ -150,8 +150,8 @@
     }
   },
   "income6": {
-    "text": "t. O",
-    "confidence": 0.5329390168190002,
+    "text": "",
+    "confidence": 0.0,
     "bbox": {
       "x": 1953,
       "y": 814,
@@ -160,8 +160,8 @@
     }
   },
   "income7": {
-    "text": "Ca 0",
-    "confidence": 0.6158642619848251,
+    "text": "C 0",
+    "confidence": 0.5518400743603706,
     "bbox": {
       "x": 1951,
       "y": 869,
@@ -170,8 +170,8 @@
     }
   },
   "income8": {
-    "text": "Q",
-    "confidence": 0.8495500683784485,
+    "text": "C",
+    "confidence": 0.8451344966888428,
     "bbox": {
       "x": 1953,
       "y": 931,
@@ -180,8 +180,8 @@
     }
   },
   "income9": {
-    "text": "O",
-    "confidence": 0.6982483863830566,
+    "text": "0",
+    "confidence": 0.8779503107070923,
     "bbox": {
       "x": 1950,
       "y": 986,
@@ -191,7 +191,7 @@
   },
   "income10": {
     "text": "480.23",
-    "confidence": 0.9866082668304443,
+    "confidence": 0.9823603630065918,
     "bbox": {
       "x": 1950,
       "y": 1039,
@@ -201,7 +201,7 @@
   },
   "income11": {
     "text": "0",
-    "confidence": 0.9859695434570312,
+    "confidence": 0.9801924824714661,
     "bbox": {
       "x": 1950,
       "y": 1098,
@@ -211,7 +211,7 @@
   },
   "income12": {
     "text": "0",
-    "confidence": 0.4797593057155609,
+    "confidence": 0.6961256265640259,
     "bbox": {
       "x": 1951,
       "y": 1159,
@@ -221,7 +221,7 @@
   },
   "income13": {
     "text": "223",
-    "confidence": 0.8520533442497253,
+    "confidence": 0.9508182406425476,
     "bbox": {
       "x": 1953,
       "y": 1214,
@@ -240,8 +240,8 @@
     }
   },
   "income15": {
-    "text": "0",
-    "confidence": 0.0,
+    "text": "7e 0",
+    "confidence": 0.7568590641021729,
     "bbox": {
       "x": 1951,
       "y": 1325,
@@ -250,8 +250,8 @@
     }
   },
   "income16": {
-    "text": "So",
-    "confidence": 0.36326199769973755,
+    "text": "680",
+    "confidence": 0.981921911239624,
     "bbox": {
       "x": 1956,
       "y": 1380,
@@ -271,7 +271,7 @@
   },
   "income18": {
     "text": "350",
-    "confidence": 0.9836837649345398,
+    "confidence": 0.9712409973144531,
     "bbox": {
       "x": 1954,
       "y": 1497,
@@ -461,55 +461,55 @@
   },
   "checkbox_need_assistance_yes": {
     "checked": true,
-    "confidence": 0.8443604284814115
+    "confidence": 0.7482671707624449
   },
   "checkbox_need_assistance_no": {
     "checked": true,
-    "confidence": 0.8318865740740741
+    "confidence": 0.7638888888888888
   },
   "checkbox_family_assets_yes": {
     "checked": true,
-    "confidence": 0.6253354804079442
+    "confidence": 0.6427804616210413
   },
   "checkbox_family_assets_no": {
     "checked": true,
-    "confidence": 0.7581018518518519
+    "confidence": 0.652488425925926
   },
   "checkbox_shelter_yes": {
     "checked": true,
-    "confidence": 0.6011198945981555
+    "confidence": 0.5945322793148881
   },
   "checkbox_shelter_no": {
     "checked": true,
-    "confidence": 0.7378129117259552
+    "confidence": 0.6439393939393939
   },
   "checkbox_dependants_yes": {
     "checked": true,
-    "confidence": 0.6983024691358024
+    "confidence": 0.6918724279835391
   },
   "checkbox_dependants_no": {
     "checked": true,
-    "confidence": 0.5659075224292616
+    "confidence": 0.5693581780538303
   },
   "checkbox_employment_changes_yes": {
     "checked": true,
-    "confidence": 0.8956521739130435
+    "confidence": 0.9159420289855074
   },
   "checkbox_employment_changes_no": {
     "checked": true,
-    "confidence": 0.826655982905983
+    "confidence": 0.8814102564102565
   },
   "checkbox_employment_changes_spouse_yes": {
     "checked": true,
-    "confidence": 0.8069828722002635
+    "confidence": 0.862977602108037
   },
   "checkbox_employment_changes_spouse_no": {
     "checked": true,
-    "confidence": 0.5866114561766737
+    "confidence": 0.6038647342995169
   },
   "checkbox_school_yes": {
     "checked": true,
-    "confidence": 0.6530303030303031
+    "confidence": 0.7318181818181818
   },
   "checkbox_school_no": {
     "checked": true,
@@ -517,58 +517,58 @@
   },
   "checkbox_school_spouse_yes": {
     "checked": true,
-    "confidence": 0.7766225582860744
+    "confidence": 0.7482671707624449
   },
   "checkbox_school_spouse_no": {
     "checked": true,
-    "confidence": 0.6691919191919192
+    "confidence": 0.6367243867243868
   },
   "checkbox_work_yes": {
     "checked": true,
-    "confidence": 0.6612318840579711
+    "confidence": 0.7729468599033816
   },
   "checkbox_work_no": {
     "checked": true,
-    "confidence": 0.7568438003220612
+    "confidence": 0.7608695652173912
   },
   "checkbox_work_souse_yes": {
     "checked": true,
-    "confidence": 0.7110881542699725
+    "confidence": 0.7162534435261708
   },
   "checkbox_work_souse_no": {
     "checked": true,
-    "confidence": 0.7089120370370371
+    "confidence": 0.7262731481481481
   },
   "checkbox_moved_yes": {
     "checked": true,
-    "confidence": 0.5096153846153847
+    "confidence": 0.5192307692307693
   },
   "checkbox_moved_no": {
     "checked": true,
-    "confidence": 0.7955917874396136
+    "confidence": 0.7880434782608696
   },
   "checkbox_moved_spouse_yes": {
     "checked": false,
-    "confidence": 0.5454545454545454
+    "confidence": 0.44178628389154695
   },
   "checkbox_moved_spouse_no": {
     "checked": true,
-    "confidence": 0.5612244897959183
+    "confidence": 0.5366591080876796
   },
   "checkbox_warrant_yes": {
     "checked": true,
-    "confidence": 0.7081686429512517
+    "confidence": 0.7246376811594203
   },
   "checkbox_warrant_no": {
     "checked": true,
-    "confidence": 0.8159722222222222
+    "confidence": 0.7438568376068376
   },
   "checkbox_warrant_spouse_yes": {
     "checked": true,
-    "confidence": 0.7263630089717047
+    "confidence": 0.6780538302277432
   },
   "checkbox_warrant_spouse_no": {
     "checked": true,
-    "confidence": 0.852236925015753
+    "confidence": 0.83648393194707
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": {
-    "text": "Jim Janes",
-    "confidence": 0.9735105037689209,
+    "text": "Jim Jones",
+    "confidence": 0.9364314675331116,
     "bbox": {
       "x": 126,
       "y": 1764,
@@ -10,8 +10,8 @@
     }
   },
   "explain_changes": {
-    "text": "Child suppert started, record affaced",
-    "confidence": 0.8469277620315552,
+    "text": "Child suppert started, record affacled",
+    "confidence": 0.8468947410583496,
     "bbox": {
       "x": 128,
       "y": 1333,
@@ -21,7 +21,7 @@
   },
   "signature": {
     "text": "SJ.",
-    "confidence": 0.8308420181274414,
+    "confidence": 0.8522038459777832,
     "bbox": {
       "x": 126,
       "y": 1672,
@@ -30,8 +30,8 @@
     }
   },
   "date": {
-    "text": "2025-No-23",
-    "confidence": 0.855124294757843,
+    "text": "2025-NoN23",
+    "confidence": 0.8340223431587219,
     "bbox": {
       "x": 870,
       "y": 1670,
@@ -41,7 +41,7 @@
   },
   "phone": {
     "text": "123-456-7789",
-    "confidence": 0.9373109936714172,
+    "confidence": 0.9570648670196533,
     "bbox": {
       "x": 132,
       "y": 1853,
@@ -51,7 +51,7 @@
   },
   "sin": {
     "text": "234-456-789",
-    "confidence": 0.9863388538360596,
+    "confidence": 0.9552385210990906,
     "bbox": {
       "x": 719,
       "y": 1855,
@@ -101,7 +101,7 @@
   },
   "income1": {
     "text": "0",
-    "confidence": 0.5203072428703308,
+    "confidence": 0.6876970529556274,
     "bbox": {
       "x": 1948,
       "y": 525,
@@ -111,7 +111,7 @@
   },
   "income2": {
     "text": "0",
-    "confidence": 0.6747720837593079,
+    "confidence": 0.4025713801383972,
     "bbox": {
       "x": 1953,
       "y": 587,
@@ -121,7 +121,7 @@
   },
   "income3": {
     "text": "245.68",
-    "confidence": 0.9861375689506531,
+    "confidence": 0.9929404854774475,
     "bbox": {
       "x": 1953,
       "y": 642,
@@ -140,8 +140,8 @@
     }
   },
   "income5": {
-    "text": "C 0",
-    "confidence": 0.6935284286737442,
+    "text": "- 0",
+    "confidence": 0.6039078086614609,
     "bbox": {
       "x": 1954,
       "y": 753,
@@ -151,7 +151,7 @@
   },
   "income6": {
     "text": "0",
-    "confidence": 0.9638999104499817,
+    "confidence": 0.9364569187164307,
     "bbox": {
       "x": 1953,
       "y": 814,
@@ -171,7 +171,7 @@
   },
   "income8": {
     "text": "397.23",
-    "confidence": 0.9169211983680725,
+    "confidence": 0.92704176902771,
     "bbox": {
       "x": 1953,
       "y": 931,
@@ -200,8 +200,8 @@
     }
   },
   "income11": {
-    "text": "C 0",
-    "confidence": 0.6704577803611755,
+    "text": "0",
+    "confidence": 0.0,
     "bbox": {
       "x": 1950,
       "y": 1098,
@@ -211,7 +211,7 @@
   },
   "income12": {
     "text": "0",
-    "confidence": 0.9830101132392883,
+    "confidence": 0.9832469820976257,
     "bbox": {
       "x": 1951,
       "y": 1159,
@@ -220,8 +220,8 @@
     }
   },
   "income13": {
-    "text": "191",
-    "confidence": 0.878699779510498,
+    "text": "111",
+    "confidence": 0.8395571708679199,
     "bbox": {
       "x": 1953,
       "y": 1214,
@@ -231,7 +231,7 @@
   },
   "income14": {
     "text": "60",
-    "confidence": 0.907366156578064,
+    "confidence": 0.8139286041259766,
     "bbox": {
       "x": 1954,
       "y": 1269,
@@ -250,8 +250,8 @@
     }
   },
   "income16": {
-    "text": "O 0",
-    "confidence": 0.6090173795819283,
+    "text": "1 0",
+    "confidence": 0.6530683189630508,
     "bbox": {
       "x": 1956,
       "y": 1380,
@@ -461,7 +461,7 @@
   },
   "checkbox_need_assistance_yes": {
     "checked": true,
-    "confidence": 0.7718966603654694
+    "confidence": 0.841209829867675
   },
   "checkbox_need_assistance_no": {
     "checked": true,
@@ -469,7 +469,7 @@
   },
   "checkbox_family_assets_yes": {
     "checked": true,
-    "confidence": 0.6508319914117016
+    "confidence": 0.6333870101986044
   },
   "checkbox_family_assets_no": {
     "checked": true,
@@ -481,11 +481,11 @@
   },
   "checkbox_shelter_no": {
     "checked": true,
-    "confidence": 0.7921607378129117
+    "confidence": 0.7740447957839263
   },
   "checkbox_dependants_yes": {
     "checked": true,
-    "confidence": 0.7008744855967078
+    "confidence": 0.6790123456790124
   },
   "checkbox_dependants_no": {
     "checked": true,
@@ -497,11 +497,11 @@
   },
   "checkbox_employment_changes_no": {
     "checked": true,
-    "confidence": 0.9321581196581197
+    "confidence": 0.9134615384615385
   },
   "checkbox_employment_changes_spouse_yes": {
     "checked": true,
-    "confidence": 0.9222661396574441
+    "confidence": 0.9272068511198946
   },
   "checkbox_employment_changes_spouse_no": {
     "checked": true,
@@ -513,11 +513,11 @@
   },
   "checkbox_school_no": {
     "checked": true,
-    "confidence": 0.7130434782608696
+    "confidence": 0.7231884057971015
   },
   "checkbox_school_spouse_yes": {
     "checked": true,
-    "confidence": 0.7624448645242596
+    "confidence": 0.7718966603654694
   },
   "checkbox_school_spouse_no": {
     "checked": true,
@@ -525,7 +525,7 @@
   },
   "checkbox_work_yes": {
     "checked": true,
-    "confidence": 0.785024154589372
+    "confidence": 0.7729468599033816
   },
   "checkbox_work_no": {
     "checked": true,
@@ -537,11 +537,11 @@
   },
   "checkbox_work_souse_no": {
     "checked": true,
-    "confidence": 0.7320601851851852
+    "confidence": 0.6958912037037037
   },
   "checkbox_moved_yes": {
     "checked": true,
-    "confidence": 0.530448717948718
+    "confidence": 0.5641025641025642
   },
   "checkbox_moved_no": {
     "checked": true,
@@ -549,7 +549,7 @@
   },
   "checkbox_moved_spouse_yes": {
     "checked": false,
-    "confidence": 0.5055821371610845
+    "confidence": 0.4936204146730463
   },
   "checkbox_moved_spouse_no": {
     "checked": true,
@@ -561,7 +561,7 @@
   },
   "checkbox_warrant_no": {
     "checked": true,
-    "confidence": 0.8373397435897436
+    "confidence": 0.8560363247863247
   },
   "checkbox_warrant_spouse_yes": {
     "checked": true,
@@ -569,6 +569,6 @@
   },
   "checkbox_warrant_spouse_no": {
     "checked": true,
-    "confidence": 0.707309388783869
+    "confidence": 0.7986767485822307
   }
 }
