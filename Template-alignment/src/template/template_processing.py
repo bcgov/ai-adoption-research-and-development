@@ -1,5 +1,6 @@
 """Template processing utilities for mask creation and ROI extraction."""
 
+import os
 import cv2
 import numpy as np
 from typing import List, Dict, Tuple
@@ -138,6 +139,57 @@ def extract_polygon_roi(image: np.ndarray, polygon: List[Tuple[int, int]], paddi
     white_bg = np.ones_like(roi) * 255
     masked_roi = np.where(roi_mask[:, :, np.newaxis] > 0, roi, white_bg)
     return masked_roi
+
+
+def extract_checkbox_roi(image: np.ndarray, bbox: Dict, padding: int = 0) -> np.ndarray:
+    """
+    Extract a checkbox ROI with optional padding (positive expands, negative crops).
+    """
+    x = bbox["x"]
+    y = bbox["y"]
+    w = bbox["width"]
+    h = bbox["height"]
+
+    # Apply padding (can be negative to crop)
+    x_padded = x + padding
+    y_padded = y + padding
+    w_padded = w - (2 * padding)
+    h_padded = h - (2 * padding)
+
+    # Clamp to image bounds
+    img_h, img_w = image.shape[:2]
+    x_padded = max(0, min(x_padded, img_w - 1))
+    y_padded = max(0, min(y_padded, img_h - 1))
+    w_padded = max(1, min(w_padded, img_w - x_padded))
+    h_padded = max(1, min(h_padded, img_h - y_padded))
+
+    roi = image[y_padded : y_padded + h_padded, x_padded : x_padded + w_padded]
+    return roi
+
+
+def save_checkbox_rois(
+    image: np.ndarray,
+    checkbox_boxes: List[Dict],
+    checkbox_results: Dict,
+    padding: int,
+    output_dir: str,
+) -> None:
+    """
+    Save checkbox ROIs (with padding applied) to a debug directory.
+
+    Filenames include status and confidence for quick inspection.
+    """
+    os.makedirs(output_dir, exist_ok=True)
+
+    for box in checkbox_boxes:
+        name = box["name"]
+        bbox = box["bbox"]
+
+        roi = extract_checkbox_roi(image, bbox, padding=padding)
+        if roi is None or roi.size == 0:
+            continue
+
+        cv2.imwrite(os.path.join(output_dir, f"{name}_checkbox.jpg"), roi)
 
 
 def detect_checkboxes_from_template_image(

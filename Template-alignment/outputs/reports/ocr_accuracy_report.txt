@@ -1,6 +1,6 @@
 OCR Accuracy Report
 ===================
-Overall accuracy: 0.4333 (325/750)
+Overall accuracy: 0.7160 (537/750)
 Documents evaluated: 10
 Documents skipped (missing/empty truth): 0
 Documents skipped (other issues): 0
@@ -8,36 +8,15 @@ Documents skipped (other issues): 0
 Per-document results
 --------------------
 2025-11-13_135834.json
-  accuracy: 0.4667 (35/75)
+  accuracy: 0.7467 (56/75)
   mismatches:
-    - checkbox_need_assistance_yes: expected='False', observed="{'checked': True, 'confidence': 0.867989918084436}"
-    - checkbox_need_assistance_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_family_assets_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_family_assets_no: expected='False', observed="{'checked': True, 'confidence': 0.8116319444444445}"
-    - checkbox_shelter_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_shelter_no: expected='False', observed="{'checked': True, 'confidence': 0.8316864295125165}"
-    - checkbox_dependants_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_dependants_no: expected='False', observed="{'checked': True, 'confidence': 0.6487232574189096}"
-    - checkbox_employment_changes_yes: expected='False', observed="{'checked': True, 'confidence': 0.8521739130434782}"
-    - checkbox_employment_changes_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_employment_changes_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.8465085638998682}"
-    - checkbox_employment_changes_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.6538992408557626}"
-    - checkbox_school_yes: expected='False', observed="{'checked': True, 'confidence': 0.693939393939394}"
-    - checkbox_school_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_school_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.7183364839319472}"
-    - checkbox_school_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.6565656565656566}"
-    - checkbox_work_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_work_no: expected='False', observed="{'checked': True, 'confidence': 0.725979602791197}"
-    - checkbox_work_souse_yes: expected='False', observed="{'checked': True, 'confidence': 0.8040633608815427}"
-    - checkbox_work_souse_no: expected='False', observed="{'checked': True, 'confidence': 0.7421875}"
-    - checkbox_moved_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_moved_no: expected='False', observed="{'checked': True, 'confidence': 0.7865338164251208}"
-    - checkbox_moved_spouse_yes: expected='False', observed="{'checked': False, 'confidence': 0.4617224880382774}"
-    - checkbox_moved_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.5744520030234317}"
-    - checkbox_warrant_yes: expected='False', observed="{'checked': True, 'confidence': 0.7378129117259552}"
-    - checkbox_warrant_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_warrant_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.6642512077294687}"
-    - checkbox_warrant_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.7514177693761814}"
+    - checkbox_shelter_no: expected='False', observed='True'
+    - checkbox_employment_changes_yes: expected='False', observed='True'
+    - checkbox_school_spouse_no: expected='False', observed='True'
+    - checkbox_work_souse_yes: expected='False', observed='True'
+    - checkbox_moved_spouse_yes: expected='False', observed='True'
+    - checkbox_moved_spouse_no: expected='False', observed='True'
+    - checkbox_warrant_yes: expected='False', observed='True'
     - explain_changes: expected='Started part time job, documents attached', observed='Started part dime job, docwments a Hacked'
     - signature: expected='K Patel', observed='KRadel'
     - date: expected='2025-09-13', observed='2035-09-13'
@@ -51,36 +30,11 @@ Per-document results
     - income17: expected='0', observed='S 0'
     - income18: expected='0', observed=''
 Receipt_2025-11-12_124242.json
-  accuracy: 0.5467 (41/75)
+  accuracy: 0.8800 (66/75)
   mismatches:
-    - checkbox_need_assistance_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_need_assistance_no: expected='False', observed="{'checked': True, 'confidence': 0.7928240740740741}"
-    - checkbox_family_assets_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_family_assets_no: expected='False', observed="{'checked': True, 'confidence': 0.6032986111111112}"
-    - checkbox_shelter_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_shelter_no: expected='False', observed="{'checked': True, 'confidence': 0.7312252964426879}"
-    - checkbox_dependants_yes: expected='False', observed="{'checked': True, 'confidence': 0.7536008230452675}"
-    - checkbox_dependants_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_employment_changes_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_employment_changes_no: expected='False', observed="{'checked': True, 'confidence': 0.9308226495726496}"
-    - checkbox_employment_changes_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.7921607378129117}"
-    - checkbox_employment_changes_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.6366459627329193}"
-    - checkbox_school_yes: expected='False', observed="{'checked': True, 'confidence': 0.7712121212121212}"
-    - checkbox_school_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_school_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.7624448645242596}"
-    - checkbox_school_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.6944444444444445}"
-    - checkbox_work_yes: expected='False', observed="{'checked': True, 'confidence': 0.8121980676328503}"
-    - checkbox_work_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_work_souse_yes: expected='False', observed="{'checked': True, 'confidence': 0.7885674931129476}"
-    - checkbox_work_souse_no: expected='False', observed="{'checked': True, 'confidence': 0.8000578703703703}"
-    - checkbox_moved_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_moved_no: expected='False', observed="{'checked': True, 'confidence': 0.8408816425120773}"
-    - checkbox_moved_spouse_yes: expected='False', observed="{'checked': False, 'confidence': 0.3460925039872408}"
-    - checkbox_moved_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.5423280423280423}"
-    - checkbox_warrant_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_warrant_no: expected='False', observed="{'checked': True, 'confidence': 0.8573717948717948}"
-    - checkbox_warrant_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.707384403036577}"
-    - checkbox_warrant_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.9136735979836169}"
+    - checkbox_need_assistance_no: expected='False', observed='True'
+    - checkbox_moved_no: expected='False', observed='True'
+    - checkbox_warrant_spouse_no: expected='False', observed='True'
     - explain_changes: expected='Working part-time at Save-on-Foods, 20 hours a week. Started Oct 12. Pay stubs attached.', observed='Uorking rard-time at Save-on-Foods, do hours a week, Started Oct i2, Pay stubs atfached'
     - signature: expected='S Thompson', observed='Ion'
     - phone: expected='234-567-8980', observed='234-567-8890'
@@ -88,36 +42,10 @@ Receipt_2025-11-12_124242.json
     - income13: expected='682.34', observed='682,34'
     - spouse_income1: expected='', observed='1'
 Receipt_2025-11-12_124252 (2).json
-  accuracy: 0.3600 (27/75)
+  accuracy: 0.7067 (53/75)
   mismatches:
-    - checkbox_need_assistance_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_need_assistance_no: expected='False', observed="{'checked': True, 'confidence': 0.8521412037037037}"
-    - checkbox_family_assets_yes: expected='False', observed="{'checked': True, 'confidence': 0.6736446591519056}"
-    - checkbox_family_assets_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_shelter_yes: expected='False', observed="{'checked': True, 'confidence': 0.6818181818181819}"
-    - checkbox_shelter_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_dependants_yes: expected='False', observed="{'checked': True, 'confidence': 0.7188786008230452}"
-    - checkbox_dependants_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_employment_changes_yes: expected='False', observed="{'checked': True, 'confidence': 0.6768115942028986}"
-    - checkbox_employment_changes_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_employment_changes_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.9156785243741766}"
-    - checkbox_employment_changes_spouse_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_school_yes: expected='False', observed="{'checked': True, 'confidence': 0.7045454545454546}"
-    - checkbox_school_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_school_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.7577189666036548}"
-    - checkbox_school_spouse_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_work_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_work_no: expected='False', observed="{'checked': True, 'confidence': 0.7380568974771874}"
-    - checkbox_work_souse_yes: expected='False', observed="{'checked': True, 'confidence': 0.8557162534435263}"
-    - checkbox_work_souse_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_moved_yes: expected='False', observed="{'checked': True, 'confidence': 0.5384615384615385}"
-    - checkbox_moved_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_moved_spouse_yes: expected='False', observed="{'checked': False, 'confidence': 0.29824561403508776}"
-    - checkbox_moved_spouse_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_warrant_yes: expected='False', observed="{'checked': True, 'confidence': 0.5862977602108037}"
-    - checkbox_warrant_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_warrant_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.6642512077294687}"
-    - checkbox_warrant_spouse_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
+    - checkbox_work_souse_yes: expected='False', observed='True'
+    - checkbox_moved_yes: expected='False', observed='True'
     - signature: expected='J Smith', observed='In'
     - spouse_signature: expected='M Smith', observed='Masth'
     - date: expected='2025-11-12', observed='2025-Now-12'
@@ -139,36 +67,10 @@ Receipt_2025-11-12_124252 (2).json
     - spouse_income15: expected='0', observed=''
     - spouse_income17: expected='0', observed='0 0'
 Receipt_2025-11-12_124301 (3).json
-  accuracy: 0.3867 (29/75)
+  accuracy: 0.7333 (55/75)
   mismatches:
-    - checkbox_need_assistance_yes: expected='False', observed="{'checked': True, 'confidence': 0.7750472589792061}"
-    - checkbox_need_assistance_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_family_assets_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_family_assets_no: expected='False', observed="{'checked': True, 'confidence': 0.6741898148148149}"
-    - checkbox_shelter_yes: expected='False', observed="{'checked': True, 'confidence': 0.7246376811594203}"
-    - checkbox_shelter_no: expected='True', observed="{'checked': True, 'confidence': 0.9140316205533598}"
-    - checkbox_dependants_yes: expected='False', observed="{'checked': True, 'confidence': 0.5902777777777778}"
-    - checkbox_dependants_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_employment_changes_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_employment_changes_no: expected='False', observed="{'checked': True, 'confidence': 0.8854166666666667}"
-    - checkbox_employment_changes_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.8563899868247695}"
-    - checkbox_employment_changes_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.6780538302277432}"
-    - checkbox_school_yes: expected='False', observed="{'checked': True, 'confidence': 0.6060606060606061}"
-    - checkbox_school_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_school_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.7482671707624449}"
-    - checkbox_school_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.5627705627705628}"
-    - checkbox_work_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_work_no: expected='False', observed="{'checked': True, 'confidence': 0.703166935050993}"
-    - checkbox_work_souse_yes: expected='False', observed="{'checked': True, 'confidence': 0.6267217630853995}"
-    - checkbox_work_souse_no: expected='False', observed="{'checked': True, 'confidence': 0.9302662037037037}"
-    - checkbox_moved_yes: expected='False', observed="{'checked': True, 'confidence': 0.5737179487179488}"
-    - checkbox_moved_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_moved_spouse_yes: expected='False', observed="{'checked': False, 'confidence': 0.23843700159489634}"
-    - checkbox_moved_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.5442176870748299}"
-    - checkbox_warrant_yes: expected='False', observed="{'checked': True, 'confidence': 0.7987483530961792}"
-    - checkbox_warrant_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_warrant_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.7211870255348517}"
-    - checkbox_warrant_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.7545683679899181}"
+    - checkbox_employment_changes_spouse_yes: expected='False', observed='True'
+    - checkbox_work_souse_no: expected='False', observed='True'
     - explain_changes: expected='No changes, continue to receive CPP, OAS, private pension', observed='No changes, Continne to receive Cpp. OAS, Private persion'
     - signature: expected='J Lee', observed='Jdee'
     - date: expected='2025-07-13', observed='2025-Ju1-13'
@@ -188,36 +90,15 @@ Receipt_2025-11-12_124301 (3).json
     - income17: expected='0', observed='1 0'
     - income18: expected='0', observed=''
 Receipt_2025-11-13_135843.json
-  accuracy: 0.2667 (20/75)
+  accuracy: 0.5467 (41/75)
   mismatches:
-    - checkbox_need_assistance_yes: expected='False', observed="{'checked': True, 'confidence': 0.8223062381852552}"
-    - checkbox_need_assistance_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_family_assets_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_family_assets_no: expected='False', observed="{'checked': True, 'confidence': 0.7624421296296297}"
-    - checkbox_shelter_yes: expected='False', observed="{'checked': True, 'confidence': 0.727931488801054}"
-    - checkbox_shelter_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_dependants_yes: expected='False', observed="{'checked': True, 'confidence': 0.7201646090534979}"
-    - checkbox_dependants_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_employment_changes_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_employment_changes_no: expected='False', observed="{'checked': True, 'confidence': 0.8760683760683762}"
-    - checkbox_employment_changes_spouse_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_employment_changes_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.6469979296066253}"
-    - checkbox_school_yes: expected='False', observed="{'checked': True, 'confidence': 0.7045454545454546}"
-    - checkbox_school_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_school_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.841209829867675}"
-    - checkbox_school_spouse_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_work_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_work_no: expected='False', observed="{'checked': True, 'confidence': 0.6561996779388084}"
-    - checkbox_work_souse_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_work_souse_no: expected='False', observed="{'checked': True, 'confidence': 0.7798032407407407}"
-    - checkbox_moved_yes: expected='False', observed="{'checked': True, 'confidence': 0.5480769230769231}"
-    - checkbox_moved_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_moved_spouse_yes: expected='False', observed="{'checked': False, 'confidence': 0.23046251993620404}"
-    - checkbox_moved_spouse_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_warrant_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_warrant_no: expected='False', observed="{'checked': True, 'confidence': 0.8627136752136754}"
-    - checkbox_warrant_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.7677708764665286}"
-    - checkbox_warrant_spouse_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
+    - checkbox_need_assistance_yes: expected='False', observed='True'
+    - checkbox_family_assets_no: expected='False', observed='True'
+    - checkbox_shelter_yes: expected='False', observed='True'
+    - checkbox_employment_changes_yes: expected='True', observed='False'
+    - checkbox_school_spouse_yes: expected='False', observed='True'
+    - checkbox_work_souse_no: expected='False', observed='True'
+    - checkbox_warrant_no: expected='False', observed='True'
     - explain_changes: expected='Rent increased, see lease update', observed='Rent inereased, see lease updak'
     - signature: expected='D Wilson', observed='Duikson'
     - spouse_signature: expected='H Wilson', observed='Kskon'
@@ -248,34 +129,34 @@ Receipt_2025-11-13_135843.json
 Receipt_2025-11-13_135900 (2).json
   accuracy: 0.4933 (37/75)
   mismatches:
-    - checkbox_need_assistance_yes: expected='', observed="{'checked': True, 'confidence': 0.7482671707624449}"
-    - checkbox_need_assistance_no: expected='', observed="{'checked': True, 'confidence': 0.7638888888888888}"
-    - checkbox_family_assets_yes: expected='', observed="{'checked': True, 'confidence': 0.6427804616210413}"
-    - checkbox_family_assets_no: expected='', observed="{'checked': True, 'confidence': 0.652488425925926}"
-    - checkbox_shelter_yes: expected='', observed="{'checked': True, 'confidence': 0.5945322793148881}"
-    - checkbox_shelter_no: expected='', observed="{'checked': True, 'confidence': 0.6439393939393939}"
-    - checkbox_dependants_yes: expected='', observed="{'checked': True, 'confidence': 0.6918724279835391}"
-    - checkbox_dependants_no: expected='', observed="{'checked': True, 'confidence': 0.5693581780538303}"
-    - checkbox_employment_changes_yes: expected='', observed="{'checked': True, 'confidence': 0.9159420289855074}"
-    - checkbox_employment_changes_no: expected='', observed="{'checked': True, 'confidence': 0.8814102564102565}"
-    - checkbox_employment_changes_spouse_yes: expected='', observed="{'checked': True, 'confidence': 0.862977602108037}"
-    - checkbox_employment_changes_spouse_no: expected='', observed="{'checked': True, 'confidence': 0.6038647342995169}"
-    - checkbox_school_yes: expected='', observed="{'checked': True, 'confidence': 0.7318181818181818}"
-    - checkbox_school_no: expected='', observed="{'checked': True, 'confidence': 0.8681159420289855}"
-    - checkbox_school_spouse_yes: expected='', observed="{'checked': True, 'confidence': 0.7482671707624449}"
-    - checkbox_school_spouse_no: expected='', observed="{'checked': True, 'confidence': 0.6367243867243868}"
-    - checkbox_work_yes: expected='', observed="{'checked': True, 'confidence': 0.7729468599033816}"
-    - checkbox_work_no: expected='', observed="{'checked': True, 'confidence': 0.7608695652173912}"
-    - checkbox_work_souse_yes: expected='', observed="{'checked': True, 'confidence': 0.7162534435261708}"
-    - checkbox_work_souse_no: expected='', observed="{'checked': True, 'confidence': 0.7262731481481481}"
-    - checkbox_moved_yes: expected='', observed="{'checked': True, 'confidence': 0.5192307692307693}"
-    - checkbox_moved_no: expected='', observed="{'checked': True, 'confidence': 0.7880434782608696}"
-    - checkbox_moved_spouse_yes: expected='', observed="{'checked': False, 'confidence': 0.44178628389154695}"
-    - checkbox_moved_spouse_no: expected='', observed="{'checked': True, 'confidence': 0.5366591080876796}"
-    - checkbox_warrant_yes: expected='', observed="{'checked': True, 'confidence': 0.7246376811594203}"
-    - checkbox_warrant_no: expected='', observed="{'checked': True, 'confidence': 0.7438568376068376}"
-    - checkbox_warrant_spouse_yes: expected='', observed="{'checked': True, 'confidence': 0.6780538302277432}"
-    - checkbox_warrant_spouse_no: expected='', observed="{'checked': True, 'confidence': 0.83648393194707}"
+    - checkbox_need_assistance_yes: expected='', observed='False'
+    - checkbox_need_assistance_no: expected='', observed='True'
+    - checkbox_family_assets_yes: expected='', observed='False'
+    - checkbox_family_assets_no: expected='', observed='False'
+    - checkbox_shelter_yes: expected='', observed='False'
+    - checkbox_shelter_no: expected='', observed='True'
+    - checkbox_dependants_yes: expected='', observed='False'
+    - checkbox_dependants_no: expected='', observed='False'
+    - checkbox_employment_changes_yes: expected='', observed='False'
+    - checkbox_employment_changes_no: expected='', observed='False'
+    - checkbox_employment_changes_spouse_yes: expected='', observed='False'
+    - checkbox_employment_changes_spouse_no: expected='', observed='False'
+    - checkbox_school_yes: expected='', observed='True'
+    - checkbox_school_no: expected='', observed='False'
+    - checkbox_school_spouse_yes: expected='', observed='False'
+    - checkbox_school_spouse_no: expected='', observed='False'
+    - checkbox_work_yes: expected='', observed='False'
+    - checkbox_work_no: expected='', observed='True'
+    - checkbox_work_souse_yes: expected='', observed='False'
+    - checkbox_work_souse_no: expected='', observed='True'
+    - checkbox_moved_yes: expected='', observed='False'
+    - checkbox_moved_no: expected='', observed='False'
+    - checkbox_moved_spouse_yes: expected='', observed='False'
+    - checkbox_moved_spouse_no: expected='', observed='False'
+    - checkbox_warrant_yes: expected='', observed='True'
+    - checkbox_warrant_no: expected='', observed='False'
+    - checkbox_warrant_spouse_yes: expected='', observed='True'
+    - checkbox_warrant_spouse_no: expected='', observed='False'
     - explain_changes: expected='Began school, student loan received', observed='Began schl student loam received'
     - signature: expected='R Chen', observed='ledn'
     - date: expected='2025-11-12', observed='2025-Nv-12'
@@ -287,36 +168,11 @@ Receipt_2025-11-13_135900 (2).json
     - income15: expected='0', observed='7e 0'
     - income17: expected='0', observed=''
 Receipt_2025-11-13_135910 (3).json
-  accuracy: 0.4000 (30/75)
+  accuracy: 0.7333 (55/75)
   mismatches:
-    - checkbox_need_assistance_yes: expected='False', observed="{'checked': True, 'confidence': 0.6852551984877127}"
-    - checkbox_need_assistance_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_family_assets_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_family_assets_no: expected='False', observed="{'checked': True, 'confidence': 0.6177662037037037}"
-    - checkbox_shelter_yes: expected='False', observed="{'checked': True, 'confidence': 0.6142951251646904}"
-    - checkbox_shelter_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_dependants_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_dependants_no: expected='False', observed="{'checked': False, 'confidence': 0.002760524499655026}"
-    - checkbox_employment_changes_yes: expected='False', observed="{'checked': True, 'confidence': 0.7492753623188406}"
-    - checkbox_employment_changes_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_employment_changes_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.9189723320158104}"
-    - checkbox_employment_changes_spouse_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_school_yes: expected='False', observed="{'checked': True, 'confidence': 0.7575757575757576}"
-    - checkbox_school_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_school_spouse_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_school_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.6782106782106783}"
-    - checkbox_work_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_work_no: expected='False', observed="{'checked': True, 'confidence': 0.7595276435856146}"
-    - checkbox_work_souse_yes: expected='False', observed="{'checked': True, 'confidence': 0.8161157024793388}"
-    - checkbox_work_souse_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_moved_yes: expected='False', observed="{'checked': True, 'confidence': 0.6426282051282052}"
-    - checkbox_moved_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_moved_spouse_yes: expected='False', observed="{'checked': False, 'confidence': 0.5454545454545454}"
-    - checkbox_moved_spouse_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_warrant_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_warrant_no: expected='False', observed="{'checked': True, 'confidence': 0.8066239316239316}"
-    - checkbox_warrant_spouse_yes: expected='True', observed="{'checked': True, 'confidence': 0.8505866114561766}"
-    - checkbox_warrant_spouse_no: expected='False', observed="{'checked': True, 'confidence': 1.0}"
+    - checkbox_school_spouse_no: expected='False', observed='True'
+    - checkbox_warrant_spouse_yes: expected='True', observed='False'
+    - checkbox_warrant_spouse_no: expected='False', observed='True'
     - explain_changes: expected='Changed address, proof of move', observed='changed addres, proof of move'
     - signature: expected="P O'Connor", observed='Bmr'
     - spouse_signature: expected="L O'Connor", observed='NOor'
@@ -335,36 +191,11 @@ Receipt_2025-11-13_135910 (3).json
     - income11: expected='', observed='C'
     - spouse_income16: expected='26.8', observed='26,80'
 Receipt_2025-11-13_135924 (4).json
-  accuracy: 0.4133 (31/75)
+  accuracy: 0.7467 (56/75)
   mismatches:
-    - checkbox_need_assistance_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_need_assistance_no: expected='False', observed="{'checked': True, 'confidence': 0.6785300925925927}"
-    - checkbox_family_assets_yes: expected='True', observed="{'checked': True, 'confidence': 0.9567901234567902}"
-    - checkbox_family_assets_no: expected='False', observed="{'checked': True, 'confidence': 0.5425347222222222}"
-    - checkbox_shelter_yes: expected='False', observed="{'checked': True, 'confidence': 0.5484189723320159}"
-    - checkbox_shelter_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_dependants_yes: expected='False', observed="{'checked': True, 'confidence': 0.6520061728395062}"
-    - checkbox_dependants_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_employment_changes_yes: expected='False', observed="{'checked': True, 'confidence': 0.8565217391304347}"
-    - checkbox_employment_changes_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_employment_changes_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.9436758893280632}"
-    - checkbox_employment_changes_spouse_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_school_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_school_no: expected='False', observed="{'checked': True, 'confidence': 0.7594202898550725}"
-    - checkbox_school_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.7482671707624449}"
-    - checkbox_school_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.5176767676767677}"
-    - checkbox_work_yes: expected='False', observed="{'checked': True, 'confidence': 0.6461352657004831}"
-    - checkbox_work_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_work_souse_yes: expected='False', observed="{'checked': True, 'confidence': 0.6284435261707989}"
-    - checkbox_work_souse_no: expected='False', observed="{'checked': True, 'confidence': 0.8564814814814814}"
-    - checkbox_moved_yes: expected='True', observed="{'checked': True, 'confidence': 0.9358974358974359}"
-    - checkbox_moved_no: expected='False', observed="{'checked': True, 'confidence': 0.8227657004830918}"
-    - checkbox_moved_spouse_yes: expected='False', observed="{'checked': False, 'confidence': 0.3341307814992026}"
-    - checkbox_moved_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.5120937263794407}"
-    - checkbox_warrant_yes: expected='False', observed="{'checked': True, 'confidence': 0.8283926218708828}"
-    - checkbox_warrant_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_warrant_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.8126293995859213}"
-    - checkbox_warrant_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.7939508506616257}"
+    - checkbox_employment_changes_yes: expected='False', observed='True'
+    - checkbox_employment_changes_spouse_yes: expected='False', observed='True'
+    - checkbox_moved_no: expected='False', observed='True'
     - explain_changes: expected='Received EI, statement submitted', observed='Received EF stament suboitted'
     - signature: expected='A M J', observed='A.h,'
     - date: expected='2025-11-23', observed='2035-NN-23'
@@ -382,36 +213,17 @@ Receipt_2025-11-13_135924 (4).json
     - income16: expected='0', observed='C 0'
     - income18: expected='0', observed=''
 Receipt_2025-11-13_135939 (5).json
-  accuracy: 0.4400 (33/75)
+  accuracy: 0.6933 (52/75)
   mismatches:
-    - checkbox_need_assistance_yes: expected='False', observed="{'checked': True, 'confidence': 0.841209829867675}"
-    - checkbox_need_assistance_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_family_assets_yes: expected='False', observed="{'checked': True, 'confidence': 0.6333870101986044}"
-    - checkbox_family_assets_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_shelter_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_shelter_no: expected='False', observed="{'checked': True, 'confidence': 0.7740447957839263}"
-    - checkbox_dependants_yes: expected='False', observed="{'checked': True, 'confidence': 0.6790123456790124}"
-    - checkbox_dependants_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_employment_changes_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_employment_changes_no: expected='False', observed="{'checked': True, 'confidence': 0.9134615384615385}"
-    - checkbox_employment_changes_spouse_yes: expected='True', observed="{'checked': True, 'confidence': 0.9272068511198946}"
-    - checkbox_employment_changes_spouse_no: expected='False', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_school_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_school_no: expected='False', observed="{'checked': True, 'confidence': 0.7231884057971015}"
-    - checkbox_school_spouse_yes: expected='True', observed="{'checked': True, 'confidence': 0.7718966603654694}"
-    - checkbox_school_spouse_no: expected='False', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_work_yes: expected='False', observed="{'checked': True, 'confidence': 0.7729468599033816}"
-    - checkbox_work_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_work_souse_yes: expected='False', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_work_souse_no: expected='True', observed="{'checked': True, 'confidence': 0.6958912037037037}"
-    - checkbox_moved_yes: expected='False', observed="{'checked': True, 'confidence': 0.5641025641025642}"
-    - checkbox_moved_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_moved_spouse_yes: expected='False', observed="{'checked': False, 'confidence': 0.4936204146730463}"
-    - checkbox_moved_spouse_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_warrant_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_warrant_no: expected='False', observed="{'checked': True, 'confidence': 0.8560363247863247}"
-    - checkbox_warrant_spouse_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_warrant_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.7986767485822307}"
+    - checkbox_need_assistance_yes: expected='False', observed='True'
+    - checkbox_employment_changes_spouse_yes: expected='True', observed='False'
+    - checkbox_employment_changes_spouse_no: expected='False', observed='True'
+    - checkbox_school_spouse_yes: expected='True', observed='False'
+    - checkbox_school_spouse_no: expected='False', observed='True'
+    - checkbox_work_yes: expected='False', observed='True'
+    - checkbox_work_souse_yes: expected='False', observed='True'
+    - checkbox_work_souse_no: expected='True', observed='False'
+    - checkbox_warrant_no: expected='False', observed='True'
     - explain_changes: expected='Child support started, record attached', observed='Child suppert started, record affacled'
     - signature: expected='S J', observed='SJ.'
     - date: expected='2025-11-23', observed='2025-NoN23'
@@ -427,36 +239,12 @@ Receipt_2025-11-13_135939 (5).json
     - income17: expected='0', observed=''
     - income18: expected='0', observed=''
 Receipt_2025-11-13_135949 (6).json
-  accuracy: 0.5600 (42/75)
+  accuracy: 0.8800 (66/75)
   mismatches:
-    - checkbox_need_assistance_yes: expected='False', observed="{'checked': True, 'confidence': 0.6789540012602395}"
-    - checkbox_need_assistance_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_family_assets_yes: expected='False', observed="{'checked': True, 'confidence': 0.6468062265163714}"
-    - checkbox_family_assets_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_shelter_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_shelter_no: expected='False', observed="{'checked': True, 'confidence': 0.6406455862977603}"
-    - checkbox_dependants_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_dependants_no: expected='False', observed="{'checked': True, 'confidence': 0.6331953071083506}"
-    - checkbox_employment_changes_yes: expected='False', observed="{'checked': True, 'confidence': 0.9318840579710146}"
-    - checkbox_employment_changes_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_employment_changes_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.7872200263504612}"
-    - checkbox_employment_changes_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.5572808833678399}"
-    - checkbox_school_yes: expected='False', observed="{'checked': True, 'confidence': 0.6818181818181819}"
-    - checkbox_school_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_school_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.6836798991808444}"
-    - checkbox_school_spouse_no: expected='False', observed="{'checked': False, 'confidence': 0.32178932178932174}"
-    - checkbox_work_yes: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_work_no: expected='False', observed="{'checked': True, 'confidence': 0.6253354804079442}"
-    - checkbox_work_souse_yes: expected='False', observed="{'checked': True, 'confidence': 0.6887052341597797}"
-    - checkbox_work_souse_no: expected='False', observed="{'checked': True, 'confidence': 0.8130787037037037}"
-    - checkbox_moved_yes: expected='False', observed="{'checked': True, 'confidence': 0.5881410256410257}"
-    - checkbox_moved_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_moved_spouse_yes: expected='False', observed="{'checked': False, 'confidence': 0.30622009569377984}"
-    - checkbox_moved_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.5744520030234317}"
-    - checkbox_warrant_yes: expected='False', observed="{'checked': True, 'confidence': 0.8662714097496707}"
-    - checkbox_warrant_no: expected='True', observed="{'checked': True, 'confidence': 1.0}"
-    - checkbox_warrant_spouse_yes: expected='False', observed="{'checked': True, 'confidence': 0.831608005521049}"
-    - checkbox_warrant_spouse_no: expected='False', observed="{'checked': True, 'confidence': 0.795526149968494}"
+    - checkbox_employment_changes_yes: expected='False', observed='True'
+    - checkbox_employment_changes_spouse_yes: expected='False', observed='True'
+    - checkbox_employment_changes_spouse_no: expected='False', observed='True'
+    - checkbox_warrant_yes: expected='False', observed='True'
     - explain_changes: expected='New roommate, room/board income enclosed', observed='New roommate, reom /board income enelosed'
     - signature: expected='M Brown', observed='mhran'
     - date: expected='2025-11-12', observed='2025-Nov -12'

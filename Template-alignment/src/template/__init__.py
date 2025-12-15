@@ -8,6 +8,8 @@ from .template_processing import (
     build_union_mask,
     apply_mask,
     extract_polygon_roi,
+    extract_checkbox_roi,
+    save_checkbox_rois,
     detect_checkboxes_from_template_image,
     subtract_template_from_aligned,
 )
@@ -29,6 +31,8 @@ __all__ = [
     "build_union_mask",
     "apply_mask",
     "extract_polygon_roi",
+    "extract_checkbox_roi",
+    "save_checkbox_rois",
     "detect_checkboxes_from_template_image",
     "subtract_template_from_aligned",
     "ROI_PADDING",

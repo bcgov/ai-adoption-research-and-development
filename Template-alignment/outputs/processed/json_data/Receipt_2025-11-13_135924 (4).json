@@ -464,28 +464,28 @@
     "confidence": 1.0
   },
   "checkbox_need_assistance_no": {
-    "checked": true,
-    "confidence": 0.6785300925925927
+    "checked": false,
+    "confidence": 0.5555555555555556
   },
   "checkbox_family_assets_yes": {
     "checked": true,
-    "confidence": 0.9567901234567902
+    "confidence": 1.0
   },
   "checkbox_family_assets_no": {
-    "checked": true,
-    "confidence": 0.5425347222222222
+    "checked": false,
+    "confidence": 0.3185185185185184
   },
   "checkbox_shelter_yes": {
-    "checked": true,
-    "confidence": 0.5484189723320159
+    "checked": false,
+    "confidence": 0.2216117216117216
   },
   "checkbox_shelter_no": {
     "checked": true,
-    "confidence": 1.0
+    "confidence": 0.6456043956043956
   },
   "checkbox_dependants_yes": {
-    "checked": true,
-    "confidence": 0.6520061728395062
+    "checked": false,
+    "confidence": 0.4320987654320988
   },
   "checkbox_dependants_no": {
     "checked": true,
@@ -493,7 +493,7 @@
   },
   "checkbox_employment_changes_yes": {
     "checked": true,
-    "confidence": 0.8565217391304347
+    "confidence": 0.621279761904762
   },
   "checkbox_employment_changes_no": {
     "checked": true,
@@ -501,7 +501,7 @@
   },
   "checkbox_employment_changes_spouse_yes": {
     "checked": true,
-    "confidence": 0.9436758893280632
+    "confidence": 0.5998168498168498
   },
   "checkbox_employment_changes_spouse_no": {
     "checked": true,
@@ -512,63 +512,63 @@
     "confidence": 1.0
   },
   "checkbox_school_no": {
-    "checked": true,
-    "confidence": 0.7594202898550725
+    "checked": false,
+    "confidence": 0.1741071428571428
   },
   "checkbox_school_spouse_yes": {
-    "checked": true,
-    "confidence": 0.7482671707624449
+    "checked": false,
+    "confidence": 0.3622448979591837
   },
   "checkbox_school_spouse_no": {
-    "checked": true,
-    "confidence": 0.5176767676767677
+    "checked": false,
+    "confidence": 0.41239316239316237
   },
   "checkbox_work_yes": {
-    "checked": true,
-    "confidence": 0.6461352657004831
+    "checked": false,
+    "confidence": 0.6746031746031746
   },
   "checkbox_work_no": {
     "checked": true,
     "confidence": 1.0
   },
   "checkbox_work_souse_yes": {
-    "checked": true,
-    "confidence": 0.6284435261707989
+    "checked": false,
+    "confidence": 0.2603550295857988
   },
   "checkbox_work_souse_no": {
-    "checked": true,
-    "confidence": 0.8564814814814814
+    "checked": false,
+    "confidence": 0.41481481481481486
   },
   "checkbox_moved_yes": {
     "checked": true,
-    "confidence": 0.9358974358974359
+    "confidence": 0.8734402852049911
   },
   "checkbox_moved_no": {
     "checked": true,
-    "confidence": 0.8227657004830918
+    "confidence": 0.6944444444444445
   },
   "checkbox_moved_spouse_yes": {
     "checked": false,
-    "confidence": 0.3341307814992026
+    "confidence": 0.9230769230769231
   },
   "checkbox_moved_spouse_no": {
-    "checked": true,
-    "confidence": 0.5120937263794407
+    "checked": false,
+    "confidence": 0.36342592592592593
   },
   "checkbox_warrant_yes": {
-    "checked": true,
-    "confidence": 0.8283926218708828
+    "checked": false,
+    "confidence": 0.12087912087912078
   },
   "checkbox_warrant_no": {
     "checked": true,
-    "confidence": 1.0
+    "confidence": 0.934640522875817
   },
   "checkbox_warrant_spouse_yes": {
-    "checked": true,
-    "confidence": 0.8126293995859213
+    "checked": false,
+    "confidence": 0.40476190476190477
   },
   "checkbox_warrant_spouse_no": {
-    "checked": true,
-    "confidence": 0.7939508506616257
+    "checked": false,
+    "confidence": 0.3112244897959183
   }
 }
