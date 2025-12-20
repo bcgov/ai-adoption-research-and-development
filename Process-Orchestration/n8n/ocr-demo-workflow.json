@@ -1,0 +1,569 @@
+{
+  "name": "Azure OCR Document Processing",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "4a93afd5-1557-4876-b5c3-d8b13f7bc000",
+      "name": "Manual Trigger - File Upload",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -3248,
+        128
+      ],
+      "webhookId": ""
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ocr-upload",
+        "responseMode": "responseNode",
+        "options": {
+          "rawBody": true
+        }
+      },
+      "id": "0e249133-8d29-4757-baa4-07fcd6bd565c",
+      "name": "Webhook - File Upload",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        -3248,
+        320
+      ],
+      "webhookId": "ocr-upload-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare file data for Azure OCR\n// Azure expects binary data in request body, not JSON with base64\nconst items = $input.all();\nconst result = [];\n\nfor (const item of items) {\n  // DEBUG: Log what we received\n  console.log('=== DEBUG: Prepare File Data Node ===');\n  console.log('Item JSON keys:', Object.keys(item.json || {}));\n  console.log('Item JSON sample:', JSON.stringify(item.json, null, 2).substring(0, 500));\n  console.log('Has binary property:', !!item.binary);\n  \n  const body = item.json.body || item.json;\n  \n  let fileName = 'document';\n  let fileType = 'pdf';\n  let contentType = 'application/pdf';\n  let binaryData = null;\n  \n  // When webhook has rawBody: true, n8n stores raw binary data in item.binary\n  // Check all possible binary property names from webhook\n  const binaryKeys = Object.keys(item.binary || {});\n  console.log('Binary keys found:', binaryKeys);\n  \n  if (item.binary) {\n    for (const key of binaryKeys) {\n      console.log(`Binary[${key}] type:`, typeof item.binary[key]);\n      console.log(`Binary[${key}] has data property:`, !!item.binary[key]?.data);\n      if (item.binary[key]?.data) {\n        console.log(`Binary[${key}].data type:`, typeof item.binary[key].data);\n        console.log(`Binary[${key}].data length:`, item.binary[key].data?.length || 'N/A');\n        console.log(`Binary[${key}].mimeType:`, item.binary[key].mimeType);\n        console.log(`Binary[${key}].fileName:`, item.binary[key].fileName);\n      }\n    }\n  }\n  \n  // Try to find binary data - check common property names\n  let binaryKey = null;\n  let foundBinary = null;\n  \n  if (binaryKeys.length > 0) {\n    // Check for 'data' first (most common for rawBody webhooks)\n    if (item.binary.data && item.binary.data.data) {\n      binaryKey = 'data';\n      foundBinary = item.binary.data;\n    } else if (item.binary.data && Buffer.isBuffer(item.binary.data)) {\n      // Handle case where data is a Buffer directly\n      binaryKey = 'data';\n      foundBinary = {\n        data: item.binary.data.toString('base64'),\n        mimeType: item.binary.data.mimeType || 'application/pdf',\n        fileName: item.binary.data.fileName || 'document'\n      };\n    } else {\n      // Check other keys\n      binaryKey = binaryKeys.find(key => item.binary[key] && item.binary[key].data);\n      if (binaryKey) {\n        foundBinary = item.binary[binaryKey];\n      }\n    }\n  }\n  \n  // Handle file read from disk or binary file upload (already in binary format)\n  if (foundBinary && foundBinary.data) {\n    // Binary file from Read Binary Files node, manual trigger, or webhook with rawBody\n    binaryData = foundBinary;\n    \n    // Extract metadata from headers if available (webhook case)\n    const headers = item.json.headers || {};\n    const contentDisposition = headers['content-disposition'] || headers['Content-Disposition'] || '';\n    const contentTypeHeader = headers['content-type'] || headers['Content-Type'] || '';\n    \n    // Extract filename from Content-Disposition header if present\n    if (contentDisposition) {\n      const filenameMatch = contentDisposition.match(/filename[^;=\\n]*=((['\"]).*?\\2|[^;\\n]*)/);\n      if (filenameMatch && filenameMatch[1]) {\n        fileName = filenameMatch[1].replace(/['\"]/g, '');\n      }\n    }\n    \n    // Get content type from header if available\n    if (contentTypeHeader) {\n      contentType = contentTypeHeader.split(';')[0].trim();\n    } else if (binaryData.mimeType) {\n      contentType = binaryData.mimeType;\n    }\n    \n    // Get filename from binary data if not found in headers\n    if (!fileName || fileName === 'document') {\n      fileName = binaryData.fileName || item.json.fileName || item.json.filePath?.split('/').pop() || 'document';\n    }\n    \n    // Determine file type from content type or filename\n    const lowerFileName = fileName.toLowerCase();\n    if (contentType.includes('pdf') || lowerFileName.endsWith('.pdf')) {\n      fileType = 'pdf';\n      contentType = 'application/pdf';\n    } else if (contentType.includes('image') || lowerFileName.match(/\\.(jpg|jpeg|png|gif|bmp|tiff|webp)$/i)) {\n      fileType = 'image';\n      if (!contentType || contentType === 'application/pdf') {\n        if (lowerFileName.endsWith('.png')) {\n          contentType = 'image/png';\n        } else if (lowerFileName.match(/\\.(jpg|jpeg)$/i)) {\n          contentType = 'image/jpeg';\n        } else if (lowerFileName.endsWith('.gif')) {\n          contentType = 'image/gif';\n        } else if (lowerFileName.match(/\\.(bmp|tiff|webp)$/i)) {\n          contentType = 'image/' + lowerFileName.split('.').pop();\n        } else {\n          contentType = contentType || 'image/jpeg';\n        }\n      }\n    }\n    \n    // Ensure binaryData has proper format (data must be base64 string)\n    // If data is already a base64 string, use it; if it's a Buffer, convert it\n    let base64Data = binaryData.data;\n    if (Buffer.isBuffer(base64Data)) {\n      base64Data = base64Data.toString('base64');\n    } else if (typeof base64Data !== 'string') {\n      // Try to convert to string if it's not already\n      base64Data = String(base64Data);\n    }\n    \n    // Ensure binaryData has proper mimeType and data format\n    binaryData = {\n      data: base64Data,\n      mimeType: binaryData.mimeType || contentType,\n      fileName: binaryData.fileName || fileName\n    };\n  }\n  // Handle webhook that converted binary to base64 (n8n webhook behavior)\n  else if (item.json.base64Source) {\n    // Webhook received binary and converted to base64\n    // Validate and use the base64 string directly\n    let base64String = item.json.base64Source;\n    \n    // Remove any data URL prefix if present\n    if (base64String.includes(',')) {\n      base64String = base64String.split(',')[1];\n    }\n    \n    // Determine content type from headers\n    const headers = item.json.headers || {};\n    const contentTypeHeader = headers['content-type'] || headers['Content-Type'] || 'application/pdf';\n    contentType = contentTypeHeader.split(';')[0].trim();\n    fileType = contentType.includes('pdf') ? 'pdf' : 'image';\n    \n    // Create binary data object in n8n format\n    // The 'data' field must contain the base64 string (not decoded)\n    // HTTP Request node will automatically decode it when sending\n    binaryData = {\n      data: base64String,\n      mimeType: contentType,\n      fileName: item.json.fileName || 'document.pdf'\n    };\n    \n    fileName = item.json.fileName || 'document.pdf';\n  }\n  // Handle webhook JSON payload with base64 file data\n  else if (body && body.file) {\n    // Base64 string - keep as base64 for binary property\n    const base64String = body.file;\n    binaryData = {\n      data: base64String,\n      mimeType: contentType,\n      fileName: body.original_filename || body.filename || 'document'\n    };\n    fileName = body.original_filename || body.filename || 'document';\n    fileType = body.file_type || 'pdf';\n    contentType = fileType === 'pdf' ? 'application/pdf' : (body.content_type || 'image/jpeg');\n  }\n  // Handle webhook with binary data field (legacy format)\n  else if (body && body.data) {\n    // Binary data - convert to base64\n    binaryData = {\n      data: Buffer.from(body.data, 'binary').toString('base64'),\n      mimeType: contentType,\n      fileName: body.filename || 'document'\n    };\n    fileName = body.filename || 'document';\n    fileType = body.file_type || 'pdf';\n    contentType = fileType === 'pdf' ? 'application/pdf' : (body.content_type || 'image/jpeg');\n  }\n  \n  if (!binaryData) {\n    // Debug: log what we received\n    console.log('ERROR: No binary data found!');\n    console.log('Item JSON:', JSON.stringify(item.json, null, 2));\n    console.log('Binary keys:', binaryKeys);\n    console.log('Has binary:', !!item.binary);\n    if (item.binary) {\n      console.log('Binary object:', JSON.stringify(Object.keys(item.binary), null, 2));\n    }\n    throw new Error('No file data found. Please upload a file via manual trigger, read from disk, or send file data via webhook. Make sure to send raw binary data with Content-Type header when using webhook with rawBody option.');\n  }\n  \n  // DEBUG: Log what we're outputting\n  console.log('SUCCESS: Binary data prepared');\n  console.log('File name:', fileName);\n  console.log('File type:', fileType);\n  console.log('Content type:', contentType);\n  console.log('Binary data type:', typeof binaryData.data);\n  console.log('Binary data length (base64):', binaryData.data?.length || 'N/A');\n  \n  // Calculate actual binary size\n  if (binaryData.data && typeof binaryData.data === 'string') {\n    try {\n      const buffer = Buffer.from(binaryData.data, 'base64');\n      console.log('Binary data size (decoded bytes):', buffer.length);\n      console.log('Binary data first 20 bytes (hex):', buffer.slice(0, 20).toString('hex'));\n      \n      // Validate PDF signature if it's supposed to be a PDF\n      if (contentType.includes('pdf') || fileType === 'pdf') {\n        const pdfSignature = buffer.slice(0, 4).toString();\n        console.log('PDF signature check:', pdfSignature, pdfSignature === '%PDF' ? '✓ Valid PDF' : '✗ Invalid PDF signature');\n        if (pdfSignature !== '%PDF' && buffer.length > 4) {\n          console.warn('WARNING: File does not have valid PDF signature!');\n        }\n      }\n    } catch (e) {\n      console.error('Error decoding base64:', e.message);\n    }\n  }\n  \n  console.log('Binary mimeType:', binaryData.mimeType);\n  console.log('Binary fileName:', binaryData.fileName);\n  \n  // Pass binary data and metadata to next node\n  result.push({\n    json: {\n      fileName: fileName,\n      fileType: fileType,\n      contentType: contentType,\n      originalData: body || item.json,\n      // DEBUG: Include debug info in output\n      _debug: {\n        hasBinary: !!item.binary,\n        binaryKeys: binaryKeys,\n        binaryDataFound: !!binaryData,\n        binaryDataType: typeof binaryData?.data,\n        binaryDataLength: binaryData?.data?.length || 0,\n        inputJsonKeys: Object.keys(item.json || {}),\n        headers: item.json.headers || item.json.Headers || null\n      }\n    },\n    binary: {\n      data: binaryData\n    }\n  });\n  \n  console.log('=== END DEBUG ===');\n}\n\nreturn result;"
+      },
+      "id": "9462704f-9a87-4a04-a9ad-67f6a72d90b0",
+      "name": "Prepare File Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2816,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": ""
+            },
+            {
+              "name": "Content-Type",
+              "value": "={{ $json.contentType || 'application/pdf' }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "2608e418-d0b8-4507-a042-d1faf26369d6",
+      "name": "Submit to Azure OCR",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2592,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract Request ID and debug HTTP response\nconst items = $input.all();\nconst result = [];\n\nfor (const item of items) {\n  // DEBUG: Log the response structure\n  console.log('=== DEBUG: Extract Request ID ===');\n  console.log('Item JSON keys:', Object.keys(item.json || {}));\n  console.log('Full item JSON:', JSON.stringify(item.json, null, 2).substring(0, 1000));\n  \n  // HTTP Request node with fullResponse returns different structures\n  // Try multiple possible structures\n  let statusCode = item.json.statusCode || item.json.status || item.json.code || null;\n  let headers = item.json.headers || item.json.header || {};\n  let apimRequestId = null;\n  \n  // Try to extract apim-request-id from headers (case-insensitive)\n  if (headers) {\n    // Headers might be an object with lowercase keys\n    apimRequestId = headers['apim-request-id'] || \n                   headers['Apim-Request-Id'] || \n                   headers['APIM-Request-Id'] ||\n                   headers['apim-request-id']?.toLowerCase() ||\n                   null;\n    \n    // If headers is an array or has different structure\n    if (!apimRequestId && Array.isArray(headers)) {\n      const headerObj = headers.find(h => h.name && h.name.toLowerCase() === 'apim-request-id');\n      apimRequestId = headerObj?.value || null;\n    }\n  }\n  \n  console.log('Status code:', statusCode);\n  console.log('Headers type:', typeof headers);\n  console.log('Headers keys:', headers ? Object.keys(headers) : 'N/A');\n  console.log('APIM Request ID:', apimRequestId);\n  \n  // Get file info from previous node\n  const prepareFileDataNode = $('Prepare File Data');\n  const fileName = prepareFileDataNode?.item?.json?.fileName || 'document';\n  const fileType = prepareFileDataNode?.item?.json?.fileType || 'pdf';\n  \n  result.push({\n    json: {\n      statusCode: statusCode,\n      apimRequestId: apimRequestId || '',\n      fileName: fileName,\n      fileType: fileType,\n      status: 'submitted',\n      headers: headers,\n      _debug: {\n        responseKeys: Object.keys(item.json || {}),\n        hasStatusCode: !!statusCode,\n        hasHeaders: !!headers,\n        headersType: typeof headers\n      }\n    }\n  });\n  \n  console.log('=== END DEBUG ===');\n}\n\nreturn result;"
+      },
+      "id": "4af9cd15-cc79-4d7e-85ed-f2934e7d78d7",
+      "name": "Extract Request ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2368,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "check-status-code",
+              "leftValue": "={{ $json.statusCode }}",
+              "rightValue": 202,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "dfa588e6-fb03-49f9-ad06-bb91a6f3b569",
+      "name": "Check Submission Success",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -2144,
+        224
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "c7fefdc8-4269-4d1f-b4dc-3ab8e4cfc3a6",
+      "name": "Wait Before First Poll",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1936,
+        128
+      ],
+      "webhookId": "30e19d72-0c4e-4b8e-a484-de3571ac7270"
+    },
+    {
+      "parameters": {
+        "url": "",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3c9cd2b8-433e-49cb-aff3-eddd5a68a77c",
+      "name": "Poll OCR Results",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1712,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "check-status",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "running",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "831a6151-4be7-4d83-852f-795dbb2fbe0a",
+      "name": "Check OCR Status",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1488,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "increment-retry",
+              "name": "retryCount",
+              "value": "={{ ($json.retryCount || 0) + 1 }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8c1fc90b-94c5-41c6-aaf6-25ce78d67bcb",
+      "name": "Increment Retry Count",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1264,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-max-retries",
+              "leftValue": "={{ $json.retryCount }}",
+              "rightValue": 20,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "55125e4e-43cf-468b-8131-480abdef2450",
+      "name": "Check Max Retries",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1056,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "id": "0c9f0533-4723-4826-91be-1d7567d7f896",
+      "name": "Wait Before Retry",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -832,
+        32
+      ],
+      "webhookId": "426f4f51-2366-43e3-b3d6-f10926c4ec21"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "extract-content",
+              "name": "extractedText",
+              "value": "={{ $json.analyzeResult?.content || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "extract-pages",
+              "name": "pages",
+              "value": "={{ $json.analyzeResult?.pages || [] }}",
+              "type": "array"
+            },
+            {
+              "id": "extract-tables",
+              "name": "tables",
+              "value": "={{ $json.analyzeResult?.tables || [] }}",
+              "type": "array"
+            },
+            {
+              "id": "extract-paragraphs",
+              "name": "paragraphs",
+              "value": "={{ $json.analyzeResult?.paragraphs || [] }}",
+              "type": "array"
+            },
+            {
+              "id": "extract-key-value-pairs",
+              "name": "keyValuePairs",
+              "value": "={{ $json.analyzeResult?.keyValuePairs || [] }}",
+              "type": "array"
+            },
+            {
+              "id": "extract-sections",
+              "name": "sections",
+              "value": "={{ $json.analyzeResult?.sections || [] }}",
+              "type": "array"
+            },
+            {
+              "id": "extract-figures",
+              "name": "figures",
+              "value": "={{ $json.analyzeResult?.figures || [] }}",
+              "type": "array"
+            },
+            {
+              "id": "store-status",
+              "name": "status",
+              "value": "={{ $json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "store-apim-id",
+              "name": "apimRequestId",
+              "value": "={{ $('Extract Request ID').item.json.apimRequestId }}",
+              "type": "string"
+            },
+            {
+              "id": "store-file-name",
+              "name": "fileName",
+              "value": "={{ $('Extract Request ID').item.json.fileName }}",
+              "type": "string"
+            },
+            {
+              "id": "store-file-type",
+              "name": "fileType",
+              "value": "={{ $('Extract Request ID').item.json.fileType }}",
+              "type": "string"
+            },
+            {
+              "id": "store-processed-at",
+              "name": "processedAt",
+              "value": "={{ $now }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b453fda6-ac6f-4261-a8a1-144ed1acd528",
+      "name": "Extract OCR Results",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1488,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\n  \"success\": true,\n  \"status\": $json.status,\n  \"apimRequestId\": $json.apimRequestId,\n  \"fileName\": $json.fileName,\n  \"fileType\": $json.fileType,\n  \"extractedText\": $json.extractedText,\n  \"pages\": $json.pages,\n  \"tables\": $json.tables,\n  \"paragraphs\": $json.paragraphs,\n  \"keyValuePairs\": $json.keyValuePairs,\n  \"sections\": $json.sections,\n  \"figures\": $json.figures,\n  \"processedAt\": $json.processedAt\n} }}",
+        "options": {}
+      },
+      "id": "8c8f7f6b-0096-4a68-b736-f34da2c866ce",
+      "name": "Return Success Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -1264,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\n  \"success\": false,\n  \"error\": \"Failed to submit document to Azure OCR. Status code: \" + $response.statusCode\n} }}",
+        "options": {}
+      },
+      "id": "d1615917-d6df-439e-9b72-e8688c642a76",
+      "name": "Return Error Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -1936,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\n  \"success\": false,\n  \"error\": \"OCR processing timed out after maximum retries\",\n  \"apimRequestId\": $json.apimRequestId,\n  \"retryCount\": $json.retryCount\n} }}",
+        "options": {}
+      },
+      "id": "4e9a256b-c1b9-4a00-b15c-615cf2f41330",
+      "name": "Return Timeout Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -832,
+        -80
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook - File Upload": {
+      "main": [
+        [
+          {
+            "node": "Prepare File Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare File Data": {
+      "main": [
+        [
+          {
+            "node": "Submit to Azure OCR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit to Azure OCR": {
+      "main": [
+        [
+          {
+            "node": "Extract Request ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Request ID": {
+      "main": [
+        [
+          {
+            "node": "Check Submission Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Submission Success": {
+      "main": [
+        [
+          {
+            "node": "Wait Before First Poll",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return Error Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Before First Poll": {
+      "main": [
+        [
+          {
+            "node": "Poll OCR Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Poll OCR Results": {
+      "main": [
+        [
+          {
+            "node": "Check OCR Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check OCR Status": {
+      "main": [
+        [
+          {
+            "node": "Increment Retry Count",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract OCR Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Increment Retry Count": {
+      "main": [
+        [
+          {
+            "node": "Check Max Retries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Max Retries": {
+      "main": [
+        [
+          {
+            "node": "Wait Before Retry",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return Timeout Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Before Retry": {
+      "main": [
+        [
+          {
+            "node": "Poll OCR Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract OCR Results": {
+      "main": [
+        [
+          {
+            "node": "Return Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "16e00db2-2a22-416a-8393-f7d518c428dc",
+  "meta": {
+    "instanceId": "d0cfc3279056ae9457ee88feb57b0432c9721d35dcbcfd8d46b6226b3a516faa"
+  },
+  "id": "34cnKCcHsKqgIfrr",
+  "tags": []
+}

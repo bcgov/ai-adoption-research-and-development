@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.6">
+  <bpmn:process id="azure-ocr-document-processing" name="Azure OCR Document Processing" isExecutable="true">
+    <bpmn:startEvent id="StartEvent" name="Start">
+      <bpmn:outgoing>Flow_StartToCheck</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="ReadFileFromDisk" name="Read File from Disk">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="read-file-from-disk" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_ReadFile</bpmn:incoming>
+      <bpmn:outgoing>Flow_ReadFileToPrepare</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="PrepareFileData" name="Prepare File Data">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="prepare-file-data" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_StartToPrepare</bpmn:incoming>
+      <bpmn:incoming>Flow_ReadFileToPrepare</bpmn:incoming>
+      <bpmn:outgoing>Flow_SubmitOCR</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="SubmitToAzureOCR" name="Submit to Azure OCR">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="submit-to-azure-ocr" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_SubmitOCR</bpmn:incoming>
+      <bpmn:outgoing>Flow_ExtractRequestId</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="ExtractRequestId" name="Extract Request ID">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="extract-request-id" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_ExtractRequestId</bpmn:incoming>
+      <bpmn:outgoing>Flow_CheckSubmission</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="CheckSubmissionSuccess" name="Check Submission Success">
+      <bpmn:incoming>Flow_CheckSubmission</bpmn:incoming>
+      <bpmn:outgoing>Flow_WaitBeforePoll</bpmn:outgoing>
+      <bpmn:outgoing>Flow_ReturnError</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:intermediateCatchEvent id="WaitBeforeFirstPoll" name="Wait Before First Poll">
+      <bpmn:incoming>Flow_WaitBeforePoll</bpmn:incoming>
+      <bpmn:outgoing>Flow_PollOCRResults</bpmn:outgoing>
+      <bpmn:timerEventDefinition>
+        <bpmn:timeDuration>PT5S</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:serviceTask id="PollOCRResults" name="Poll OCR Results">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="poll-ocr-results" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_PollOCRResults</bpmn:incoming>
+      <bpmn:incoming>Flow_WaitBeforeRetry</bpmn:incoming>
+      <bpmn:outgoing>Flow_CheckOCRStatus</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="CheckOCRStatus" name="Check OCR Status">
+      <bpmn:incoming>Flow_CheckOCRStatus</bpmn:incoming>
+      <bpmn:outgoing>Flow_IncrementRetry</bpmn:outgoing>
+      <bpmn:outgoing>Flow_ExtractResults</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="IncrementRetryCount" name="Increment Retry Count">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="increment-retry-count" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_IncrementRetry</bpmn:incoming>
+      <bpmn:outgoing>Flow_CheckMaxRetries</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="CheckMaxRetries" name="Check Max Retries">
+      <bpmn:incoming>Flow_CheckMaxRetries</bpmn:incoming>
+      <bpmn:outgoing>Flow_WaitBeforeRetry</bpmn:outgoing>
+      <bpmn:outgoing>Flow_ReturnTimeout</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:intermediateCatchEvent id="WaitBeforeRetry" name="Wait Before Retry">
+      <bpmn:incoming>Flow_WaitBeforeRetry</bpmn:incoming>
+      <bpmn:outgoing>Flow_PollOCRResults</bpmn:outgoing>
+      <bpmn:timerEventDefinition>
+        <bpmn:timeDuration>PT10S</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:serviceTask id="ExtractOCRResults" name="Extract OCR Results">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="extract-ocr-results" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_ExtractResults</bpmn:incoming>
+      <bpmn:outgoing>Flow_CheckOCRSuccess</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="CheckOCRSuccess" name="Check OCR Success">
+      <bpmn:incoming>Flow_CheckOCRSuccess</bpmn:incoming>
+      <bpmn:outgoing>Flow_ReviewOCRResults</bpmn:outgoing>
+      <bpmn:outgoing>Flow_ReturnSuccess</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="ReviewOCRResults" name="Review OCR Results">
+      <bpmn:incoming>Flow_ReviewOCRResults</bpmn:incoming>
+      <bpmn:outgoing>Flow_AfterReview</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="ReturnSuccessResponse" name="Return Success Response">
+      <bpmn:incoming>Flow_ReturnSuccess</bpmn:incoming>
+      <bpmn:incoming>Flow_AfterReview</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="ReturnErrorResponse" name="Return Error Response">
+      <bpmn:incoming>Flow_ReturnError</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="ReturnTimeoutResponse" name="Return Timeout Response">
+      <bpmn:incoming>Flow_ReturnTimeout</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="CheckFilePath" name="Check File Path">
+      <bpmn:incoming>Flow_StartToCheck</bpmn:incoming>
+      <bpmn:outgoing>Flow_ReadFile</bpmn:outgoing>
+      <bpmn:outgoing>Flow_StartToPrepare</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_StartToCheck" sourceRef="StartEvent" targetRef="CheckFilePath" />
+    <bpmn:sequenceFlow id="Flow_ReadFile" name="filePath exists" sourceRef="CheckFilePath" targetRef="ReadFileFromDisk">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=filePath != null and filePath != ""</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_StartToPrepare" name="no filePath" sourceRef="CheckFilePath" targetRef="PrepareFileData">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=filePath = null or filePath = ""</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_ReadFileToPrepare" sourceRef="ReadFileFromDisk" targetRef="PrepareFileData" />
+    <bpmn:sequenceFlow id="Flow_SubmitOCR" sourceRef="PrepareFileData" targetRef="SubmitToAzureOCR" />
+    <bpmn:sequenceFlow id="Flow_ExtractRequestId" sourceRef="SubmitToAzureOCR" targetRef="ExtractRequestId" />
+    <bpmn:sequenceFlow id="Flow_CheckSubmission" sourceRef="ExtractRequestId" targetRef="CheckSubmissionSuccess" />
+    <bpmn:sequenceFlow id="Flow_WaitBeforePoll" name="Status Code = 202" sourceRef="CheckSubmissionSuccess" targetRef="WaitBeforeFirstPoll">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=statusCode = 202</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_ReturnError" name="Status Code != 202" sourceRef="CheckSubmissionSuccess" targetRef="ReturnErrorResponse">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=statusCode != 202</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_PollOCRResults" sourceRef="WaitBeforeFirstPoll" targetRef="PollOCRResults" />
+    <bpmn:sequenceFlow id="Flow_CheckOCRStatus" sourceRef="PollOCRResults" targetRef="CheckOCRStatus" />
+    <bpmn:sequenceFlow id="Flow_IncrementRetry" name="Status = running" sourceRef="CheckOCRStatus" targetRef="IncrementRetryCount">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=ocrStatus = "running"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_ExtractResults" name="Status != running" sourceRef="CheckOCRStatus" targetRef="ExtractOCRResults">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=ocrStatus != "running"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_CheckMaxRetries" sourceRef="IncrementRetryCount" targetRef="CheckMaxRetries" />
+    <bpmn:sequenceFlow id="Flow_WaitBeforeRetry" name="Retry Count &#60; 20" sourceRef="CheckMaxRetries" targetRef="WaitBeforeRetry">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=retryCount &lt; 20</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_ReturnTimeout" name="Retry Count &#62;= 20" sourceRef="CheckMaxRetries" targetRef="ReturnTimeoutResponse">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=retryCount &gt;= 20</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_CheckOCRSuccess" sourceRef="ExtractOCRResults" targetRef="CheckOCRSuccess" />
+    <bpmn:sequenceFlow id="Flow_ReviewOCRResults" name="OCR Succeeded" sourceRef="CheckOCRSuccess" targetRef="ReviewOCRResults">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=ocrStatus = "succeeded"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_ReturnSuccess" name="OCR Failed or No Results" sourceRef="CheckOCRSuccess" targetRef="ReturnSuccessResponse">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=ocrStatus != "succeeded"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_AfterReview" sourceRef="ReviewOCRResults" targetRef="ReturnSuccessResponse" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="azure-ocr-document-processing">
+      <bpmndi:BPMNShape id="_BPMNShape_ScriptTask_1" bpmnElement="PrepareFileData">
+        <dc:Bounds x="450" y="299" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_ServiceTask_2" bpmnElement="SubmitToAzureOCR">
+        <dc:Bounds x="630" y="299" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_ScriptTask_2" bpmnElement="ExtractRequestId">
+        <dc:Bounds x="810" y="299" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_ExclusiveGateway_1" bpmnElement="CheckSubmissionSuccess" isMarkerVisible="true">
+        <dc:Bounds x="990" y="312" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1049.5" y="317" width="57" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_ServiceTask_3" bpmnElement="PollOCRResults">
+        <dc:Bounds x="1270" y="212" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_ExclusiveGateway_2" bpmnElement="CheckOCRStatus" isMarkerVisible="true">
+        <dc:Bounds x="1450" y="225" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1445" y="275" width="60" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_ScriptTask_3" bpmnElement="IncrementRetryCount">
+        <dc:Bounds x="1550" y="112" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_ExclusiveGateway_3" bpmnElement="CheckMaxRetries" isMarkerVisible="true">
+        <dc:Bounds x="1730" y="125" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1727" y="175" width="56" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_IntermediateCatchEvent_2" bpmnElement="WaitBeforeRetry">
+        <dc:Bounds x="1234" y="82" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1209" y="118" width="86" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_ScriptTask_4" bpmnElement="ExtractOCRResults">
+        <dc:Bounds x="1550" y="312" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_ExclusiveGateway_4" bpmnElement="CheckOCRSuccess" isMarkerVisible="true">
+        <dc:Bounds x="1730" y="325" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1720" y="375" width="70" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_UserTask_1" bpmnElement="ReviewOCRResults">
+        <dc:Bounds x="1850" y="312" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_EndEvent_1" bpmnElement="ReturnSuccessResponse">
+        <dc:Bounds x="2030" y="332" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2009" y="368" width="79" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_EndEvent_2" bpmnElement="ReturnErrorResponse">
+        <dc:Bounds x="1830" y="432" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1817" y="468" width="62" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_EndEvent_3" bpmnElement="ReturnTimeoutResponse">
+        <dc:Bounds x="1830" y="232" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1810" y="268" width="77" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_ExclusiveGateway_0" bpmnElement="CheckFilePath" isMarkerVisible="true">
+        <dc:Bounds x="215" y="262" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="275" y="280" width="78" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_ServiceTask_1" bpmnElement="ReadFileFromDisk">
+        <dc:Bounds x="340" y="150" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_1" bpmnElement="StartEvent">
+        <dc:Bounds x="142" y="269" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="148" y="312" width="25" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_IntermediateCatchEvent_1" bpmnElement="WaitBeforeFirstPoll">
+        <dc:Bounds x="1112" y="222" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1089" y="258" width="82" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_StartToCheck_di" bpmnElement="Flow_StartToCheck">
+        <di:waypoint x="178" y="287" />
+        <di:waypoint x="215" y="287" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ReadFile_di" bpmnElement="Flow_ReadFile">
+        <di:waypoint x="240" y="262" />
+        <di:waypoint x="240" y="188" />
+        <di:waypoint x="340" y="188" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="256" y="163" width="68" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_StartToPrepare_di" bpmnElement="Flow_StartToPrepare">
+        <di:waypoint x="240" y="312" />
+        <di:waypoint x="240" y="337" />
+        <di:waypoint x="450" y="337" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="254" y="320" width="52" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ReadFileToPrepare_di" bpmnElement="Flow_ReadFileToPrepare">
+        <di:waypoint x="390" y="230" />
+        <di:waypoint x="390" y="265" />
+        <di:waypoint x="500" y="265" />
+        <di:waypoint x="500" y="299" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_SubmitOCR_di" bpmnElement="Flow_SubmitOCR">
+        <di:waypoint x="550" y="337" />
+        <di:waypoint x="630" y="337" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ExtractRequestId_di" bpmnElement="Flow_ExtractRequestId">
+        <di:waypoint x="730" y="337" />
+        <di:waypoint x="810" y="337" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_CheckSubmission_di" bpmnElement="Flow_CheckSubmission">
+        <di:waypoint x="910" y="337" />
+        <di:waypoint x="990" y="337" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_WaitBeforePoll_di" bpmnElement="Flow_WaitBeforePoll">
+        <di:waypoint x="1015" y="312" />
+        <di:waypoint x="1015" y="240" />
+        <di:waypoint x="1112" y="240" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1058" y="265" width="71" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ReturnError_di" bpmnElement="Flow_ReturnError">
+        <di:waypoint x="1015" y="362" />
+        <di:waypoint x="1015" y="450" />
+        <di:waypoint x="1090" y="450" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1073" y="400" width="74" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_PollOCRResults_di" bpmnElement="Flow_PollOCRResults">
+        <di:waypoint x="1148" y="240" />
+        <di:waypoint x="1209" y="240" />
+        <di:waypoint x="1209" y="250" />
+        <di:waypoint x="1270" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_CheckOCRStatus_di" bpmnElement="Flow_CheckOCRStatus">
+        <di:waypoint x="1370" y="250" />
+        <di:waypoint x="1450" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_IncrementRetry_di" bpmnElement="Flow_IncrementRetry">
+        <di:waypoint x="1475" y="225" />
+        <di:waypoint x="1475" y="150" />
+        <di:waypoint x="1550" y="150" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1495" y="175" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ExtractResults_di" bpmnElement="Flow_ExtractResults">
+        <di:waypoint x="1475" y="275" />
+        <di:waypoint x="1475" y="350" />
+        <di:waypoint x="1550" y="350" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1503" y="300" width="84" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_CheckMaxRetries_di" bpmnElement="Flow_CheckMaxRetries">
+        <di:waypoint x="1650" y="150" />
+        <di:waypoint x="1730" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_WaitBeforeRetry_di" bpmnElement="Flow_WaitBeforeRetry">
+        <di:waypoint x="1755" y="125" />
+        <di:waypoint x="1755" y="100" />
+        <di:waypoint x="1270" y="100" />
+        <di:waypoint x="1270" y="225" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1773" y="110" width="84" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ReturnTimeout_di" bpmnElement="Flow_ReturnTimeout">
+        <di:waypoint x="1755" y="175" />
+        <di:waypoint x="1755" y="250" />
+        <di:waypoint x="1830" y="250" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1780" y="200" width="90" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_CheckOCRSuccess_di" bpmnElement="Flow_CheckOCRSuccess">
+        <di:waypoint x="1650" y="350" />
+        <di:waypoint x="1730" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ReviewOCRResults_di" bpmnElement="Flow_ReviewOCRResults">
+        <di:waypoint x="1780" y="325" />
+        <di:waypoint x="1780" y="350" />
+        <di:waypoint x="1850" y="350" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1790" y="330" width="70" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ReturnSuccess_di" bpmnElement="Flow_ReturnSuccess">
+        <di:waypoint x="1755" y="375" />
+        <di:waypoint x="1755" y="400" />
+        <di:waypoint x="2048" y="400" />
+        <di:waypoint x="2048" y="368" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1790" y="400" width="120" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_AfterReview_di" bpmnElement="Flow_AfterReview">
+        <di:waypoint x="1950" y="350" />
+        <di:waypoint x="2030" y="350" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
