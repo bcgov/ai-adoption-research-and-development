@@ -1,0 +1,94 @@
+{
+    "checkbox_need_assistance_yes": true,
+    "checkbox_need_assistance_no": false,
+  
+    "checkbox_family_assets_yes": false,
+    "checkbox_family_assets_no": true,
+  
+    "checkbox_shelter_yes": false,
+    "checkbox_shelter_no": true,
+  
+    "checkbox_dependants_yes": false,
+    "checkbox_dependants_no": true,
+  
+    "checkbox_employment_changes_yes": false,
+    "checkbox_employment_changes_no": true,
+    "checkbox_employment_changes_spouse_yes": false,
+    "checkbox_employment_changes_spouse_no": true,
+  
+    "checkbox_school_yes": false,
+    "checkbox_school_no": true,
+    "checkbox_school_spouse_yes": false,
+    "checkbox_school_spouse_no": true,
+  
+    "checkbox_work_yes": true,
+    "checkbox_work_no": false,
+    "checkbox_work_souse_yes": false,
+    "checkbox_work_souse_no": true,
+  
+    "checkbox_moved_yes": false,
+    "checkbox_moved_no": true,
+    "checkbox_moved_spouse_yes": false,
+    "checkbox_moved_spouse_no": true,
+  
+    "checkbox_warrant_yes": false,
+    "checkbox_warrant_no": true,
+    "checkbox_warrant_spouse_yes": false,
+    "checkbox_warrant_spouse_no": true,
+  
+    "explain_changes": "Began looking for work",
+  
+    "signature": "J Smith",
+    "spouse_signature": "M Smith",
+  
+    "date": "2025-11-12",
+    "spouse_date": "2025-11-12",
+  
+    "name": "John Smith",
+    "spouse_name": "Maria Smith",
+  
+    "phone": "123-456-7789",
+    "spouse_phone": "234-567-8890",
+  
+    "sin": "123-456-789",
+    "spouse_sin": "456-789-012",
+  
+    "income1": 0,
+    "income2": 0,
+    "income3": 0,
+    "income4": 0,
+    "income5": 0,
+    "income6": 0,
+    "income7": 0,
+    "income8": 0,
+    "income9": 0,
+    "income10": 0,
+    "income11": 0,
+    "income12": 0,
+    "income13": 0,
+    "income14": 0,
+    "income15": 0,
+    "income16": 0,
+    "income17": 0,
+    "income18": 0,
+  
+    "spouse_income1": 0,
+    "spouse_income2": 0,
+    "spouse_income3": 0,
+    "spouse_income4": 0,
+    "spouse_income5": 0,
+    "spouse_income6": 0,
+    "spouse_income7": 0,
+    "spouse_income8": 0,
+    "spouse_income9": 0,
+    "spouse_income10": 0,
+    "spouse_income11": 0,
+    "spouse_income12": 0,
+    "spouse_income13": 0,
+    "spouse_income14": 0,
+    "spouse_income15": 0,
+    "spouse_income16": 0,
+    "spouse_income17": 0,
+    "spouse_income18": null
+  }
+  

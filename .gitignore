@@ -33,3 +33,6 @@ Thumbs.db
 *.tmp
 *.temp
 .cache/
+
+debug_data/
+debug_slices/
