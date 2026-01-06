@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "review-ocr-form",
+  "type": "default",
+  "components": [
+    {
+      "key": "sectionStatus",
+      "label": "Status",
+      "type": "text",
+      "text": "OCR Status: {{ ocrStatus }}"
+    },
+    {
+      "key": "sectionUrl",
+      "label": "Review URL",
+      "type": "text",
+      "text": "Review URL: {{ reviewUrl }}"
+    },
+    {
+      "key": "ocrSummary",
+      "label": "OCR Summary",
+      "type": "text",
+      "text": "Summary: {{ ocrSummary }}"
+    },
+    {
+      "key": "ocrPreviewText",
+      "label": "OCR Preview (first 2000 chars)",
+      "type": "textarea",
+      "rows": 15,
+      "readonly": true,
+      "defaultValue": "=ocrPreviewText"
+    }
+  ]
+}
+

@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  camunda:
+    image: camunda/camunda-bpm-platform:run-${CAMUNDA_7_VERSION:-7.21.0}
+    container_name: camunda7
+    ports:
+      - "8080:8080"
+    environment:
+      - CAMUNDA_BPM_ADMIN_USER=${CAMUNDA_ADMIN_USER:-demo}
+      - CAMUNDA_BPM_ADMIN_PASSWORD=${CAMUNDA_ADMIN_PASSWORD:-demo}
+      - CAMUNDA_BPM_HISTORY_LEVEL=full
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/engine-rest/engine || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+    volumes:
+      - camunda-data:/camunda/data
+    restart: unless-stopped
+
+volumes:
+  camunda-data:
