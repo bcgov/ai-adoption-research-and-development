@@ -1,0 +1,574 @@
+{
+  "name": {
+    "text": "Morothy Wilson",
+    "confidence": 0.9167293906211853,
+    "bbox": {
+      "x": 126,
+      "y": 1764,
+      "width": 1183,
+      "height": 84
+    }
+  },
+  "explain_changes": {
+    "text": "Rent inereased, see lease updak",
+    "confidence": 0.8555458188056946,
+    "bbox": {
+      "x": 128,
+      "y": 1333,
+      "width": 1183,
+      "height": 227
+    }
+  },
+  "signature": {
+    "text": "Duikson",
+    "confidence": 0.8049896955490112,
+    "bbox": {
+      "x": 126,
+      "y": 1672,
+      "width": 736,
+      "height": 84
+    }
+  },
+  "date": {
+    "text": "025-11-12",
+    "confidence": 0.9328587055206299,
+    "bbox": {
+      "x": 870,
+      "y": 1670,
+      "width": 443,
+      "height": 88
+    }
+  },
+  "phone": {
+    "text": "345-765-31",
+    "confidence": 0.9702658653259277,
+    "bbox": {
+      "x": 132,
+      "y": 1853,
+      "width": 583,
+      "height": 88
+    }
+  },
+  "sin": {
+    "text": "123-456-789",
+    "confidence": 0.9281814694404602,
+    "bbox": {
+      "x": 719,
+      "y": 1855,
+      "width": 595,
+      "height": 86
+    }
+  },
+  "spouse_signature": {
+    "text": "Kskon",
+    "confidence": 0.5735881328582764,
+    "bbox": {
+      "x": 1319,
+      "y": 1672,
+      "width": 694,
+      "height": 86
+    }
+  },
+  "spouse_date": {
+    "text": "Nou ds, do28",
+    "confidence": 0.7232134342193604,
+    "bbox": {
+      "x": 2016,
+      "y": 1666,
+      "width": 442,
+      "height": 92
+    }
+  },
+  "spouse_name": {
+    "text": "Harodd Wilson",
+    "confidence": 0.8241844177246094,
+    "bbox": {
+      "x": 1315,
+      "y": 1760,
+      "width": 1143,
+      "height": 90
+    }
+  },
+  "spouse_phone": {
+    "text": "123-956-789",
+    "confidence": 0.9647611379623413,
+    "bbox": {
+      "x": 1890,
+      "y": 1849,
+      "width": 573,
+      "height": 90
+    }
+  },
+  "income1": {
+    "text": "1,389",
+    "confidence": 0.8104095458984375,
+    "bbox": {
+      "x": 1948,
+      "y": 525,
+      "width": 240,
+      "height": 62
+    }
+  },
+  "income2": {
+    "text": "a 0",
+    "confidence": 0.6910185217857361,
+    "bbox": {
+      "x": 1953,
+      "y": 587,
+      "width": 234,
+      "height": 55
+    }
+  },
+  "income3": {
+    "text": "C 0",
+    "confidence": 0.897278755903244,
+    "bbox": {
+      "x": 1953,
+      "y": 642,
+      "width": 234,
+      "height": 58
+    }
+  },
+  "income4": {
+    "text": "a",
+    "confidence": 0.32796603441238403,
+    "bbox": {
+      "x": 1956,
+      "y": 700,
+      "width": 231,
+      "height": 59
+    }
+  },
+  "income5": {
+    "text": "2,38023",
+    "confidence": 0.935525119304657,
+    "bbox": {
+      "x": 1954,
+      "y": 753,
+      "width": 236,
+      "height": 61
+    }
+  },
+  "income6": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 1953,
+      "y": 814,
+      "width": 239,
+      "height": 56
+    }
+  },
+  "income7": {
+    "text": "C",
+    "confidence": 0.4695513844490051,
+    "bbox": {
+      "x": 1951,
+      "y": 869,
+      "width": 240,
+      "height": 62
+    }
+  },
+  "income8": {
+    "text": "0",
+    "confidence": 0.35803306102752686,
+    "bbox": {
+      "x": 1953,
+      "y": 931,
+      "width": 240,
+      "height": 53
+    }
+  },
+  "income9": {
+    "text": "0",
+    "confidence": 0.9690248966217041,
+    "bbox": {
+      "x": 1950,
+      "y": 986,
+      "width": 239,
+      "height": 55
+    }
+  },
+  "income10": {
+    "text": "C 0",
+    "confidence": 0.7189092636108398,
+    "bbox": {
+      "x": 1950,
+      "y": 1039,
+      "width": 245,
+      "height": 61
+    }
+  },
+  "income11": {
+    "text": "0",
+    "confidence": 0.9308338761329651,
+    "bbox": {
+      "x": 1950,
+      "y": 1098,
+      "width": 242,
+      "height": 59
+    }
+  },
+  "income12": {
+    "text": "0",
+    "confidence": 0.5115925073623657,
+    "bbox": {
+      "x": 1951,
+      "y": 1159,
+      "width": 240,
+      "height": 55
+    }
+  },
+  "income13": {
+    "text": "0",
+    "confidence": 0.9720801115036011,
+    "bbox": {
+      "x": 1953,
+      "y": 1214,
+      "width": 240,
+      "height": 56
+    }
+  },
+  "income14": {
+    "text": "0",
+    "confidence": 0.8824858069419861,
+    "bbox": {
+      "x": 1954,
+      "y": 1269,
+      "width": 237,
+      "height": 61
+    }
+  },
+  "income15": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 1951,
+      "y": 1325,
+      "width": 242,
+      "height": 58
+    }
+  },
+  "income16": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 1956,
+      "y": 1380,
+      "width": 236,
+      "height": 59
+    }
+  },
+  "income17": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 1954,
+      "y": 1439,
+      "width": 237,
+      "height": 64
+    }
+  },
+  "income18": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 1954,
+      "y": 1497,
+      "width": 242,
+      "height": 55
+    }
+  },
+  "spouse_income1": {
+    "text": "0",
+    "confidence": 0.8725230097770691,
+    "bbox": {
+      "x": 2219,
+      "y": 525,
+      "width": 237,
+      "height": 59
+    }
+  },
+  "spouse_income2": {
+    "text": "650.25",
+    "confidence": 0.9644191861152649,
+    "bbox": {
+      "x": 2221,
+      "y": 586,
+      "width": 234,
+      "height": 56
+    }
+  },
+  "spouse_income3": {
+    "text": "0",
+    "confidence": 0.743499219417572,
+    "bbox": {
+      "x": 2221,
+      "y": 643,
+      "width": 236,
+      "height": 55
+    }
+  },
+  "spouse_income4": {
+    "text": "C 0",
+    "confidence": 0.8468496203422546,
+    "bbox": {
+      "x": 2219,
+      "y": 697,
+      "width": 234,
+      "height": 58
+    }
+  },
+  "spouse_income5": {
+    "text": "0",
+    "confidence": 0.584156334400177,
+    "bbox": {
+      "x": 2219,
+      "y": 754,
+      "width": 239,
+      "height": 55
+    }
+  },
+  "spouse_income6": {
+    "text": "- 0",
+    "confidence": 0.5842904895544052,
+    "bbox": {
+      "x": 2221,
+      "y": 808,
+      "width": 237,
+      "height": 59
+    }
+  },
+  "spouse_income7": {
+    "text": "320",
+    "confidence": 0.9446296691894531,
+    "bbox": {
+      "x": 2217,
+      "y": 869,
+      "width": 239,
+      "height": 61
+    }
+  },
+  "spouse_income8": {
+    "text": "0",
+    "confidence": 0.7171382308006287,
+    "bbox": {
+      "x": 2217,
+      "y": 925,
+      "width": 243,
+      "height": 59
+    }
+  },
+  "spouse_income9": {
+    "text": "0",
+    "confidence": 0.6502682566642761,
+    "bbox": {
+      "x": 2219,
+      "y": 983,
+      "width": 242,
+      "height": 58
+    }
+  },
+  "spouse_income10": {
+    "text": "0",
+    "confidence": 0.779299795627594,
+    "bbox": {
+      "x": 2221,
+      "y": 1042,
+      "width": 239,
+      "height": 59
+    }
+  },
+  "spouse_income11": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2221,
+      "y": 1100,
+      "width": 237,
+      "height": 56
+    }
+  },
+  "spouse_income12": {
+    "text": "480",
+    "confidence": 0.9974126815795898,
+    "bbox": {
+      "x": 2221,
+      "y": 1154,
+      "width": 237,
+      "height": 56
+    }
+  },
+  "spouse_income13": {
+    "text": "0",
+    "confidence": 0.8749810457229614,
+    "bbox": {
+      "x": 2219,
+      "y": 1209,
+      "width": 239,
+      "height": 58
+    }
+  },
+  "spouse_income14": {
+    "text": "9",
+    "confidence": 0.9619680047035217,
+    "bbox": {
+      "x": 2221,
+      "y": 1267,
+      "width": 237,
+      "height": 61
+    }
+  },
+  "spouse_income15": {
+    "text": "0",
+    "confidence": 0.9338363409042358,
+    "bbox": {
+      "x": 2219,
+      "y": 1326,
+      "width": 236,
+      "height": 56
+    }
+  },
+  "spouse_income16": {
+    "text": "0",
+    "confidence": 0.9723118543624878,
+    "bbox": {
+      "x": 2221,
+      "y": 1381,
+      "width": 237,
+      "height": 61
+    }
+  },
+  "spouse_income17": {
+    "text": "0",
+    "confidence": 0.9587618112564087,
+    "bbox": {
+      "x": 2221,
+      "y": 1437,
+      "width": 242,
+      "height": 61
+    }
+  },
+  "spouse_income18": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2199,
+      "y": 1495,
+      "width": 265,
+      "height": 62
+    }
+  },
+  "checkbox_need_assistance_yes": {
+    "checked": true,
+    "confidence": 0.5229591836734694
+  },
+  "checkbox_need_assistance_no": {
+    "checked": true,
+    "confidence": 1.0
+  },
+  "checkbox_family_assets_yes": {
+    "checked": true,
+    "confidence": 0.9556878306878307
+  },
+  "checkbox_family_assets_no": {
+    "checked": true,
+    "confidence": 0.7333333333333334
+  },
+  "checkbox_shelter_yes": {
+    "checked": true,
+    "confidence": 1.0
+  },
+  "checkbox_shelter_no": {
+    "checked": true,
+    "confidence": 1.0
+  },
+  "checkbox_dependants_yes": {
+    "checked": false,
+    "confidence": 0.8518518518518519
+  },
+  "checkbox_dependants_no": {
+    "checked": true,
+    "confidence": 1.0
+  },
+  "checkbox_employment_changes_yes": {
+    "checked": false,
+    "confidence": 0.04017857142857151
+  },
+  "checkbox_employment_changes_no": {
+    "checked": false,
+    "confidence": 0.1895424836601307
+  },
+  "checkbox_employment_changes_spouse_yes": {
+    "checked": true,
+    "confidence": 0.7875457875457875
+  },
+  "checkbox_employment_changes_spouse_no": {
+    "checked": false,
+    "confidence": 0.6924603174603174
+  },
+  "checkbox_school_yes": {
+    "checked": false,
+    "confidence": 0.7676282051282051
+  },
+  "checkbox_school_no": {
+    "checked": true,
+    "confidence": 1.0
+  },
+  "checkbox_school_spouse_yes": {
+    "checked": true,
+    "confidence": 0.5654761904761906
+  },
+  "checkbox_school_spouse_no": {
+    "checked": true,
+    "confidence": 1.0
+  },
+  "checkbox_work_yes": {
+    "checked": true,
+    "confidence": 1.0
+  },
+  "checkbox_work_no": {
+    "checked": false,
+    "confidence": 0.7023809523809523
+  },
+  "checkbox_work_souse_yes": {
+    "checked": true,
+    "confidence": 1.0
+  },
+  "checkbox_work_souse_no": {
+    "checked": true,
+    "confidence": 0.7814814814814816
+  },
+  "checkbox_moved_yes": {
+    "checked": false,
+    "confidence": 0.803921568627451
+  },
+  "checkbox_moved_no": {
+    "checked": true,
+    "confidence": 0.9404761904761905
+  },
+  "checkbox_moved_spouse_yes": {
+    "checked": false,
+    "confidence": 0.5897435897435896
+  },
+  "checkbox_moved_spouse_no": {
+    "checked": true,
+    "confidence": 1.0
+  },
+  "checkbox_warrant_yes": {
+    "checked": true,
+    "confidence": 1.0
+  },
+  "checkbox_warrant_no": {
+    "checked": true,
+    "confidence": 1.0
+  },
+  "checkbox_warrant_spouse_yes": {
+    "checked": false,
+    "confidence": 0.49404761904761907
+  },
+  "checkbox_warrant_spouse_no": {
+    "checked": true,
+    "confidence": 1.0
+  }
+}

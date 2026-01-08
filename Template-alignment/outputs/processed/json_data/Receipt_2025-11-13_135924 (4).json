@@ -1,0 +1,574 @@
+{
+  "name": {
+    "text": "Amanda Martinee-Jones",
+    "confidence": 0.8979315757751465,
+    "bbox": {
+      "x": 126,
+      "y": 1764,
+      "width": 1183,
+      "height": 84
+    }
+  },
+  "explain_changes": {
+    "text": "Received EF stament suboitted",
+    "confidence": 0.741213321685791,
+    "bbox": {
+      "x": 128,
+      "y": 1333,
+      "width": 1183,
+      "height": 227
+    }
+  },
+  "signature": {
+    "text": "A.h,",
+    "confidence": 0.5158627033233643,
+    "bbox": {
+      "x": 126,
+      "y": 1672,
+      "width": 736,
+      "height": 84
+    }
+  },
+  "date": {
+    "text": "2035-NN-23",
+    "confidence": 0.7904547452926636,
+    "bbox": {
+      "x": 870,
+      "y": 1670,
+      "width": 443,
+      "height": 88
+    }
+  },
+  "phone": {
+    "text": "B26-783-4854",
+    "confidence": 0.9068455696105957,
+    "bbox": {
+      "x": 132,
+      "y": 1853,
+      "width": 583,
+      "height": 88
+    }
+  },
+  "sin": {
+    "text": "122-456-789",
+    "confidence": 0.9743619561195374,
+    "bbox": {
+      "x": 719,
+      "y": 1855,
+      "width": 595,
+      "height": 86
+    }
+  },
+  "spouse_signature": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 1319,
+      "y": 1672,
+      "width": 694,
+      "height": 86
+    }
+  },
+  "spouse_date": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2016,
+      "y": 1666,
+      "width": 442,
+      "height": 92
+    }
+  },
+  "spouse_name": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 1315,
+      "y": 1760,
+      "width": 1143,
+      "height": 90
+    }
+  },
+  "spouse_phone": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 1890,
+      "y": 1849,
+      "width": 573,
+      "height": 90
+    }
+  },
+  "income1": {
+    "text": "300",
+    "confidence": 0.802116870880127,
+    "bbox": {
+      "x": 1948,
+      "y": 525,
+      "width": 240,
+      "height": 62
+    }
+  },
+  "income2": {
+    "text": "0",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 1953,
+      "y": 587,
+      "width": 234,
+      "height": 55
+    }
+  },
+  "income3": {
+    "text": "C u0o",
+    "confidence": 0.7171749770641327,
+    "bbox": {
+      "x": 1953,
+      "y": 642,
+      "width": 234,
+      "height": 58
+    }
+  },
+  "income4": {
+    "text": "C 0",
+    "confidence": 0.337623693048954,
+    "bbox": {
+      "x": 1956,
+      "y": 700,
+      "width": 231,
+      "height": 59
+    }
+  },
+  "income5": {
+    "text": "a",
+    "confidence": 0.9728062152862549,
+    "bbox": {
+      "x": 1954,
+      "y": 753,
+      "width": 236,
+      "height": 61
+    }
+  },
+  "income6": {
+    "text": ">25.25",
+    "confidence": 0.9173855185508728,
+    "bbox": {
+      "x": 1953,
+      "y": 814,
+      "width": 239,
+      "height": 56
+    }
+  },
+  "income7": {
+    "text": "CX .md",
+    "confidence": 0.4138389229774475,
+    "bbox": {
+      "x": 1951,
+      "y": 869,
+      "width": 240,
+      "height": 62
+    }
+  },
+  "income8": {
+    "text": "0",
+    "confidence": 0.629726231098175,
+    "bbox": {
+      "x": 1953,
+      "y": 931,
+      "width": 240,
+      "height": 53
+    }
+  },
+  "income9": {
+    "text": "a",
+    "confidence": 0.8544639945030212,
+    "bbox": {
+      "x": 1950,
+      "y": 986,
+      "width": 239,
+      "height": 55
+    }
+  },
+  "income10": {
+    "text": "0",
+    "confidence": 0.9685160517692566,
+    "bbox": {
+      "x": 1950,
+      "y": 1039,
+      "width": 245,
+      "height": 61
+    }
+  },
+  "income11": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 1950,
+      "y": 1098,
+      "width": 242,
+      "height": 59
+    }
+  },
+  "income12": {
+    "text": "0",
+    "confidence": 0.9192901253700256,
+    "bbox": {
+      "x": 1951,
+      "y": 1159,
+      "width": 240,
+      "height": 55
+    }
+  },
+  "income13": {
+    "text": "0",
+    "confidence": 0.8667504191398621,
+    "bbox": {
+      "x": 1953,
+      "y": 1214,
+      "width": 240,
+      "height": 56
+    }
+  },
+  "income14": {
+    "text": "0",
+    "confidence": 0.659164547920227,
+    "bbox": {
+      "x": 1954,
+      "y": 1269,
+      "width": 237,
+      "height": 61
+    }
+  },
+  "income15": {
+    "text": "C 0",
+    "confidence": 0.702294647693634,
+    "bbox": {
+      "x": 1951,
+      "y": 1325,
+      "width": 242,
+      "height": 58
+    }
+  },
+  "income16": {
+    "text": "C 0",
+    "confidence": 0.5426020175218582,
+    "bbox": {
+      "x": 1956,
+      "y": 1380,
+      "width": 236,
+      "height": 59
+    }
+  },
+  "income17": {
+    "text": "0",
+    "confidence": 0.93169105052948,
+    "bbox": {
+      "x": 1954,
+      "y": 1439,
+      "width": 237,
+      "height": 64
+    }
+  },
+  "income18": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 1954,
+      "y": 1497,
+      "width": 242,
+      "height": 55
+    }
+  },
+  "spouse_income1": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2219,
+      "y": 525,
+      "width": 237,
+      "height": 59
+    }
+  },
+  "spouse_income2": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2221,
+      "y": 586,
+      "width": 234,
+      "height": 56
+    }
+  },
+  "spouse_income3": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2221,
+      "y": 643,
+      "width": 236,
+      "height": 55
+    }
+  },
+  "spouse_income4": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2219,
+      "y": 697,
+      "width": 234,
+      "height": 58
+    }
+  },
+  "spouse_income5": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2219,
+      "y": 754,
+      "width": 239,
+      "height": 55
+    }
+  },
+  "spouse_income6": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2221,
+      "y": 808,
+      "width": 237,
+      "height": 59
+    }
+  },
+  "spouse_income7": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2217,
+      "y": 869,
+      "width": 239,
+      "height": 61
+    }
+  },
+  "spouse_income8": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2217,
+      "y": 925,
+      "width": 243,
+      "height": 59
+    }
+  },
+  "spouse_income9": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2219,
+      "y": 983,
+      "width": 242,
+      "height": 58
+    }
+  },
+  "spouse_income10": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2221,
+      "y": 1042,
+      "width": 239,
+      "height": 59
+    }
+  },
+  "spouse_income11": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2221,
+      "y": 1100,
+      "width": 237,
+      "height": 56
+    }
+  },
+  "spouse_income12": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2221,
+      "y": 1154,
+      "width": 237,
+      "height": 56
+    }
+  },
+  "spouse_income13": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2219,
+      "y": 1209,
+      "width": 239,
+      "height": 58
+    }
+  },
+  "spouse_income14": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2221,
+      "y": 1267,
+      "width": 237,
+      "height": 61
+    }
+  },
+  "spouse_income15": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2219,
+      "y": 1326,
+      "width": 236,
+      "height": 56
+    }
+  },
+  "spouse_income16": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2221,
+      "y": 1381,
+      "width": 237,
+      "height": 61
+    }
+  },
+  "spouse_income17": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2221,
+      "y": 1437,
+      "width": 242,
+      "height": 61
+    }
+  },
+  "spouse_income18": {
+    "text": "",
+    "confidence": 0.0,
+    "bbox": {
+      "x": 2199,
+      "y": 1495,
+      "width": 265,
+      "height": 62
+    }
+  },
+  "checkbox_need_assistance_yes": {
+    "checked": true,
+    "confidence": 1.0
+  },
+  "checkbox_need_assistance_no": {
+    "checked": false,
+    "confidence": 0.5555555555555556
+  },
+  "checkbox_family_assets_yes": {
+    "checked": true,
+    "confidence": 1.0
+  },
+  "checkbox_family_assets_no": {
+    "checked": false,
+    "confidence": 0.3185185185185184
+  },
+  "checkbox_shelter_yes": {
+    "checked": false,
+    "confidence": 0.2216117216117216
+  },
+  "checkbox_shelter_no": {
+    "checked": true,
+    "confidence": 0.6456043956043956
+  },
+  "checkbox_dependants_yes": {
+    "checked": false,
+    "confidence": 0.4320987654320988
+  },
+  "checkbox_dependants_no": {
+    "checked": true,
+    "confidence": 1.0
+  },
+  "checkbox_employment_changes_yes": {
+    "checked": true,
+    "confidence": 0.621279761904762
+  },
+  "checkbox_employment_changes_no": {
+    "checked": true,
+    "confidence": 1.0
+  },
+  "checkbox_employment_changes_spouse_yes": {
+    "checked": true,
+    "confidence": 0.5998168498168498
+  },
+  "checkbox_employment_changes_spouse_no": {
+    "checked": true,
+    "confidence": 1.0
+  },
+  "checkbox_school_yes": {
+    "checked": true,
+    "confidence": 1.0
+  },
+  "checkbox_school_no": {
+    "checked": false,
+    "confidence": 0.1741071428571428
+  },
+  "checkbox_school_spouse_yes": {
+    "checked": false,
+    "confidence": 0.3622448979591837
+  },
+  "checkbox_school_spouse_no": {
+    "checked": false,
+    "confidence": 0.41239316239316237
+  },
+  "checkbox_work_yes": {
+    "checked": false,
+    "confidence": 0.6746031746031746
+  },
+  "checkbox_work_no": {
+    "checked": true,
+    "confidence": 1.0
+  },
+  "checkbox_work_souse_yes": {
+    "checked": false,
+    "confidence": 0.2603550295857988
+  },
+  "checkbox_work_souse_no": {
+    "checked": false,
+    "confidence": 0.41481481481481486
+  },
+  "checkbox_moved_yes": {
+    "checked": true,
+    "confidence": 0.8734402852049911
+  },
+  "checkbox_moved_no": {
+    "checked": true,
+    "confidence": 0.6944444444444445
+  },
+  "checkbox_moved_spouse_yes": {
+    "checked": false,
+    "confidence": 0.9230769230769231
+  },
+  "checkbox_moved_spouse_no": {
+    "checked": false,
+    "confidence": 0.36342592592592593
+  },
+  "checkbox_warrant_yes": {
+    "checked": false,
+    "confidence": 0.12087912087912078
+  },
+  "checkbox_warrant_no": {
+    "checked": true,
+    "confidence": 0.934640522875817
+  },
+  "checkbox_warrant_spouse_yes": {
+    "checked": false,
+    "confidence": 0.40476190476190477
+  },
+  "checkbox_warrant_spouse_no": {
+    "checked": false,
+    "confidence": 0.3112244897959183
+  }
+}
