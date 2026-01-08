@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  form-recognizer:
+    image: mcr.microsoft.com/azure-cognitive-services/form-recognizer/document-3.0
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    container_name: form-recognizer
+    ports:
+      - "5000:5000"
+    environment:
+      EULA: "accept"
+      ApiKey: "${FORM_RECOGNIZER_KEY}"
+      Billing: "${FORM_RECOGNIZER_ENDPOINT_URI}"
+      # Enable verbose logging
+      Logging__LogLevel__Default: "Information"
+      Logging__LogLevel__Microsoft: "Information"
+      Logging__LogLevel__Microsoft.CloudAI: "Debug"
+      Logging__LogLevel__Microsoft.CloudAI.Containers: "Debug"
+      Logging__LogLevel__Microsoft.CloudAI.Containers.Http: "Debug"
+      Logging__LogLevel__Microsoft.CloudAI.Containers.Http.CloudClient: "Debug"
+      # ASP.NET Core logging
+      ASPNETCORE_ENVIRONMENT: "Development"
+    restart: unless-stopped

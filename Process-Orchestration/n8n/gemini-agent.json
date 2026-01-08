@@ -1,0 +1,544 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=<role>\nYou are a Developer AI Agent, a powerful assistant designed to help automate development workflows. You can search Trello for automation tasks, extract task descriptions, work with GitHub repositories, and create pull requests. Your personality is professional, efficient, and helpful.\n</role>\n\n<instructions>\n<goal>\nYour primary goal is to help automate development workflows by:\n1. Finding Trello cards labeled 'automation'\n2. Extracting task descriptions from those cards\n3. Implementing the changes in a GitHub repository. Remember to check if a file exists before creating it.\n4. Creating pull requests with the changes\n\nYou can also answer questions and perform other tasks using your available tools.\n\nIf not otherwise specified, you will be working in the YOUR_REPO repository owned by YOUR_USERNAME.\n</goal>\n\n<context>\n### How I Work\nI am an AI model operating within an n8n workflow. This workflow gives me:\n1. **A set of tools:** Functions I can call to get information or perform actions\n2. **Simple Memory:** I can remember the immediate past of our current conversation\n\n### My Development Automation Tools\nI have specialized tools for automating development workflows:\n- **Get Trello List of Cards:** Get the current list of Cards from Trello\n- **Get Trello Card Details:** Get full details of a card including description\n- **Get GitHub Repo Info:** Get repository information including default branch and latest commit SHA\n- **Get Github Branch:** Gets the details of a github branch\n- **Create Github Branch:** Create a new branch for the changes. Requires \"ref\" and \"sha\"\n- **Get File Contents from Github** Get file contents to see current contents before making changes\n- **Create/Update GitHub File:** Create or update files in the repository. Requires the sha if updating a file.\n- **Create GitHub Pull Request:** Create a PR with your changes\n\n### Workflow for Automation Tasks\nWhen asked to process automation tasks from Trello:\n1. Use Get Trello List of Cards\n2. For each card found, use 'Get Trello Card Details' to get the full description\n3. Use 'Get GitHub Repo Info' to get repository details (default branch, etc.)\n4. Use 'Get Github Branch' to retieve the main branch and extract the sha\n5. Use 'Create Github Branch' for the modified and new files (specify a new branch name like 'automation/trello-{card-name}')\n6. Use 'Get File Contents from Github' to pull existing files that need to be modified (if applicable)\n7. Analyze the task description and generate appropriate code/files\n8. Use 'Create/Update GitHub File' to add or modify files with your generated code on the new branch\n9. Use 'Create GitHub Pull Request' to create a PR linking back to the Trello card\n</context>\n\n<output_format>\n- Respond in a professional, helpful, and clear tone.\n- When processing automation tasks, work step-by-step and explain what you're doing.\n- When a user's request requires a tool, select the appropriate tool and present results clearly.\n- If you encounter errors, explain them and suggest solutions.\n- Be proactive in suggesting next steps or asking for clarification when needed.\n</output_format>\n</instructions>"
+        }
+      },
+      "id": "c7c17d6f-7456-4c93-a51c-18fa091d91aa",
+      "cid": "Ikx1Y2FzIFBleXJpbiI",
+      "name": "Your First AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "creator": "Lucas Peyrin",
+      "position": [
+        16,
+        288
+      ],
+      "typeVersion": 2.2,
+      "notes": "© 2025 Lucas Peyrin"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi there! 👋",
+        "options": {
+          "inputPlaceholder": "Type your message here...",
+          "showWelcomeScreen": false,
+          "subtitle": "This is for demo purposes. Try me out !",
+          "title": "Your first AI Agent 🚀",
+          "responseMode": "lastNode"
+        }
+      },
+      "id": "1c16c384-9ffd-44a1-bbe4-0d79da6a4e40",
+      "cid": "Ikx1Y2FzIFBleXJpbiI",
+      "name": "Example Chat",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "creator": "Lucas Peyrin",
+      "position": [
+        -720,
+        288
+      ],
+      "webhookId": "e5616171-e3b5-4c39-81d4-67409f9fa60a",
+      "typeVersion": 1.1,
+      "notes": "© 2025 Lucas Peyrin"
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 30
+      },
+      "id": "a836dd0e-b980-463a-9659-af724b893a00",
+      "cid": "Ikx1Y2FzIFBleXJpbiI",
+      "name": "Conversation Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "creator": "Lucas Peyrin",
+      "position": [
+        -544,
+        544
+      ],
+      "typeVersion": 1.3,
+      "notes": "© 2025 Lucas Peyrin"
+    },
+    {
+      "parameters": {
+        "options": {
+          "temperature": 0
+        }
+      },
+      "id": "e3fca3c6-f12b-448f-9aab-e4e09d878360",
+      "cid": "Ikx1Y2FzIFBleXJpbiI",
+      "name": "Connect Gemini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "creator": "Lucas Peyrin",
+      "position": [
+        -720,
+        464
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "dlFuUHaYTJV7nXNs",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "notes": "© 2025 Lucas Peyrin"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('id', `The ID of the Trello card to retrieve. Get this from the search results.`, 'string') }}",
+        "additionalFields": {
+          "fields": "name,desc,labels,idList,idBoard,url,due,start"
+        }
+      },
+      "type": "n8n-nodes-base.trelloTool",
+      "typeVersion": 1,
+      "position": [
+        -272,
+        752
+      ],
+      "id": "a1eb7656-8dc9-4486-8c10-d441e45015ae",
+      "name": "Get Trello Card Details",
+      "credentials": {
+        "trelloApi": {
+          "id": "H4nFq9lUgF0kwfXn",
+          "name": "Trello account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "repository",
+        "operation": "get",
+        "owner": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('owner', `Repository owner username`, 'string') }}"
+        },
+        "repository": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('repo', `Repository name`, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.githubTool",
+      "typeVersion": 1.1,
+      "position": [
+        432,
+        736
+      ],
+      "id": "6e9768f0-ccef-491f-8bc0-f36ec1e4b40b",
+      "name": "Get GitHub Repo Info",
+      "webhookId": "9666bdee-a431-4531-a90d-2bcb5a426161"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "get",
+        "owner": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('owner', `Repository owner username`, 'string') }}"
+        },
+        "repository": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('repo', `Repository name`, 'string') }}"
+        },
+        "filePath": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('filePath', `File path relative to repo root, e.g. 'src/index.js'`, 'string') }}",
+        "additionalParameters": {}
+      },
+      "type": "n8n-nodes-base.githubTool",
+      "typeVersion": 1.1,
+      "position": [
+        -720,
+        816
+      ],
+      "id": "9f13c0c2-529d-439e-8963-b343f6d7c750",
+      "name": "Get GitHub File",
+      "webhookId": "2cb354c6-1629-41a8-95dc-86edf7d19e6b"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "owner": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('owner', `Repository owner username`, 'string') }}"
+        },
+        "repository": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('repo', `Repository name`, 'string') }}"
+        },
+        "filePath": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('filePath', `File path relative to repo root, e.g. 'src/index.js'`, 'string') }}",
+        "fileContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('content', `File content as plain text`, 'string') }}",
+        "commitMessage": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('message', `Commit message describing the changes`, 'string') }}",
+        "additionalParameters": {
+          "branch": {
+            "branch": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Branch', ``, 'string') }}"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.githubTool",
+      "typeVersion": 1.1,
+      "position": [
+        272,
+        736
+      ],
+      "id": "edfc937a-69aa-4ab3-8317-236761f25fb9",
+      "name": "Create/Update GitHub File",
+      "webhookId": "28f1ec2d-52e4-4b29-9e53-bb55314430de"
+    },
+    {
+      "parameters": {
+        "resource": "list",
+        "operation": "getCards",
+        "id": "YOUR_TRELLO_LIST_ID",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.trelloTool",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        752
+      ],
+      "id": "8d641522-2931-4e82-b5fd-33a36a933a3a",
+      "name": "Get Trello Cards",
+      "credentials": {
+        "trelloApi": {
+          "id": "H4nFq9lUgF0kwfXn",
+          "name": "Trello account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Create a github branch",
+        "method": "POST",
+        "url": "=https://api.github.com/repos/YOUR_USERNAME/YOUR_REPO/git/refs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('JSON', ``, 'json') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        272,
+        512
+      ],
+      "id": "5593d469-cffd-411a-94fb-2dd8a94b33aa",
+      "name": "Create Github Branch",
+      "credentials": {
+        "githubApi": {
+          "id": "2AB2LqG8lnFfq35G",
+          "name": "GitHub account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Get File Contents from Github",
+        "url": "=https://api.github.com/repos/{{ $json.owner }}/{{ $json.repo }}/contents/{{ $json.path }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "ref",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        400,
+        512
+      ],
+      "id": "c86ff060-ec43-46b6-9250-6272218d8e9f",
+      "name": "Get File Contents from Github",
+      "credentials": {
+        "githubApi": {
+          "id": "ApFLxJD9LtJhM1qk",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('JSON', ``, 'json') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        528,
+        512
+      ],
+      "id": "6fd68a84-ada9-4218-be82-ff4d6e9b0326",
+      "name": "Create Github Pull Request",
+      "credentials": {
+        "githubApi": {
+          "id": "ApFLxJD9LtJhM1qk",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        608
+      ],
+      "id": "b9e9aece-2577-449a-a75e-0978a7cddc0f",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "5Z2zjSDnYPs8L2ls",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"owner\": \"YOUR_USERNAME\",\n\t\"repo\": \"YOUR_REPO\",\n    \"path\": \"src/file.txt\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        160,
+        80
+      ],
+      "id": "b77572fa-9d04-4814-8b3f-da01842118ab",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Get a github branch",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        656,
+        512
+      ],
+      "id": "aee740c5-472a-4dee-b6f3-dab5f3042d02",
+      "name": "Get Github Branch",
+      "credentials": {
+        "githubApi": {
+          "id": "2AB2LqG8lnFfq35G",
+          "name": "GitHub account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Example Chat": {
+      "main": [
+        [
+          {
+            "node": "Your First AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Connect Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Your First AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conversation Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Your First AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Trello Card Details": {
+      "ai_tool": [
+        [
+          {
+            "node": "Your First AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get GitHub Repo Info": {
+      "ai_tool": [
+        [
+          {
+            "node": "Your First AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get GitHub File": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Create/Update GitHub File": {
+      "ai_tool": [
+        [
+          {
+            "node": "Your First AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Trello Cards": {
+      "ai_tool": [
+        [
+          {
+            "node": "Your First AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Github Branch": {
+      "ai_tool": [
+        [
+          {
+            "node": "Your First AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get File Contents from Github": {
+      "ai_tool": [
+        [
+          {
+            "node": "Your First AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Github Pull Request": {
+      "ai_tool": [
+        [
+          {
+            "node": "Your First AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        []
+      ]
+    },
+    "Get Github Branch": {
+      "ai_tool": [
+        [
+          {
+            "node": "Your First AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "7f2720ce-0976-40be-a722-f1f2288219f5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d0cfc3279056ae9457ee88feb57b0432c9721d35dcbcfd8d46b6226b3a516faa"
+  },
+  "id": "2UYtkeJ9FhbTB7VR",
+  "tags": []
+}
