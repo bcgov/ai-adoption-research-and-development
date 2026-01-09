@@ -106,11 +106,15 @@ for src_file in sample_files:
 
 print(f"Copied {copied_count} new files to {INPUTS_DIR}")
 
-# List input files
-input_files = sorted(INPUTS_DIR.glob("*.jpg"))
-print(f"\nTotal input files ready: {len(input_files)}")
+# List input files (limit to first 5)
+all_input_files = sorted(INPUTS_DIR.glob("*.jpg"))
+input_files = all_input_files[:5]  # Only process first 5 files
+print(f"\nTotal input files available: {len(all_input_files)}")
+print(f"Processing first {len(input_files)} files:")
 for f in input_files:
     print(f"  - {f.name}")
+if len(all_input_files) > 5:
+    print(f"\nNote: {len(all_input_files) - 5} additional files will be skipped.")
 
 # %% [markdown]
 # ## 3. Load Template Image
