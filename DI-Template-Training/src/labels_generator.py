@@ -167,6 +167,7 @@ def generate_labels_json(
     ocr_data: dict[str, Any],
     zones: dict[str, Any],
     output_path: Path | str,
+    debug: bool = False,
 ) -> dict[str, Any]:
     """
     Generate .labels.json for a single image.
@@ -176,6 +177,7 @@ def generate_labels_json(
         ocr_data: OCR JSON data for the image
         zones: Template zones dict from load_template_zones()
         output_path: Path for output JSON
+        debug: Print debug information about zone-to-word matching
 
     Returns:
         The labels.json data
@@ -184,6 +186,12 @@ def generate_labels_json(
     words = extract_words_from_ocr(ocr_data)
     selection_marks = extract_selection_marks_from_ocr(ocr_data)
     page_width, page_height = get_page_dimensions(ocr_data)
+
+    if debug:
+        print(f"\n[DEBUG] Processing: {image_name}")
+        print(f"  Page dimensions: {page_width} x {page_height}")
+        print(f"  Words extracted: {len(words)}")
+        print(f"  Selection marks: {len(selection_marks)}")
 
     labels = []
 
@@ -198,10 +206,21 @@ def generate_labels_json(
         # Create zone polygon
         zone_polygon = _polygon_from_coords(zone["polygon"])
         if zone_polygon is None:
+            if debug:
+                print(f"  [SKIP] Zone '{zone_name}' - invalid polygon")
             continue
 
         # Find words in zone
         matching_words = _words_in_zone(words, zone_polygon)
+
+        if debug:
+            bounds = zone_polygon.bounds  # (minx, miny, maxx, maxy)
+            print(f"  [ZONE] '{zone_name}' (polygon)")
+            print(f"         bounds: x={bounds[0]:.1f}-{bounds[2]:.1f}, y={bounds[1]:.1f}-{bounds[3]:.1f}")
+            print(f"         matching words: {len(matching_words)}")
+            if matching_words:
+                word_texts = [w["text"] for w in matching_words]
+                print(f"         words: {word_texts}")
 
         if matching_words:
             # Sort words by reading order using Azure OCR's span offset
@@ -301,6 +320,25 @@ def generate_labels_json(
             }],
         }
         labels.append(label)
+
+    # Validate for duplicate labels
+    label_names = [label["label"] for label in labels]
+    seen = set()
+    duplicates = []
+    for name in label_names:
+        if name in seen:
+            duplicates.append(name)
+        seen.add(name)
+
+    if duplicates:
+        error_msg = f"Duplicate labels found in {image_name}: {duplicates}"
+        if debug:
+            print(f"  [ERROR] {error_msg}")
+            for label in labels:
+                if label["label"] in duplicates:
+                    text = label["value"][0]["text"] if label["value"] else ""
+                    print(f"         '{label['label']}' -> '{text}'")
+        raise ValueError(error_msg)
 
     labels_data = {
         "document": image_name,
