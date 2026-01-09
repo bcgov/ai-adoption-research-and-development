@@ -26,7 +26,7 @@ from dotenv import load_dotenv
 load_dotenv(project_root / ".env")
 
 from src.utils import load_json, save_json
-from src.azure_client import get_document_intelligence_client
+from src.azure_client import get_document_intelligence_admin_client
 
 print(f"Project root: {project_root}")
 
@@ -70,12 +70,12 @@ else:
     SAS_URL = None
 
 # %% [markdown]
-# ## 3. Initialize Document Intelligence Client
+# ## 3. Initialize Document Intelligence Admin Client
 
 # %%
-# Initialize client
-di_client = get_document_intelligence_client()
-print("Document Intelligence client initialized.")
+# Initialize admin client (for model management)
+di_admin_client = get_document_intelligence_admin_client()
+print("Document Intelligence admin client initialized.")
 
 # Show endpoint
 endpoint = os.environ.get("AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT", "")
@@ -86,7 +86,7 @@ print(f"Endpoint: {endpoint}")
 
 # %%
 # List existing custom models
-models = list(di_client.list_models())
+models = list(di_admin_client.list_models())
 
 print(f"Existing custom models: {len(models)}")
 print("-" * 50)
@@ -133,7 +133,7 @@ if SAS_URL:
     )
 
     # Start training
-    poller = di_client.begin_build_document_model(request)
+    poller = di_admin_client.begin_build_document_model(request)
     print("Training started. This may take 1-5 minutes...")
 
 # %% [markdown]

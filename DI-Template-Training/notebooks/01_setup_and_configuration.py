@@ -65,21 +65,30 @@ else:
 # %%
 from src.azure_client import (
     get_document_intelligence_client,
+    get_document_intelligence_admin_client,
     test_document_intelligence_connection,
 )
 
-# Initialize client
+# Initialize clients
 try:
     di_client = get_document_intelligence_client()
     print("Document Intelligence client initialized successfully.")
 except Exception as e:
-    print(f"Failed to initialize client: {e}")
+    print(f"Failed to initialize analysis client: {e}")
     di_client = None
 
+try:
+    di_admin_client = get_document_intelligence_admin_client()
+    print("Document Intelligence admin client initialized successfully.")
+except Exception as e:
+    print(f"Failed to initialize admin client: {e}")
+    di_admin_client = None
+
+
 # %%
-# Test connection
-if di_client:
-    result = test_document_intelligence_connection(di_client)
+# Test connection using admin client
+if di_admin_client:
+    result = test_document_intelligence_connection(di_admin_client)
 
     print("\nDocument Intelligence Connection Test:")
     print("-" * 50)
