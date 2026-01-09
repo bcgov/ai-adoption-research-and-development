@@ -276,22 +276,16 @@ image_ocr_pairs = []
 for img_path in training_images:
     ocr_path = TRAINING_DIR / f"{img_path.name}.ocr.json"
 
-    # Skip if labels already exist
-    labels_path = TRAINING_DIR / f"{img_path.name}.labels.json"
-    if labels_path.exists():
-        continue
-
     if ocr_path.exists():
         ocr_data = load_json(ocr_path)
         image_ocr_pairs.append((img_path.name, ocr_data))
 
 print(f"Images to process: {len(image_ocr_pairs)}")
-print(f"Already processed: {len(training_images) - len(image_ocr_pairs)}")
 
 # %%
-# Generate labels for remaining images
+# Generate labels for all images (overwrites existing)
 if image_ocr_pairs:
-    print(f"\nGenerating labels for {len(image_ocr_pairs)} images...")
+    print(f"\nGenerating labels for {len(image_ocr_pairs)} images (will overwrite existing)...")
 
     results = generate_labels_batch(
         image_ocr_pairs=image_ocr_pairs,
