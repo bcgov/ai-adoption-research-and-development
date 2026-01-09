@@ -118,6 +118,8 @@ def align_image_to_template(
     input_image: np.ndarray,
     template_image: np.ndarray,
     mode: AlignmentMode | str = AlignmentMode.HIGH_ACCURACY,
+    verbose: bool = False,
+    raise_on_failure: bool = False,
 ) -> AlignmentResult:
     """
     Align an input image to a template image.
@@ -126,6 +128,8 @@ def align_image_to_template(
         input_image: Input image (BGR)
         template_image: Template image (BGR)
         mode: Alignment mode
+        verbose: Print detailed debug information
+        raise_on_failure: Raise exception on alignment failure
 
     Returns:
         AlignmentResult with aligned image and metrics
@@ -134,19 +138,69 @@ def align_image_to_template(
     from alignment.phase_1_alignment import FeatureBasedAligner
 
     config = get_alignment_config(mode)
+    config.verbose = verbose  # Enable verbose mode in aligner
+
     aligner = FeatureBasedAligner(config)
+
+    if verbose:
+        print(f"\n[DEBUG] Alignment Configuration:")
+        print(f"  Feature detector: {config.feature_detector}")
+        print(f"  Max features: {config.max_features}")
+        print(f"  Ratio test threshold: {config.ratio_test_threshold}")
+        print(f"  RANSAC threshold: {config.ransac_threshold}")
+        print(f"  Min matches: {config.min_matches}")
+        print(f"  Input image shape: {input_image.shape}")
+        print(f"  Template image shape: {template_image.shape}")
 
     try:
         result = aligner.align(input_image, template_image)
+
+        # Compute success based on quality thresholds
+        num_matches = len(result.good_matches) if hasattr(result, 'good_matches') else 0
+        inlier_ratio_pct = result.inlier_ratio  # Already in percentage (0-100)
+
+        success = (
+            num_matches >= config.min_matches and
+            inlier_ratio_pct > 40 and  # >40% inlier ratio
+            result.reprojection_error < 5  # <5px error
+        )
+
+        if verbose:
+            print(f"\n[DEBUG] Alignment Result:")
+            print(f"  Total matches: {num_matches}")
+            print(f"  Inlier ratio: {inlier_ratio_pct:.1f}%")
+            print(f"  Reprojection error: {result.reprojection_error:.2f}px")
+            print(f"  Aligned image shape: {result.aligned_image.shape}")
+            print(f"  Success: {success}")
+
+        if not success and raise_on_failure:
+            error_msg = (
+                f"Alignment quality check failed!\n"
+                f"  Matches found: {num_matches} (required: >= {config.min_matches})\n"
+                f"  Inlier ratio: {inlier_ratio_pct:.1f}% (required: > 40%)\n"
+                f"  Reprojection error: {result.reprojection_error:.2f}px (required: < 5px)"
+            )
+            raise RuntimeError(error_msg)
+
         return AlignmentResult(
             aligned_image=result.aligned_image,
-            success=result.success,
+            success=success,
             reprojection_error=result.reprojection_error,
-            inlier_ratio=result.inlier_ratio,
-            num_matches=result.num_matches,
-            message="Alignment successful",
+            inlier_ratio=inlier_ratio_pct / 100.0,  # Convert to 0-1 range for consistency
+            num_matches=num_matches,
+            message="Alignment successful" if success else "Alignment quality check failed",
         )
     except Exception as e:
+        error_msg = f"Alignment failed: {str(e)}"
+
+        if verbose:
+            print(f"\n[ERROR] {error_msg}")
+            import traceback
+            traceback.print_exc()
+
+        if raise_on_failure:
+            raise RuntimeError(error_msg) from e
+
         # Return empty result on failure
         return AlignmentResult(
             aligned_image=input_image,  # Return original on failure
@@ -154,7 +208,7 @@ def align_image_to_template(
             reprojection_error=float("inf"),
             inlier_ratio=0.0,
             num_matches=0,
-            message=f"Alignment failed: {str(e)}",
+            message=error_msg,
         )
 
 

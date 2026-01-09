@@ -139,16 +139,18 @@ print(f"\nAligning {len(input_files)} images using {ALIGNMENT_MODE.value} mode..
 print("-" * 60)
 
 for i, input_path in enumerate(input_files):
-    print_progress(i + 1, len(input_files), "Aligning")
+    print(f"\n[{i+1}/{len(input_files)}] Processing: {input_path.name}")
 
     # Load input image
     input_image = load_image(input_path)
 
-    # Align to template
+    # Align to template (verbose on first image, raise on first failure)
     result = align_image_to_template(
         input_image,
         template_image,
         mode=ALIGNMENT_MODE,
+        verbose=(i == 0),  # Verbose for first image only
+        raise_on_failure=(i == 0),  # Raise error on first failure to debug
     )
 
     # Save aligned image
@@ -163,6 +165,10 @@ for i, input_path in enumerate(input_files):
         "num_matches": result.num_matches,
         "message": result.message,
     })
+
+    # Show status
+    status = "OK" if result.success else "FAILED"
+    print(f"  Status: {status} | Matches: {result.num_matches} | Inliers: {result.inlier_ratio:.1%}")
 
 print("\n")
 
