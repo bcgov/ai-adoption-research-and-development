@@ -111,14 +111,13 @@ print(f"Saved to: {fields_output_path}")
 # Show field definitions
 print("\nField Definitions (sample):")
 print("-" * 60)
-print(f"{'Name':<40} {'Type':<15} {'Subtype'}")
+print(f"{'Name':<40} {'Type':<15}")
 print("-" * 60)
 
 fields_dict = fields_data['fields']
 for i, (field_name, field_info) in enumerate(list(fields_dict.items())[:15]):
     field_type = field_info.get('type', '')
-    subtype = field_info.get('subtype', '')
-    print(f"{field_name:<40} {field_type:<15} {subtype}")
+    print(f"{field_name:<40} {field_type:<15}")
 
 if len(fields_dict) > 15:
     print(f"... and {len(fields_dict) - 15} more fields")

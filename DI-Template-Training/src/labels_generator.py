@@ -14,7 +14,7 @@ FIELD_TYPE_RULES = [
     # Checkbox fields
     (lambda name: name.startswith("checkbox_"), {"type": "selectionMark"}),
     # Date fields
-    (lambda name: name in ("date", "spouse_date"), {"type": "date", "subtype": "dmy"}),
+    (lambda name: name in ("date", "spouse_date"), {"type": "date"}),
     # Income/number fields
     (lambda name: "income" in name, {"type": "number"}),
     # Signature fields (treated as region)

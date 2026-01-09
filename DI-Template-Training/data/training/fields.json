@@ -76,12 +76,10 @@
       "type": "signature"
     },
     "date": {
-      "type": "date",
-      "subtype": "dmy"
+      "type": "date"
     },
     "spouse_date": {
-      "type": "date",
-      "subtype": "dmy"
+      "type": "date"
     },
     "name": {
       "type": "string"
