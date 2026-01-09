@@ -17,8 +17,8 @@ FIELD_TYPE_RULES = [
     (lambda name: name in ("date", "spouse_date"), {"type": "date"}),
     # Income/number fields
     (lambda name: "income" in name, {"type": "number"}),
-    # Signature fields (treated as region)
-    (lambda name: "signature" in name, {"type": "signature"}),
+    # Signature fields (treated as string)
+    (lambda name: "signature" in name, {"type": "string"}),
     # Default: string
     (lambda name: True, {"type": "string"}),
 ]

@@ -70,10 +70,10 @@
       "type": "string"
     },
     "signature": {
-      "type": "signature"
+      "type": "string"
     },
     "spouse_signature": {
-      "type": "signature"
+      "type": "string"
     },
     "date": {
       "type": "date"
