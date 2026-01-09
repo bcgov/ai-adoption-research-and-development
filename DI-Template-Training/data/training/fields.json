@@ -1,0 +1,306 @@
+{
+  "fields": [
+    {
+      "name": "checkbox_need_assistance_yes",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_need_assistance_no",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_family_assets_yes",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_family_assets_no",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_shelter_yes",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_shelter_no",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_employment_changes_yes",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_employment_changes_no",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_employment_changes_spouse_yes",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_employment_changes_spouse_no",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_school_yes",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_school_no",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_school_spouse_yes",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_school_spouse_no",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_moved_yes",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_moved_no",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_moved_spouse_yes",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_moved_spouse_no",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_warrant_yes",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_warrant_no",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_warrant_spouse_yes",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_warrant_spouse_no",
+      "type": "selectionMark"
+    },
+    {
+      "name": "explain_changes",
+      "type": "string"
+    },
+    {
+      "name": "signature",
+      "type": "signature"
+    },
+    {
+      "name": "spouse_signature",
+      "type": "signature"
+    },
+    {
+      "name": "date",
+      "type": "date",
+      "subtype": "dmy"
+    },
+    {
+      "name": "spouse_date",
+      "type": "date",
+      "subtype": "dmy"
+    },
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "spouse_name",
+      "type": "string"
+    },
+    {
+      "name": "phone",
+      "type": "string"
+    },
+    {
+      "name": "spouse_phone",
+      "type": "string"
+    },
+    {
+      "name": "sin",
+      "type": "string"
+    },
+    {
+      "name": "spouse_sin",
+      "type": "string"
+    },
+    {
+      "name": "income1",
+      "type": "number"
+    },
+    {
+      "name": "income2",
+      "type": "number"
+    },
+    {
+      "name": "income3",
+      "type": "number"
+    },
+    {
+      "name": "income4",
+      "type": "number"
+    },
+    {
+      "name": "income5",
+      "type": "number"
+    },
+    {
+      "name": "income6",
+      "type": "number"
+    },
+    {
+      "name": "income7",
+      "type": "number"
+    },
+    {
+      "name": "income8",
+      "type": "number"
+    },
+    {
+      "name": "income9",
+      "type": "number"
+    },
+    {
+      "name": "income10",
+      "type": "number"
+    },
+    {
+      "name": "income11",
+      "type": "number"
+    },
+    {
+      "name": "income12",
+      "type": "number"
+    },
+    {
+      "name": "income13",
+      "type": "number"
+    },
+    {
+      "name": "income14",
+      "type": "number"
+    },
+    {
+      "name": "income15",
+      "type": "number"
+    },
+    {
+      "name": "income16",
+      "type": "number"
+    },
+    {
+      "name": "income17",
+      "type": "number"
+    },
+    {
+      "name": "income18",
+      "type": "number"
+    },
+    {
+      "name": "spouse_income1",
+      "type": "number"
+    },
+    {
+      "name": "spouse_income2",
+      "type": "number"
+    },
+    {
+      "name": "spouse_income3",
+      "type": "number"
+    },
+    {
+      "name": "spouse_income4",
+      "type": "number"
+    },
+    {
+      "name": "spouse_income5",
+      "type": "number"
+    },
+    {
+      "name": "spouse_income6",
+      "type": "number"
+    },
+    {
+      "name": "spouse_income7",
+      "type": "number"
+    },
+    {
+      "name": "spouse_income8",
+      "type": "number"
+    },
+    {
+      "name": "spouse_income9",
+      "type": "number"
+    },
+    {
+      "name": "spouse_income10",
+      "type": "number"
+    },
+    {
+      "name": "spouse_income11",
+      "type": "number"
+    },
+    {
+      "name": "spouse_income12",
+      "type": "number"
+    },
+    {
+      "name": "spouse_income13",
+      "type": "number"
+    },
+    {
+      "name": "spouse_income14",
+      "type": "number"
+    },
+    {
+      "name": "spouse_income15",
+      "type": "number"
+    },
+    {
+      "name": "spouse_income16",
+      "type": "number"
+    },
+    {
+      "name": "spouse_income17",
+      "type": "number"
+    },
+    {
+      "name": "spouse_income18",
+      "type": "number"
+    },
+    {
+      "name": "checkbox_dependants_yes",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_dependants_no",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_work_yes",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_work_no",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_work_souse_yes",
+      "type": "selectionMark"
+    },
+    {
+      "name": "checkbox_work_souse_no",
+      "type": "selectionMark"
+    }
+  ]
+}

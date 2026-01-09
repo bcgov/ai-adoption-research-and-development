@@ -15,8 +15,6 @@ from pathlib import Path
 
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.patches import Polygon as MplPolygon, Rectangle
 
 # Add project root to path
 project_root = Path.cwd().parent
@@ -46,11 +44,16 @@ print(f"Project root: {project_root}")
 # Paths
 DATA_DIR = project_root / "data"
 TRAINING_DIR = DATA_DIR / "training"
+DEBUG_DIR = DATA_DIR / "debug"
 TEMPLATES_DIR = project_root / "templates"
 
 TEMPLATE_JSON_PATH = TEMPLATES_DIR / "template.json"
 
+# Create debug directory if it doesn't exist
+DEBUG_DIR.mkdir(parents=True, exist_ok=True)
+
 print(f"Training directory: {TRAINING_DIR}")
+print(f"Debug directory: {DEBUG_DIR}")
 print(f"Template JSON: {TEMPLATE_JSON_PATH}")
 
 # List training files
@@ -167,46 +170,94 @@ if 'labels_data' in dir():
         print(f"  ... and {len(labels_data['labels']) - 10} more labels")
 
 # %% [markdown]
-# ## 5. Visualize Labels on Image
+# ## 5. Save Debug Images with Labels
 
 # %%
-# Visualize labeled regions
-if 'labels_data' in dir() and training_images:
-    image = load_image(training_images[0])
+def save_debug_image(image_path, labels_data, output_dir):
+    """
+    Save debug image showing labeled regions with field names.
+
+    Args:
+        image_path: Path to the training image
+        labels_data: Labels data dictionary
+        output_dir: Directory to save debug images
+    """
+    # Load image
+    image = load_image(image_path)
     height, width = image.shape[:2]
 
-    fig, ax = plt.subplots(figsize=(12, 15))
-    ax.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+    # Create a copy for drawing
+    debug_image = image.copy()
+
+    # Generate colors for different fields
+    np.random.seed(42)  # Consistent colors
+    colors = [(np.random.randint(50, 255),
+               np.random.randint(50, 255),
+               np.random.randint(50, 255))
+              for _ in range(len(labels_data['labels']))]
 
     # Draw labeled regions
-    colors = plt.cm.tab20(np.linspace(0, 1, 20))
-
-    for i, label in enumerate(labels_data['labels'][:20]):
+    for i, label in enumerate(labels_data['labels']):
         color = colors[i % len(colors)]
         name = label['label']
 
         for value in label.get('value', []):
+            text_content = value.get('text', '')
+
             for bbox in value.get('boundingBoxes', []):
                 # Convert normalized coords back to pixels
                 # bbox format: [x1,y1, x2,y1, x2,y2, x1,y2]
-                x1 = bbox[0] * width
-                y1 = bbox[1] * height
-                x2 = bbox[2] * width
-                y2 = bbox[5] * height
+                x1 = int(bbox[0] * width)
+                y1 = int(bbox[1] * height)
+                x2 = int(bbox[2] * width)
+                y2 = int(bbox[5] * height)
 
-                rect = Rectangle(
-                    (x1, y1), x2 - x1, y2 - y1,
-                    linewidth=2, edgecolor=color, facecolor='none'
+                # Draw rectangle
+                cv2.rectangle(debug_image, (x1, y1), (x2, y2), color, 2)
+
+                # Add field name above the box
+                label_text = f"{name}: {text_content}"
+                font = cv2.FONT_HERSHEY_SIMPLEX
+                font_scale = 0.5
+                thickness = 1
+
+                # Get text size for background
+                (text_width, text_height), baseline = cv2.getTextSize(
+                    label_text, font, font_scale, thickness
                 )
-                ax.add_patch(rect)
 
-                # Add label text
-                ax.text(x1, y1 - 5, name[:20], fontsize=6, color=color)
+                # Draw background for text
+                text_y = max(y1 - 5, text_height + 5)
+                cv2.rectangle(
+                    debug_image,
+                    (x1, text_y - text_height - baseline),
+                    (x1 + text_width, text_y + baseline),
+                    color,
+                    -1  # Filled
+                )
 
-    ax.set_title(f"Labeled Regions: {training_images[0].name}")
-    ax.axis('off')
-    plt.tight_layout()
-    plt.show()
+                # Draw text
+                cv2.putText(
+                    debug_image,
+                    label_text,
+                    (x1, text_y),
+                    font,
+                    font_scale,
+                    (255, 255, 255),  # White text
+                    thickness,
+                    cv2.LINE_AA
+                )
+
+    # Save debug image
+    output_path = output_dir / f"{image_path.stem}_debug.jpg"
+    cv2.imwrite(str(output_path), debug_image)
+
+    return output_path
+
+# Generate debug image for demo
+if 'labels_data' in dir() and training_images:
+    debug_path = save_debug_image(training_images[0], labels_data, DEBUG_DIR)
+    print(f"\nSaved debug image: {debug_path}")
 
 # %% [markdown]
 # ## 6. Batch Generate Labels for All Images
@@ -254,6 +305,28 @@ if image_ocr_pairs:
             print(f"  - {f['image']}: {f.get('error', 'Unknown')}")
 else:
     print("All images already have labels.")
+
+# %% [markdown]
+# ## 6.5. Generate Debug Images for All Processed Images
+
+# %%
+# Generate debug images for all images with labels
+print("\nGenerating debug images for all processed images...")
+
+debug_count = 0
+for img_path in training_images:
+    labels_path = TRAINING_DIR / f"{img_path.name}.labels.json"
+
+    if labels_path.exists():
+        try:
+            labels_data = load_json(labels_path)
+            debug_path = save_debug_image(img_path, labels_data, DEBUG_DIR)
+            debug_count += 1
+            print(f"  Generated: {debug_path.name}")
+        except Exception as e:
+            print(f"  Failed for {img_path.name}: {e}")
+
+print(f"\nGenerated {debug_count} debug images in {DEBUG_DIR}")
 
 # %% [markdown]
 # ## 7. Validate Training Data
