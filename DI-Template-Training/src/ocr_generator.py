@@ -22,6 +22,7 @@ def generate_ocr_json(
     client: DocumentIntelligenceClient,
     image_path: Path | str,
     output_path: Optional[Path | str] = None,
+    verbose: bool = False,
 ) -> dict[str, Any]:
     """
     Generate .ocr.json file for an image using Azure Layout API.
@@ -30,6 +31,7 @@ def generate_ocr_json(
         client: DocumentIntelligenceClient instance
         image_path: Path to the image file
         output_path: Path for output JSON (defaults to image_path + .ocr.json)
+        verbose: Print debug information
 
     Returns:
         The OCR JSON data
@@ -41,16 +43,50 @@ def generate_ocr_json(
     with open(image_path, "rb") as f:
         image_data = f.read()
 
+    if verbose:
+        print(f"Image size: {len(image_data)} bytes")
+        print(f"Client endpoint: {client._config.endpoint}")
+
     # Capture raw response
     response_holder = {}
 
     # Call Layout API
-    poller = client.begin_analyze_document(
-        "prebuilt-layout",
-        body=image_data,
-        content_type="application/octet-stream",
-        cls=_capture_raw_response(response_holder),
-    )
+    try:
+        if verbose:
+            print("Calling begin_analyze_document with model: prebuilt-layout")
+
+        poller = client.begin_analyze_document(
+            model_id="prebuilt-layout",
+            body=image_data,
+            content_type="application/octet-stream",
+            cls=_capture_raw_response(response_holder),
+        )
+    except Exception as e:
+        print(f"\n=== ERROR DETAILS ===")
+        print(f"Error type: {type(e).__name__}")
+        print(f"Error message: {str(e)}")
+
+        if hasattr(e, 'response'):
+            print(f"\nHTTP Response:")
+            resp = e.response
+            print(f"  Status: {resp.status_code if hasattr(resp, 'status_code') else 'N/A'}")
+            print(f"  Reason: {resp.reason if hasattr(resp, 'reason') else 'N/A'}")
+
+            if hasattr(resp, 'text'):
+                try:
+                    body_text = resp.text() if callable(resp.text) else resp.text
+                    print(f"  Body: {body_text}")
+                except:
+                    pass
+
+            if hasattr(resp, 'headers'):
+                print(f"  Headers: {dict(resp.headers)}")
+
+        if hasattr(e, 'error'):
+            print(f"\nError object: {e.error}")
+
+        print("=" * 50)
+        raise
 
     # Wait for completion
     result = poller.result()

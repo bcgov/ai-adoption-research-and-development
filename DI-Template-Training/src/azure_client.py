@@ -15,26 +15,45 @@ from azure.storage.blob import BlobServiceClient
 
 class APIMSubscriptionKeyPolicy(HTTPPolicy):
     """Custom policy to add APIM subscription key with custom header name"""
-    
-    def __init__(self, subscription_key: str, header_name: str = "api-key"):
+
+    def __init__(self, subscription_key: str, header_name: str = "api-key", verbose: bool = False):
         self.subscription_key = subscription_key
         self.header_name = header_name
-    
+        self.verbose = verbose
+
     def send(self, request: PipelineRequest) -> PipelineResponse:
+        # Debug logging
+        if self.verbose:
+            print(f"\n=== HTTP REQUEST ===")
+            print(f"URL: {request.http_request.url}")
+            print(f"Method: {request.http_request.method}")
+            print(f"Headers: {dict(request.http_request.headers)}")
+            print("=" * 50)
+
         # Add the subscription key with custom header name
         request.http_request.headers[self.header_name] = self.subscription_key
-        
+
         # Remove the default header if it exists
         if "Ocp-Apim-Subscription-Key" in request.http_request.headers:
             del request.http_request.headers["Ocp-Apim-Subscription-Key"]
-        
+
         # Continue with the pipeline
-        return self.next.send(request)
+        response = self.next.send(request)
+
+        # Debug response
+        if self.verbose:
+            print(f"\n=== HTTP RESPONSE ===")
+            print(f"Status: {response.http_response.status_code}")
+            print(f"Reason: {response.http_response.reason}")
+            print("=" * 50)
+
+        return response
 
 
 def get_document_intelligence_client(
     endpoint: Optional[str] = None,
     api_key: Optional[str] = None,
+    verbose: bool = False,
 ) -> DocumentIntelligenceClient:
     """
     Create an Azure Document Intelligence client for analyzing documents.
@@ -42,6 +61,7 @@ def get_document_intelligence_client(
     Args:
         endpoint: DI endpoint URL (defaults to AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT env var)
         api_key: DI API key (defaults to AZURE_DOCUMENT_INTELLIGENCE_KEY env var)
+        verbose: Enable verbose HTTP request/response logging
 
     Returns:
         DocumentIntelligenceClient instance
@@ -61,7 +81,7 @@ def get_document_intelligence_client(
         )
 
     # Create custom policy for APIM header
-    apim_policy = APIMSubscriptionKeyPolicy(api_key, header_name="api-key")
+    apim_policy = APIMSubscriptionKeyPolicy(api_key, header_name="api-key", verbose=verbose)
 
     return DocumentIntelligenceClient(
         endpoint=endpoint,

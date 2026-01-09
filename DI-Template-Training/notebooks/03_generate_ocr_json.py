@@ -65,8 +65,8 @@ for f in aligned_files:
 # ## 2. Initialize Azure Document Intelligence Client
 
 # %%
-# Initialize client
-di_client = get_document_intelligence_client()
+# Initialize client with verbose mode for debugging
+di_client = get_document_intelligence_client(verbose=True)
 print("Document Intelligence client initialized.")
 
 # Show endpoint (masked)
@@ -104,7 +104,7 @@ if aligned_files:
     print(f"Processing: {demo_image.name}")
     print("This may take 10-30 seconds...")
 
-    ocr_data = generate_ocr_json(di_client, demo_image, demo_output)
+    ocr_data = generate_ocr_json(di_client, demo_image, demo_output, verbose=True)
 
     print(f"\nOCR JSON saved to: {demo_output}")
 
