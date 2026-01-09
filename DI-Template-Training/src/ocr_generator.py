@@ -266,6 +266,62 @@ def extract_words_from_ocr(ocr_data: dict[str, Any]) -> list[dict]:
     return words
 
 
+def extract_selection_marks_from_ocr(ocr_data: dict[str, Any]) -> list[dict]:
+    """
+    Extract selection mark (checkbox) data from OCR JSON.
+
+    Args:
+        ocr_data: OCR JSON data
+
+    Returns:
+        List of selection mark dicts with state, polygon, confidence, page
+    """
+    selection_marks = []
+
+    analyze_result = ocr_data.get("analyzeResult", ocr_data)
+    pages = analyze_result.get("pages", [])
+
+    for page in pages:
+        page_num = page.get("pageNumber", 1)
+        page_width = page.get("width", 1)
+        page_height = page.get("height", 1)
+
+        for mark in page.get("selectionMarks", []):
+            mark_data = {
+                "state": mark.get("state", "unselected"),
+                "confidence": mark.get("confidence", 0.0),
+                "page": page_num,
+                "page_width": page_width,
+                "page_height": page_height,
+            }
+
+            # Handle polygon coordinates
+            polygon = mark.get("polygon", [])
+            if polygon:
+                # Polygon is a flat list [x1,y1,x2,y2,...]
+                mark_data["polygon"] = polygon
+
+                # Calculate bounding box
+                if len(polygon) >= 8:
+                    xs = polygon[0::2]
+                    ys = polygon[1::2]
+                    mark_data["bbox"] = {
+                        "x": min(xs),
+                        "y": min(ys),
+                        "width": max(xs) - min(xs),
+                        "height": max(ys) - min(ys),
+                    }
+
+            # Include span data for reading order
+            span = mark.get("span", {})
+            if span:
+                mark_data["span"] = span
+
+            selection_marks.append(mark_data)
+
+    return selection_marks
+
+
 def get_page_dimensions(ocr_data: dict[str, Any], page_num: int = 1) -> tuple[float, float]:
     """
     Get page dimensions from OCR data.

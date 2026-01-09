@@ -6,7 +6,7 @@ from typing import Any, Optional
 from shapely.geometry import Polygon, box
 
 from .utils import load_json, save_json, normalize_bbox, polygon_to_bbox, print_progress
-from .ocr_generator import extract_words_from_ocr, get_page_dimensions
+from .ocr_generator import extract_words_from_ocr, extract_selection_marks_from_ocr, get_page_dimensions
 
 
 # Field type mapping based on field names
@@ -121,6 +121,47 @@ def _words_in_zone(
     return matching
 
 
+def _selection_mark_in_zone(
+    selection_marks: list[dict],
+    zone_polygon: Polygon,
+    min_overlap: float = 0.5,
+) -> Optional[dict]:
+    """
+    Find the selection mark that overlaps with a zone polygon.
+
+    Args:
+        selection_marks: List of selection mark dicts with bbox
+        zone_polygon: Shapely Polygon of the zone
+        min_overlap: Minimum intersection ratio to consider a match
+
+    Returns:
+        The best matching selection mark, or None if no match
+    """
+    best_match = None
+    best_overlap = 0
+
+    for mark in selection_marks:
+        if "bbox" not in mark:
+            continue
+
+        mark_poly = _bbox_to_polygon(mark["bbox"])
+
+        try:
+            intersection = zone_polygon.intersection(mark_poly)
+            mark_area = mark_poly.area
+
+            if mark_area > 0:
+                overlap_ratio = intersection.area / mark_area
+                if overlap_ratio >= min_overlap and overlap_ratio > best_overlap:
+                    best_overlap = overlap_ratio
+                    best_match = mark
+        except Exception:
+            # Skip invalid geometries
+            continue
+
+    return best_match
+
+
 def generate_labels_json(
     image_name: str,
     ocr_data: dict[str, Any],
@@ -139,8 +180,9 @@ def generate_labels_json(
     Returns:
         The labels.json data
     """
-    # Extract words from OCR
+    # Extract words and selection marks from OCR
     words = extract_words_from_ocr(ocr_data)
+    selection_marks = extract_selection_marks_from_ocr(ocr_data)
     page_width, page_height = get_page_dimensions(ocr_data)
 
     labels = []
@@ -236,22 +278,27 @@ def generate_labels_json(
         if "bbox" not in zone:
             continue
 
-        # For checkboxes, we label the region, not the text
-        bbox = zone["bbox"]
-        norm_bbox = normalize_bbox(bbox, page_width, page_height)
+        # Find the selection mark that overlaps with this checkbox zone
+        zone_polygon = _bbox_to_polygon(zone["bbox"])
+        matching_mark = _selection_mark_in_zone(selection_marks, zone_polygon, min_overlap=0.5)
 
-        # Determine if checkbox is checked based on words in zone
-        zone_polygon = _bbox_to_polygon(bbox)
-        matching_words = _words_in_zone(words, zone_polygon, min_overlap=0.5)
+        if matching_mark:
+            # Use the actual state from the OCR selection mark
+            state = matching_mark.get("state", "unselected")
 
-        # If there are marks/text in the checkbox, consider it checked
-        is_checked = len(matching_words) > 0
+            # Use the selection mark's bounding box (more accurate than zone bbox)
+            mark_bbox = matching_mark["bbox"]
+            norm_bbox = normalize_bbox(mark_bbox, page_width, page_height)
+        else:
+            # No selection mark found - default to unselected with zone bbox
+            state = "unselected"
+            norm_bbox = normalize_bbox(zone["bbox"], page_width, page_height)
 
         label = {
             "label": zone_name,
             "value": [{
                 "page": 1,
-                "text": ":selected:" if is_checked else ":unselected:",
+                "text": f":{state}:",
                 "boundingBoxes": [norm_bbox],
             }],
             "labelType": "selectionMark",
