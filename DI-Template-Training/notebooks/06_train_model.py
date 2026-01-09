@@ -133,8 +133,33 @@ if SAS_URL:
     )
 
     # Start training
+    print("\n[DEBUG] Calling begin_build_document_model...")
+    print(f"[DEBUG] Endpoint: {di_admin_client._client._base_url}")
+    print(f"[DEBUG] Model ID: {MODEL_ID}")
+
     poller = di_admin_client.begin_build_document_model(request)
-    print("Training started. This may take 1-5 minutes...")
+
+    print("\n[DEBUG] Training request submitted successfully")
+    print(f"[DEBUG] Poller status: {poller.status()}")
+
+    # Extract polling URL from the poller
+    if hasattr(poller, '_polling_method'):
+        polling_method = poller._polling_method
+        if hasattr(polling_method, '_pipeline_response'):
+            pipeline_response = polling_method._pipeline_response
+            if hasattr(pipeline_response, 'http_response'):
+                http_response = pipeline_response.http_response
+                print(f"[DEBUG] Initial response status: {http_response.status_code}")
+                print(f"[DEBUG] Initial response URL: {http_response.request.url}")
+
+                # Check for Operation-Location header (polling URL)
+                if hasattr(http_response, 'headers'):
+                    headers = http_response.headers
+                    for header_name in ['Operation-Location', 'operation-location', 'Location', 'location']:
+                        if header_name in headers:
+                            print(f"[DEBUG] {header_name} header: {headers[header_name]}")
+
+    print("\nTraining started. This may take 1-5 minutes...")
 
 # %% [markdown]
 # ## 6. Monitor Training Progress
@@ -148,8 +173,23 @@ if 'poller' in dir():
     start_time = time.time()
     last_status = None
 
+    # Show polling URL once
+    polling_url_shown = False
+
     while not poller.done():
         status = poller.status()
+
+        # Show polling URL on first iteration
+        if not polling_url_shown and hasattr(poller, '_polling_method'):
+            polling_method = poller._polling_method
+            if hasattr(polling_method, '_pipeline_response'):
+                pipeline_response = polling_method._pipeline_response
+                if hasattr(pipeline_response, 'http_response'):
+                    http_response = pipeline_response.http_response
+                    print(f"[DEBUG] Polling URL: {http_response.request.url}")
+                    print(f"[DEBUG] Polling method: {http_response.request.method}")
+            polling_url_shown = True
+
         if status != last_status:
             elapsed = time.time() - start_time
             print(f"  [{elapsed:.0f}s] Status: {status}")
@@ -160,7 +200,33 @@ if 'poller' in dir():
     print(f"\nTraining completed in {elapsed:.1f} seconds")
 
     # Get result
-    model = poller.result()
+    print("\n[DEBUG] Calling poller.result() to get final model...")
+    try:
+        model = poller.result()
+        print("[DEBUG] Successfully retrieved model result")
+    except Exception as e:
+        print(f"\n[DEBUG] ERROR during poller.result():")
+        print(f"[DEBUG] Error type: {type(e).__name__}")
+        print(f"[DEBUG] Error message: {str(e)}")
+
+        # Try to get the failing URL from the exception
+        if hasattr(e, 'response'):
+            response = e.response
+            print(f"[DEBUG] Failed response status: {response.status_code if hasattr(response, 'status_code') else 'N/A'}")
+            print(f"[DEBUG] Failed request URL: {response.request.url if hasattr(response, 'request') else 'N/A'}")
+            print(f"[DEBUG] Failed request method: {response.request.method if hasattr(response, 'request') else 'N/A'}")
+
+        # Also check polling method for the URL
+        if hasattr(poller, '_polling_method'):
+            polling_method = poller._polling_method
+            if hasattr(polling_method, '_pipeline_response'):
+                pipeline_response = polling_method._pipeline_response
+                if hasattr(pipeline_response, 'http_response'):
+                    http_response = pipeline_response.http_response
+                    print(f"[DEBUG] Last polling URL: {http_response.request.url}")
+                    print(f"[DEBUG] Last polling status: {http_response.status_code}")
+
+        raise  # Re-raise the exception
 
 # %% [markdown]
 # ## 7. Display Model Details
