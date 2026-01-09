@@ -1,0 +1,20 @@
+# Environment
+.env
+.venv/
+__pycache__/
+*.pyc
+
+# Data (large files)
+data/inputs/sample_forms/*.jpg
+data/aligned/*.jpg
+data/training/*.jpg
+data/training/*.ocr.json
+data/outputs/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
