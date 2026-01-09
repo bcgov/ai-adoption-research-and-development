@@ -162,13 +162,19 @@ def generate_labels_json(
         matching_words = _words_in_zone(words, zone_polygon)
 
         if matching_words:
-            # Sort words by position (left to right, top to bottom)
-            matching_words.sort(key=lambda w: (w["bbox"]["y"], w["bbox"]["x"]))
+            # Sort words by reading order using Azure OCR's span offset
+            # This is 100% reliable as it uses Azure's authoritative reading order
+            # Fallback to coordinate-based sorting if span data is missing
+            if all("span" in w for w in matching_words):
+                matching_words.sort(key=lambda w: w["span"]["offset"])
+            else:
+                # Fallback: sort by coordinates with y-rounding for tilted text
+                matching_words.sort(key=lambda w: (round(w["bbox"]["y"] / 20) * 20, w["bbox"]["x"]))
 
-            # Concatenate text
+            # Concatenate text in sorted order
             text = " ".join(w["text"] for w in matching_words)
 
-            # Build bounding boxes (normalized)
+            # Build bounding boxes in the same sorted order
             bounding_boxes = []
             for word in matching_words:
                 bbox = word["bbox"]
@@ -197,7 +203,13 @@ def generate_labels_json(
         matching_words = _words_in_zone(words, zone_polygon)
 
         if matching_words:
-            matching_words.sort(key=lambda w: (w["bbox"]["y"], w["bbox"]["x"]))
+            # Sort words by reading order using Azure OCR's span offset
+            # Fallback to coordinate-based sorting if span data is missing
+            if all("span" in w for w in matching_words):
+                matching_words.sort(key=lambda w: w["span"]["offset"])
+            else:
+                # Fallback: sort by coordinates with y-rounding for tilted text
+                matching_words.sort(key=lambda w: (round(w["bbox"]["y"] / 20) * 20, w["bbox"]["x"]))
             text = " ".join(w["text"] for w in matching_words)
 
             bounding_boxes = []

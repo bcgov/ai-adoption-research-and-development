@@ -256,6 +256,11 @@ def extract_words_from_ocr(ocr_data: dict[str, Any]) -> list[dict]:
                         "height": max(ys) - min(ys),
                     }
 
+            # Include span data for reading order
+            span = word.get("span", {})
+            if span:
+                word_data["span"] = span
+
             words.append(word_data)
 
     return words

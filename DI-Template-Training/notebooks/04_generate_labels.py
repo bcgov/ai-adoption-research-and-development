@@ -203,8 +203,10 @@ def save_debug_image(image_path, labels_data, output_dir):
 
         for value in label.get('value', []):
             text_content = value.get('text', '')
+            bboxes = value.get('boundingBoxes', [])
 
-            for bbox in value.get('boundingBoxes', []):
+            # Draw all bounding boxes for this field
+            for bbox in bboxes:
                 # Convert normalized coords back to pixels
                 # bbox format: [x1,y1, x2,y1, x2,y2, x1,y2]
                 x1 = int(bbox[0] * width)
@@ -215,7 +217,12 @@ def save_debug_image(image_path, labels_data, output_dir):
                 # Draw rectangle
                 cv2.rectangle(debug_image, (x1, y1), (x2, y2), color, 2)
 
-                # Add field name above the box
+            # Add field name and text ONCE above the first bounding box
+            if bboxes:
+                first_bbox = bboxes[0]
+                x1 = int(first_bbox[0] * width)
+                y1 = int(first_bbox[1] * height)
+
                 label_text = f"{name}: {text_content}"
                 font = cv2.FONT_HERSHEY_SIMPLEX
                 font_scale = 0.5
