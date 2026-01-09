@@ -228,9 +228,8 @@ def generate_labels_json(
                 "value": [{
                     "page": matching_words[0].get("page", 1),
                     "text": text,
-                    "boundingBoxes": bounding_boxes,
+                    "polygons": bounding_boxes,
                 }],
-                "labelType": "words",
             }
             labels.append(label)
 
@@ -265,9 +264,8 @@ def generate_labels_json(
                 "value": [{
                     "page": matching_words[0].get("page", 1),
                     "text": text,
-                    "boundingBoxes": bounding_boxes,
+                    "polygons": bounding_boxes,
                 }],
-                "labelType": "words",
             }
             labels.append(label)
 
@@ -299,9 +297,8 @@ def generate_labels_json(
             "value": [{
                 "page": 1,
                 "text": f":{state}:",
-                "boundingBoxes": [norm_bbox],
+                "polygons": [norm_bbox],
             }],
-            "labelType": "selectionMark",
         }
         labels.append(label)
 

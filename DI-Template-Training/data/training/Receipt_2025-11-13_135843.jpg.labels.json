@@ -7,7 +7,7 @@
         {
           "page": 1,
           "text": "Dorothy Wilson",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.1582375478927203,
               0.5301672640382318,
@@ -30,8 +30,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "explain_changes",
@@ -39,7 +38,7 @@
         {
           "page": 1,
           "text": "Rent increased, see lease update",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.05325670498084291,
               0.4145758661887694,
@@ -92,8 +91,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "signature",
@@ -101,7 +99,7 @@
         {
           "page": 1,
           "text": "Dwilson",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.15938697318007664,
               0.5029868578255675,
@@ -114,8 +112,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "date",
@@ -123,7 +120,7 @@
         {
           "page": 1,
           "text": "2025-11-12",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.3375478927203065,
               0.5116487455197133,
@@ -136,8 +133,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "phone",
@@ -145,7 +141,7 @@
         {
           "page": 1,
           "text": "345-765-31",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.0739463601532567,
               0.5642174432497014,
@@ -158,8 +154,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "sin",
@@ -167,7 +162,7 @@
         {
           "page": 1,
           "text": "123-456-789",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.285823754789272,
               0.5630227001194743,
@@ -180,8 +175,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_signature",
@@ -189,7 +183,7 @@
         {
           "page": 1,
           "text": "Khikan",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.6019157088122605,
               0.5032855436081243,
@@ -202,8 +196,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_date",
@@ -211,7 +204,7 @@
         {
           "page": 1,
           "text": "Nov 25, 2025",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.775095785440613,
               0.5098566308243727,
@@ -244,8 +237,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_name",
@@ -253,7 +245,7 @@
         {
           "page": 1,
           "text": "Harold Wilson",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.6045977011494252,
               0.5286738351254481,
@@ -276,8 +268,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_phone",
@@ -285,7 +276,7 @@
         {
           "page": 1,
           "text": "+1 236-789-387",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.5130268199233716,
               0.5627240143369175,
@@ -308,8 +299,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_phone",
@@ -317,7 +307,7 @@
         {
           "page": 1,
           "text": "123-456-789",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.7417624521072796,
               0.562126642771804,
@@ -330,8 +320,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "income1",
@@ -339,7 +328,7 @@
         {
           "page": 1,
           "text": "1389",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.7513409961685824,
               0.16069295101553166,
@@ -352,8 +341,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "income2",
@@ -361,7 +349,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.7743295019157088,
               0.18040621266427717,
@@ -374,8 +362,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "income3",
@@ -383,7 +370,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.7735632183908046,
               0.19504181600955794,
@@ -396,8 +383,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "income4",
@@ -405,7 +391,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.7773946360153257,
               0.2120669056152927,
@@ -418,8 +404,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "income5",
@@ -427,7 +412,7 @@
         {
           "page": 1,
           "text": "2,380.23",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.7578544061302682,
               0.22939068100358423,
@@ -440,8 +425,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "income6",
@@ -449,7 +433,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.7762452107279694,
               0.24761051373954598,
@@ -462,8 +446,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "income7",
@@ -471,7 +454,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.778544061302682,
               0.26045400238948624,
@@ -484,8 +467,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "income8",
@@ -493,7 +475,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.7781609195402299,
               0.27927120669056155,
@@ -506,8 +488,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "income9",
@@ -515,7 +496,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.7781609195402299,
               0.29958183990442055,
@@ -528,8 +509,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "income10",
@@ -537,7 +517,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.7796934865900383,
               0.3160095579450418,
@@ -550,8 +530,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "income11",
@@ -559,7 +538,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.7781609195402299,
               0.3333333333333333,
@@ -572,8 +551,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "income12",
@@ -581,7 +559,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.778544061302682,
               0.34886499402628435,
@@ -594,8 +572,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "income13",
@@ -603,7 +580,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.7781609195402299,
               0.36678614097968937,
@@ -616,8 +593,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "income14",
@@ -625,7 +601,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.7796934865900383,
               0.38291517323775387,
@@ -638,8 +614,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "income15",
@@ -647,7 +622,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.7808429118773946,
               0.40113500597371565,
@@ -660,8 +635,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "income16",
@@ -669,7 +643,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.7804597701149425,
               0.41816009557945044,
@@ -682,8 +656,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "income17",
@@ -691,7 +664,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.7808429118773946,
               0.4351851851851852,
@@ -704,8 +677,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "income18",
@@ -713,7 +685,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.7831417624521073,
               0.45101553166069297,
@@ -726,8 +698,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_income1",
@@ -735,7 +706,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.8835249042145594,
               0.1627837514934289,
@@ -748,8 +719,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_income2",
@@ -757,7 +727,7 @@
         {
           "page": 1,
           "text": "650.25",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.8659003831417624,
               0.17801672640382318,
@@ -770,8 +740,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_income3",
@@ -779,7 +748,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.8804597701149425,
               0.1959378733572282,
@@ -792,8 +761,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_income4",
@@ -801,7 +769,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.8804597701149425,
               0.21027479091995221,
@@ -814,8 +782,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_income5",
@@ -823,7 +790,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.8808429118773946,
               0.23178016726403824,
@@ -836,8 +803,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_income6",
@@ -845,7 +811,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.8796934865900383,
               0.2494026284348865,
@@ -858,8 +824,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_income7",
@@ -867,7 +832,7 @@
         {
           "page": 1,
           "text": "320",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.8681992337164751,
               0.2616487455197133,
@@ -880,8 +845,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_income8",
@@ -889,7 +853,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.8754789272030651,
               0.2819593787335723,
@@ -902,8 +866,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_income9",
@@ -911,7 +874,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.878927203065134,
               0.2986857825567503,
@@ -924,8 +887,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_income10",
@@ -933,7 +895,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.8800766283524905,
               0.3160095579450418,
@@ -946,8 +908,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_income11",
@@ -955,7 +916,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.8773946360153256,
               0.3330346475507766,
@@ -968,8 +929,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_income12",
@@ -977,7 +937,7 @@
         {
           "page": 1,
           "text": "480",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.8681992337164751,
               0.3473715651135006,
@@ -990,8 +950,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_income13",
@@ -999,7 +958,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.8773946360153256,
               0.3664874551971326,
@@ -1012,8 +971,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_income14",
@@ -1021,7 +979,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.878927203065134,
               0.37992831541218636,
@@ -1034,8 +992,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_income15",
@@ -1043,7 +1000,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.8796934865900383,
               0.3996415770609319,
@@ -1056,8 +1013,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_income16",
@@ -1065,7 +1021,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.8793103448275862,
               0.4163679808841099,
@@ -1078,8 +1034,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_income17",
@@ -1087,7 +1042,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.8773946360153256,
               0.43189964157706096,
@@ -1100,8 +1055,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "spouse_income18",
@@ -1109,7 +1063,7 @@
         {
           "page": 1,
           "text": "0",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.8766283524904215,
               0.44743130227001193,
@@ -1122,8 +1076,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "words"
+      ]
     },
     {
       "label": "checkbox_need_assistance_yes",
@@ -1131,7 +1084,7 @@
         {
           "page": 1,
           "text": ":unselected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.2957854406130268,
               0.1917562724014337,
@@ -1144,8 +1097,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_need_assistance_no",
@@ -1153,7 +1105,7 @@
         {
           "page": 1,
           "text": ":selected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.3471264367816092,
               0.1917562724014337,
@@ -1166,8 +1118,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_family_assets_yes",
@@ -1175,7 +1126,7 @@
         {
           "page": 1,
           "text": ":selected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.29616858237547894,
               0.2126642771804062,
@@ -1188,8 +1139,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_family_assets_no",
@@ -1197,7 +1147,7 @@
         {
           "page": 1,
           "text": ":unselected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.3471264367816092,
               0.2126642771804062,
@@ -1210,8 +1160,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_shelter_yes",
@@ -1219,7 +1168,7 @@
         {
           "page": 1,
           "text": ":unselected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.29616858237547894,
               0.23476702508960573,
@@ -1232,8 +1181,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_shelter_no",
@@ -1241,7 +1189,7 @@
         {
           "page": 1,
           "text": ":selected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.3471264367816092,
               0.234468339307049,
@@ -1254,8 +1202,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_dependants_yes",
@@ -1263,7 +1210,7 @@
         {
           "page": 1,
           "text": ":unselected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.29616858237547894,
               0.2565710872162485,
@@ -1276,8 +1223,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_dependants_no",
@@ -1285,7 +1231,7 @@
         {
           "page": 1,
           "text": ":selected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.3471264367816092,
               0.255973715651135,
@@ -1298,8 +1244,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_employment_changes_yes",
@@ -1307,7 +1252,7 @@
         {
           "page": 1,
           "text": ":selected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.29616858237547894,
               0.3058542413381123,
@@ -1320,8 +1265,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_employment_changes_no",
@@ -1329,7 +1273,7 @@
         {
           "page": 1,
           "text": ":unselected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.3475095785440613,
               0.3058542413381123,
@@ -1342,8 +1286,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_employment_changes_spouse_yes",
@@ -1351,7 +1294,7 @@
         {
           "page": 1,
           "text": ":selected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.40153256704980844,
               0.3058542413381123,
@@ -1364,8 +1307,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_employment_changes_spouse_no",
@@ -1373,7 +1315,7 @@
         {
           "page": 1,
           "text": ":unselected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.4532567049808429,
               0.3058542413381123,
@@ -1386,8 +1328,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_school_yes",
@@ -1395,7 +1336,7 @@
         {
           "page": 1,
           "text": ":unselected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.296551724137931,
               0.32765830346475505,
@@ -1408,8 +1349,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_school_no",
@@ -1417,7 +1357,7 @@
         {
           "page": 1,
           "text": ":selected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.3478927203065134,
               0.3270609318996416,
@@ -1430,8 +1370,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_school_spouse_yes",
@@ -1439,7 +1378,7 @@
         {
           "page": 1,
           "text": ":unselected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.40229885057471265,
               0.32765830346475505,
@@ -1452,8 +1391,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_school_spouse_no",
@@ -1461,7 +1399,7 @@
         {
           "page": 1,
           "text": ":selected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.453639846743295,
               0.32735961768219835,
@@ -1474,8 +1412,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_work_yes",
@@ -1483,7 +1420,7 @@
         {
           "page": 1,
           "text": ":selected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.29693486590038315,
               0.34946236559139787,
@@ -1496,8 +1433,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_work_no",
@@ -1505,7 +1441,7 @@
         {
           "page": 1,
           "text": ":unselected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.3478927203065134,
               0.34946236559139787,
@@ -1518,8 +1454,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_work_souse_yes",
@@ -1527,7 +1462,7 @@
         {
           "page": 1,
           "text": ":selected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.4019157088122605,
               0.3491636798088411,
@@ -1540,8 +1475,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_work_souse_no",
@@ -1549,7 +1483,7 @@
         {
           "page": 1,
           "text": ":unselected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.4532567049808429,
               0.3497610513739546,
@@ -1562,8 +1496,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_moved_yes",
@@ -1571,7 +1504,7 @@
         {
           "page": 1,
           "text": ":unselected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.296551724137931,
               0.36678614097968937,
@@ -1584,8 +1517,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_moved_no",
@@ -1593,7 +1525,7 @@
         {
           "page": 1,
           "text": ":selected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.3482758620689655,
               0.36618876941457584,
@@ -1606,8 +1538,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_moved_spouse_yes",
@@ -1615,7 +1546,7 @@
         {
           "page": 1,
           "text": ":unselected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.40229885057471265,
               0.3664874551971326,
@@ -1628,8 +1559,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_moved_spouse_no",
@@ -1637,7 +1567,7 @@
         {
           "page": 1,
           "text": ":selected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.453639846743295,
               0.36589008363201914,
@@ -1650,8 +1580,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_warrant_yes",
@@ -1659,7 +1588,7 @@
         {
           "page": 1,
           "text": ":selected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.29693486590038315,
               0.38291517323775387,
@@ -1672,8 +1601,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_warrant_no",
@@ -1681,7 +1609,7 @@
         {
           "page": 1,
           "text": ":unselected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.3478927203065134,
               0.38291517323775387,
@@ -1694,8 +1622,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_warrant_spouse_yes",
@@ -1703,7 +1630,7 @@
         {
           "page": 1,
           "text": ":unselected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.4019157088122605,
               0.38321385902031063,
@@ -1716,8 +1643,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     },
     {
       "label": "checkbox_warrant_spouse_no",
@@ -1725,7 +1651,7 @@
         {
           "page": 1,
           "text": ":selected:",
-          "boundingBoxes": [
+          "polygons": [
             [
               0.453639846743295,
               0.38291517323775387,
@@ -1738,8 +1664,7 @@
             ]
           ]
         }
-      ],
-      "labelType": "selectionMark"
+      ]
     }
   ]
 }

@@ -155,17 +155,16 @@ if 'labels_data' in dir():
 
     for label in labels_data['labels'][:10]:
         name = label['label']
-        label_type = label['labelType']
         values = label.get('value', [])
 
         if values:
             text = values[0].get('text', '')[:40]
-            bbox_count = len(values[0].get('boundingBoxes', []))
+            polygon_count = len(values[0].get('polygons', []))
         else:
             text = ''
-            bbox_count = 0
+            polygon_count = 0
 
-        print(f"  {name:<35} [{label_type:<14}] '{text}' ({bbox_count} boxes)")
+        print(f"  {name:<35} '{text}' ({polygon_count} polygons)")
 
     if len(labels_data['labels']) > 10:
         print(f"  ... and {len(labels_data['labels']) - 10} more labels")
@@ -204,7 +203,7 @@ def save_debug_image(image_path, labels_data, output_dir):
 
         for value in label.get('value', []):
             text_content = value.get('text', '')
-            bboxes = value.get('boundingBoxes', [])
+            bboxes = value.get('polygons', [])
 
             # Draw all bounding boxes for this field
             for bbox in bboxes:
