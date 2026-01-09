@@ -22,20 +22,21 @@ class APIMSubscriptionKeyPolicy(HTTPPolicy):
         self.verbose = verbose
 
     def send(self, request: PipelineRequest) -> PipelineResponse:
-        # Debug logging
+        # Always add the subscription key with custom header name to ALL requests
+        # This includes initial requests AND polling requests for long-running operations
+        request.http_request.headers[self.header_name] = self.subscription_key
+
+        # Remove the default header if it exists
+        if "Ocp-Apim-Subscription-Key" in request.http_request.headers:
+            del request.http_request.headers["Ocp-Apim-Subscription-Key"]
+
+        # Debug logging AFTER adding headers
         if self.verbose:
             print(f"\n=== HTTP REQUEST ===")
             print(f"URL: {request.http_request.url}")
             print(f"Method: {request.http_request.method}")
             print(f"Headers: {dict(request.http_request.headers)}")
             print("=" * 50)
-
-        # Add the subscription key with custom header name
-        request.http_request.headers[self.header_name] = self.subscription_key
-
-        # Remove the default header if it exists
-        if "Ocp-Apim-Subscription-Key" in request.http_request.headers:
-            del request.http_request.headers["Ocp-Apim-Subscription-Key"]
 
         # Continue with the pipeline
         response = self.next.send(request)
@@ -86,13 +87,14 @@ def get_document_intelligence_client(
     return DocumentIntelligenceClient(
         endpoint=endpoint,
         credential=AzureKeyCredential("dummy"),  # Dummy credential since we're using custom policy
-        per_call_policies=[apim_policy],  # Add custom policy
+        per_call_policies=[apim_policy],  # Use per_call to apply to ALL requests including polling
     )
 
 
 def get_document_intelligence_admin_client(
     endpoint: Optional[str] = None,
     api_key: Optional[str] = None,
+    verbose: bool = False,
 ) -> DocumentIntelligenceAdministrationClient:
     """
     Create an Azure Document Intelligence Administration client for managing models.
@@ -100,6 +102,7 @@ def get_document_intelligence_admin_client(
     Args:
         endpoint: DI endpoint URL (defaults to AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT env var)
         api_key: DI API key (defaults to AZURE_DOCUMENT_INTELLIGENCE_KEY env var)
+        verbose: Enable verbose HTTP request/response logging
 
     Returns:
         DocumentIntelligenceAdministrationClient instance
@@ -119,12 +122,12 @@ def get_document_intelligence_admin_client(
         )
 
     # Create custom policy for APIM header
-    apim_policy = APIMSubscriptionKeyPolicy(api_key, header_name="api-key")
+    apim_policy = APIMSubscriptionKeyPolicy(api_key, header_name="api-key", verbose=verbose)
 
     return DocumentIntelligenceAdministrationClient(
         endpoint=endpoint,
         credential=AzureKeyCredential("dummy"),  # Dummy credential since we're using custom policy
-        per_call_policies=[apim_policy],  # Add custom policy
+        per_call_policies=[apim_policy],  # Use per_call to apply to ALL requests including polling
     )
 
 def get_blob_service_client(
