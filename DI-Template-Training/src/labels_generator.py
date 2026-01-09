@@ -46,17 +46,17 @@ def generate_fields_json(
         exclude_checkboxes: Whether to exclude checkbox fields
 
     Returns:
-        The fields.json data
+        The fields.json data with fields as a dictionary (field_name -> field_type_info)
     """
-    fields = []
+    fields = {}
 
     for cat_id, name in sorted(categories.items(), key=lambda x: x[0]):
         if exclude_checkboxes and name.startswith("checkbox_"):
             continue
 
         field_type = get_field_type(name)
-        field_def = {"name": name, **field_type}
-        fields.append(field_def)
+        # Store field type info without the name (name is the key)
+        fields[name] = field_type
 
     fields_data = {"fields": fields}
     save_json(fields_data, output_path)

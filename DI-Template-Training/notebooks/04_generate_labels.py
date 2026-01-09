@@ -114,12 +114,14 @@ print("-" * 60)
 print(f"{'Name':<40} {'Type':<15} {'Subtype'}")
 print("-" * 60)
 
-for field in fields_data['fields'][:15]:
-    subtype = field.get('subtype', '')
-    print(f"{field['name']:<40} {field['type']:<15} {subtype}")
+fields_dict = fields_data['fields']
+for i, (field_name, field_info) in enumerate(list(fields_dict.items())[:15]):
+    field_type = field_info.get('type', '')
+    subtype = field_info.get('subtype', '')
+    print(f"{field_name:<40} {field_type:<15} {subtype}")
 
-if len(fields_data['fields']) > 15:
-    print(f"... and {len(fields_data['fields']) - 15} more fields")
+if len(fields_dict) > 15:
+    print(f"... and {len(fields_dict) - 15} more fields")
 
 # %% [markdown]
 # ## 4. Generate Labels for Single Image (Demo)
