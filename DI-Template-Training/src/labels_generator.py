@@ -57,9 +57,16 @@ def generate_fields_json(
         if exclude_checkboxes and name.startswith("checkbox_"):
             continue
 
-        field_type = get_field_type(name)
-        # Create field object with name and type info
-        field_obj = {"name": name, **field_type}
+        field_type_info = get_field_type(name)
+        # Create field object with fieldKey and fieldType
+        field_obj = {"fieldKey": name}
+
+        # Map "type" to "fieldType" and copy subtype if present
+        if "type" in field_type_info:
+            field_obj["fieldType"] = field_type_info["type"]
+        if "subtype" in field_type_info:
+            field_obj["fieldFormat"] = field_type_info["subtype"]
+
         fields.append(field_obj)
 
     fields_data = {"fields": fields}
