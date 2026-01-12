@@ -26,6 +26,11 @@ class APIMSubscriptionKeyPolicy(HTTPPolicy):
         # This includes initial requests AND polling requests for long-running operations
         request.http_request.headers[self.header_name] = self.subscription_key
 
+        # Ensure x-ms-client-request-id is present (required by Azure SDK polling)
+        if "x-ms-client-request-id" not in request.http_request.headers:
+            import uuid
+            request.http_request.headers["x-ms-client-request-id"] = str(uuid.uuid4())
+
         # Remove the default header if it exists
         if "Ocp-Apim-Subscription-Key" in request.http_request.headers:
             del request.http_request.headers["Ocp-Apim-Subscription-Key"]
@@ -46,6 +51,17 @@ class APIMSubscriptionKeyPolicy(HTTPPolicy):
             print(f"\n=== HTTP RESPONSE ===")
             print(f"Status: {response.http_response.status_code}")
             print(f"Reason: {response.http_response.reason}")
+            print(f"Response Headers: {dict(response.http_response.headers)}")
+
+            # Try to show response body for debugging
+            if hasattr(response.http_response, 'text') and callable(response.http_response.text):
+                try:
+                    body_text = response.http_response.text()[:500]  # First 500 chars
+                    if body_text:
+                        print(f"Response Body (first 500 chars): {body_text}")
+                except:
+                    pass
+
             print("=" * 50)
 
         return response
@@ -87,7 +103,8 @@ def get_document_intelligence_client(
     return DocumentIntelligenceClient(
         endpoint=endpoint,
         credential=AzureKeyCredential("dummy"),  # Dummy credential since we're using custom policy
-        per_call_policies=[apim_policy],  # Use per_call to apply to ALL requests including polling
+        per_call_policies=[apim_policy],  # Apply to all initial requests
+        per_retry_policies=[apim_policy],  # Apply to all retry/polling requests
     )
 
 
@@ -127,7 +144,8 @@ def get_document_intelligence_admin_client(
     return DocumentIntelligenceAdministrationClient(
         endpoint=endpoint,
         credential=AzureKeyCredential("dummy"),  # Dummy credential since we're using custom policy
-        per_call_policies=[apim_policy],  # Use per_call to apply to ALL requests including polling
+        per_call_policies=[apim_policy],  # Apply to all initial requests
+        per_retry_policies=[apim_policy],  # Apply to all retry/polling requests
     )
 
 def get_blob_service_client(

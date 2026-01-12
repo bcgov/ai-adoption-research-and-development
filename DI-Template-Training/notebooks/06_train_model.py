@@ -222,7 +222,7 @@ else:
 
 # %%
 # Initialize admin client (for model management)
-di_admin_client = get_document_intelligence_admin_client()
+di_admin_client = get_document_intelligence_admin_client(verbose=True)
 print("Document Intelligence admin client initialized.")
 
 # Show endpoint
@@ -288,11 +288,14 @@ if SAS_URL:
     poller = di_admin_client.begin_build_document_model(request)
 
     print("\n[DEBUG] Training request submitted successfully")
+    print(f"[DEBUG] Poller type: {type(poller)}")
+    print(f"[DEBUG] Poller done: {poller.done()}")
     print(f"[DEBUG] Poller status: {poller.status()}")
 
     # Extract polling URL from the poller
     if hasattr(poller, '_polling_method'):
         polling_method = poller._polling_method
+        print(f"[DEBUG] Polling method type: {type(polling_method)}")
         if hasattr(polling_method, '_pipeline_response'):
             pipeline_response = polling_method._pipeline_response
             if hasattr(pipeline_response, 'http_response'):
@@ -313,68 +316,82 @@ if SAS_URL:
 # ## 7. Monitor Training Progress
 
 # %%
+import requests
+
 if 'poller' in dir():
-    # Poll for completion
-    print("Waiting for training to complete...")
+    # Extract the operation URL from the poller's initial response
+    operation_url = None
+    if hasattr(poller, '_polling_method'):
+        polling_method = poller._polling_method
+        if hasattr(polling_method, '_pipeline_response'):
+            pipeline_response = polling_method._pipeline_response
+            if hasattr(pipeline_response, 'http_response'):
+                http_response = pipeline_response.http_response
+                if hasattr(http_response, 'headers'):
+                    headers = http_response.headers
+                    operation_url = headers.get('operation-location') or headers.get('Operation-Location')
+
+    if not operation_url:
+        raise RuntimeError("Could not extract operation URL from poller response")
+
+    print(f"Waiting for training to complete...")
+    print(f"Operation URL: {operation_url}")
     print("-" * 50)
+
+    # Manual polling using requests - bypass the SDK's broken poller
+    api_key = os.environ.get("AZURE_DOCUMENT_INTELLIGENCE_KEY")
+    poll_headers = {"api-key": api_key}
 
     start_time = time.time()
     last_status = None
+    poll_count = 0
+    poll_interval = 5  # seconds between polls
+    operation_result = None
 
-    # Show polling URL once
-    polling_url_shown = False
+    while True:
+        poll_count += 1
+        elapsed = time.time() - start_time
 
-    while not poller.done():
-        status = poller.status()
+        # Make direct HTTP request to check operation status
+        response = requests.get(operation_url, headers=poll_headers)
+        response.raise_for_status()
+        operation_result = response.json()
 
-        # Show polling URL on first iteration
-        if not polling_url_shown and hasattr(poller, '_polling_method'):
-            polling_method = poller._polling_method
-            if hasattr(polling_method, '_pipeline_response'):
-                pipeline_response = polling_method._pipeline_response
-                if hasattr(pipeline_response, 'http_response'):
-                    http_response = pipeline_response.http_response
-                    print(f"[DEBUG] Polling URL: {http_response.request.url}")
-                    print(f"[DEBUG] Polling method: {http_response.request.method}")
-            polling_url_shown = True
+        status = operation_result.get("status", "Unknown")
 
         if status != last_status:
-            elapsed = time.time() - start_time
-            print(f"  [{elapsed:.0f}s] Status: {status}")
+            print(f"  [{elapsed:.0f}s] Poll #{poll_count}: Status = {status}")
             last_status = status
-        time.sleep(5)
+
+        # Check if operation is complete
+        if status not in ["notStarted", "running"]:
+            print(f"  Operation finished with status: {status}")
+            break
+
+        # Safety timeout after 10 minutes
+        if elapsed > 600:
+            print("  WARNING: Polling timeout after 10 minutes")
+            break
+
+        time.sleep(poll_interval)
 
     elapsed = time.time() - start_time
     print(f"\nTraining completed in {elapsed:.1f} seconds")
 
-    # Get result
-    print("\n[DEBUG] Calling poller.result() to get final model...")
-    try:
-        model = poller.result()
-        print("[DEBUG] Successfully retrieved model result")
-    except Exception as e:
-        print(f"\n[DEBUG] ERROR during poller.result():")
-        print(f"[DEBUG] Error type: {type(e).__name__}")
-        print(f"[DEBUG] Error message: {str(e)}")
-
-        # Try to get the failing URL from the exception
-        if hasattr(e, 'response'):
-            response = e.response
-            print(f"[DEBUG] Failed response status: {response.status_code if hasattr(response, 'status_code') else 'N/A'}")
-            print(f"[DEBUG] Failed request URL: {response.request.url if hasattr(response, 'request') else 'N/A'}")
-            print(f"[DEBUG] Failed request method: {response.request.method if hasattr(response, 'request') else 'N/A'}")
-
-        # Also check polling method for the URL
-        if hasattr(poller, '_polling_method'):
-            polling_method = poller._polling_method
-            if hasattr(polling_method, '_pipeline_response'):
-                pipeline_response = polling_method._pipeline_response
-                if hasattr(pipeline_response, 'http_response'):
-                    http_response = pipeline_response.http_response
-                    print(f"[DEBUG] Last polling URL: {http_response.request.url}")
-                    print(f"[DEBUG] Last polling status: {http_response.status_code}")
-
-        raise  # Re-raise the exception
+    # Get the model from the result or fetch it directly
+    model = None
+    if operation_result and operation_result.get("status") == "succeeded":
+        print("\n[DEBUG] Training succeeded, fetching model details...")
+        try:
+            model = di_admin_client.get_model(MODEL_ID)
+            print(f"[DEBUG] Successfully retrieved model: {model.model_id}")
+        except Exception as e:
+            print(f"[DEBUG] Error fetching model: {e}")
+    elif operation_result:
+        print(f"\n[DEBUG] Training failed or incomplete:")
+        print(f"[DEBUG] Status: {operation_result.get('status')}")
+        if "error" in operation_result:
+            print(f"[DEBUG] Error: {operation_result['error']}")
 
 # %% [markdown]
 # ## 8. Display Model Details
