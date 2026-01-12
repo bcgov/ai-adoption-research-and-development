@@ -236,23 +236,22 @@ def generate_labels_json(
                 # Fallback: sort by coordinates with y-rounding for tilted text
                 matching_words.sort(key=lambda w: (round(w["bbox"]["y"] / 20) * 20, w["bbox"]["x"]))
 
-            # Concatenate text in sorted order
-            text = " ".join(w["text"] for w in matching_words)
-
-            # Build bounding boxes in the same sorted order
-            bounding_boxes = []
+            # Create separate value objects for each word
+            value_objects = []
             for word in matching_words:
                 bbox = word["bbox"]
                 norm_bbox = normalize_bbox(bbox, page_width, page_height)
-                bounding_boxes.append(norm_bbox)
+
+                value_obj = {
+                    "page": word.get("page", 1),
+                    "text": word["text"],
+                    "boundingBoxes": [norm_bbox],
+                }
+                value_objects.append(value_obj)
 
             label = {
                 "label": zone_name,
-                "value": [{
-                    "page": matching_words[0].get("page", 1),
-                    "text": text,
-                    "polygons": bounding_boxes,
-                }],
+                "value": value_objects,
             }
             labels.append(label)
 
@@ -274,21 +273,23 @@ def generate_labels_json(
             else:
                 # Fallback: sort by coordinates with y-rounding for tilted text
                 matching_words.sort(key=lambda w: (round(w["bbox"]["y"] / 20) * 20, w["bbox"]["x"]))
-            text = " ".join(w["text"] for w in matching_words)
 
-            bounding_boxes = []
+            # Create separate value objects for each word
+            value_objects = []
             for word in matching_words:
                 bbox = word["bbox"]
                 norm_bbox = normalize_bbox(bbox, page_width, page_height)
-                bounding_boxes.append(norm_bbox)
+
+                value_obj = {
+                    "page": word.get("page", 1),
+                    "text": word["text"],
+                    "boundingBoxes": [norm_bbox],
+                }
+                value_objects.append(value_obj)
 
             label = {
                 "label": zone_name,
-                "value": [{
-                    "page": matching_words[0].get("page", 1),
-                    "text": text,
-                    "polygons": bounding_boxes,
-                }],
+                "value": value_objects,
             }
             labels.append(label)
 
@@ -320,7 +321,7 @@ def generate_labels_json(
             "value": [{
                 "page": 1,
                 "text": f":{state}:",
-                "polygons": [norm_bbox],
+                "boundingBoxes": [norm_bbox],
             }],
         }
         labels.append(label)

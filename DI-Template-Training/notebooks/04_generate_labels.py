@@ -159,13 +159,15 @@ if 'labels_data' in dir():
         values = label.get('value', [])
 
         if values:
-            text = values[0].get('text', '')[:40]
-            polygon_count = len(values[0].get('polygons', []))
+            # Combine all text from value objects
+            text = " ".join(v.get('text', '') for v in values)[:40]
+            # Count total bounding boxes
+            bbox_count = sum(len(v.get('boundingBoxes', [])) for v in values)
         else:
             text = ''
-            polygon_count = 0
+            bbox_count = 0
 
-        print(f"  {name:<35} '{text}' ({polygon_count} polygons)")
+        print(f"  {name:<35} '{text}' ({bbox_count} boxes)")
 
     if len(labels_data['labels']) > 10:
         print(f"  ... and {len(labels_data['labels']) - 10} more labels")
@@ -202,11 +204,14 @@ def save_debug_image(image_path, labels_data, output_dir):
         color = colors[i % len(colors)]
         name = label['label']
 
-        for value in label.get('value', []):
-            text_content = value.get('text', '')
-            bboxes = value.get('polygons', [])
+        # Collect all text from value objects
+        all_text = " ".join(v.get('text', '') for v in label.get('value', []))
+        all_bboxes = []
 
-            # Draw all bounding boxes for this field
+        for value in label.get('value', []):
+            bboxes = value.get('boundingBoxes', [])
+
+            # Draw all bounding boxes for this value object
             for bbox in bboxes:
                 # Convert normalized coords back to pixels
                 # bbox format: [x1,y1, x2,y1, x2,y2, x1,y2]
@@ -217,44 +222,45 @@ def save_debug_image(image_path, labels_data, output_dir):
 
                 # Draw rectangle
                 cv2.rectangle(debug_image, (x1, y1), (x2, y2), color, 2)
+                all_bboxes.extend(bboxes)
 
-            # Add field name and text ONCE above the first bounding box
-            if bboxes:
-                first_bbox = bboxes[0]
-                x1 = int(first_bbox[0] * width)
-                y1 = int(first_bbox[1] * height)
+        # Add field name and text ONCE above the first bounding box
+        if all_bboxes:
+            first_bbox = all_bboxes[0]
+            x1 = int(first_bbox[0] * width)
+            y1 = int(first_bbox[1] * height)
 
-                label_text = f"{name}: {text_content}"
-                font = cv2.FONT_HERSHEY_SIMPLEX
-                font_scale = 0.5
-                thickness = 1
+            label_text = f"{name}: {all_text}"
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            font_scale = 0.5
+            thickness = 1
 
-                # Get text size for background
-                (text_width, text_height), baseline = cv2.getTextSize(
-                    label_text, font, font_scale, thickness
-                )
+            # Get text size for background
+            (text_width, text_height), baseline = cv2.getTextSize(
+                label_text, font, font_scale, thickness
+            )
 
-                # Draw background for text
-                text_y = max(y1 - 5, text_height + 5)
-                cv2.rectangle(
-                    debug_image,
-                    (x1, text_y - text_height - baseline),
-                    (x1 + text_width, text_y + baseline),
-                    color,
-                    -1  # Filled
-                )
+            # Draw background for text
+            text_y = max(y1 - 5, text_height + 5)
+            cv2.rectangle(
+                debug_image,
+                (x1, text_y - text_height - baseline),
+                (x1 + text_width, text_y + baseline),
+                color,
+                -1  # Filled
+            )
 
-                # Draw text
-                cv2.putText(
-                    debug_image,
-                    label_text,
-                    (x1, text_y),
-                    font,
-                    font_scale,
-                    (255, 255, 255),  # White text
-                    thickness,
-                    cv2.LINE_AA
-                )
+            # Draw text
+            cv2.putText(
+                debug_image,
+                label_text,
+                (x1, text_y),
+                font,
+                font_scale,
+                (255, 255, 255),  # White text
+                thickness,
+                cv2.LINE_AA
+            )
 
     # Save debug image
     output_path = output_dir / f"{image_path.stem}_debug.jpg"
