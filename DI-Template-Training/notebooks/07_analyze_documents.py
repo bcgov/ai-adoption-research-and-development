@@ -76,7 +76,9 @@ else:
 
 # %%
 # Initialize Document Intelligence client
-di_client = get_document_intelligence_client()
+# Set verbose=True to enable detailed HTTP request/response logging for debugging
+VERBOSE = True  # Set to True if you need to debug API calls
+di_client = get_document_intelligence_client(verbose=VERBOSE)
 print("Document Intelligence client initialized.")
 
 # %% [markdown]
@@ -93,7 +95,7 @@ for i, f in enumerate(input_files):
 # %%
 # Select a document to analyze
 # Change this index to test different documents
-DOCUMENT_INDEX = 0
+DOCUMENT_INDEX = 5
 
 if input_files:
     test_document = input_files[DOCUMENT_INDEX]
@@ -111,20 +113,132 @@ if test_document:
     print("This may take 10-30 seconds...")
     print("-" * 50)
 
-    # Read document
-    with open(test_document, "rb") as f:
-        document_data = f.read()
+    try:
+        # Read document
+        with open(test_document, "rb") as f:
+            document_data = f.read()
 
-    # Analyze with custom model
-    poller = di_client.begin_analyze_document(
-        model_id=MODEL_ID,
-        body=document_data,
-        content_type="application/octet-stream",
-    )
+        print(f"Document size: {len(document_data)} bytes")
 
-    # Wait for result
-    result = poller.result()
-    print("Analysis complete!")
+        # Analyze with custom model using manual polling
+        # The Azure SDK's built-in poller doesn't work correctly with APIM gateway
+        import requests
+        import time
+
+        print(f"\nSubmitting document to model: {MODEL_ID}")
+
+        # Get endpoint and API key from environment
+        endpoint = os.environ.get("AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT")
+        api_key = os.environ.get("AZURE_DOCUMENT_INTELLIGENCE_KEY")
+
+        # Submit document for analysis
+        analyze_url = f"{endpoint}/documentintelligence/documentModels/{MODEL_ID}:analyze?api-version=2024-11-30"
+
+        headers = {
+            "api-key": api_key,
+            "Content-Type": "application/octet-stream",
+        }
+
+        print(f"POST {analyze_url}")
+        response = requests.post(analyze_url, headers=headers, data=document_data)
+        print(f"Response status: {response.status_code}")
+
+        if response.status_code != 202:
+            print(f"ERROR: Expected 202 Accepted, got {response.status_code}")
+            print(f"Response: {response.text}")
+            result = None
+        else:
+            # Get the operation location for polling
+            operation_location = response.headers.get("Operation-Location")
+            print(f"Operation-Location: {operation_location}")
+
+            # Poll until complete
+            print("\nPolling for results...")
+            poll_headers = {"api-key": api_key}
+            max_attempts = 60  # 60 attempts * 2 seconds = 2 minutes max
+            attempt = 0
+
+            while attempt < max_attempts:
+                attempt += 1
+                time.sleep(2)  # Wait 2 seconds between polls
+
+                poll_response = requests.get(operation_location, headers=poll_headers)
+                poll_data = poll_response.json()
+
+                status = poll_data.get("status", "unknown")
+                print(f"  Attempt {attempt}: status = {status}")
+
+                if status == "succeeded":
+                    print("Analysis succeeded!")
+                    # Parse the result into the expected format
+                    # The polling response contains the full result
+                    import json
+                    from azure.ai.documentintelligence.models import AnalyzeResult
+
+                    # Use the Azure SDK's internal deserialization
+                    analyze_result_data = poll_data.get("analyzeResult", {})
+
+                    # Create AnalyzeResult from the JSON response
+                    # The SDK uses a deserializer, but we can use the model constructor
+                    result = AnalyzeResult._from_generated(analyze_result_data) if hasattr(AnalyzeResult, '_from_generated') else None
+
+                    # If that doesn't work, try direct instantiation
+                    if result is None:
+                        # Store the raw result and we'll handle it manually
+                        result = type('AnalyzeResult', (), {
+                            'documents': [],
+                            'pages': [],
+                            'tables': [],
+                            'key_value_pairs': [],
+                            'model_id': poll_data.get('modelId'),
+                            '_raw_data': poll_data
+                        })()
+
+                        # Parse documents
+                        for doc_data in analyze_result_data.get('documents', []):
+                            doc = type('Document', (), {
+                                'doc_type': doc_data.get('docType'),
+                                'fields': {},
+                                'confidence': doc_data.get('confidence', 1.0),
+                                'bounding_regions': doc_data.get('boundingRegions', [])
+                            })()
+
+                            # Parse fields
+                            for field_name, field_data in doc_data.get('fields', {}).items():
+                                field = type('DocumentField', (), {
+                                    'value': field_data.get('content') or field_data.get('valueString') or field_data.get('valueNumber'),
+                                    'content': field_data.get('content'),
+                                    'confidence': field_data.get('confidence', 0.0),
+                                    'bounding_regions': field_data.get('boundingRegions', [])
+                                })()
+                                doc.fields[field_name] = field
+
+                            result.documents.append(doc)
+
+                    break
+                elif status == "failed":
+                    print(f"Analysis failed: {poll_data}")
+                    result = None
+                    break
+            else:
+                print("ERROR: Polling timed out after 2 minutes")
+                result = None
+
+        # Check if result is valid
+        if result is None:
+            print("ERROR: Analysis returned None. Check your model ID and API configuration.")
+            print(f"Model ID used: {MODEL_ID}")
+        else:
+            print("Analysis complete!")
+            print(f"Number of documents: {len(result.documents) if hasattr(result, 'documents') else 0}")
+    except Exception as e:
+        print(f"ERROR during analysis: {str(e)}")
+        print(f"Error type: {type(e).__name__}")
+        print(f"Model ID used: {MODEL_ID}")
+        import traceback
+        print("\nFull traceback:")
+        traceback.print_exc()
+        result = None
 
 # %% [markdown]
 # ## 6. Parse Extraction Results
@@ -167,7 +281,7 @@ def get_field_bounding_regions(field):
     return regions if regions else []
 
 # %%
-if 'result' in dir():
+if 'result' in dir() and result is not None:
     print("\nExtracted Fields:")
     print("=" * 70)
     print(f"{'Field Name':<35} {'Value':<25} {'Confidence'}")
@@ -200,7 +314,7 @@ if 'result' in dir():
 # ## 7. Visualize Extraction
 
 # %%
-if 'result' in dir() and test_document:
+if 'result' in dir() and result is not None and test_document:
     # Load document image
     image = load_image(test_document)
     height, width = image.shape[:2]
