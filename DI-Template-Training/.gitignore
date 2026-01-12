@@ -11,3 +11,5 @@ __pycache__/
 # OS
 .DS_Store
 Thumbs.db
+
+DI-Template-Training/data/outputs/upload_config.json

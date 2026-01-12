@@ -1,0 +1,3078 @@
+{
+  "model_id": "sdpr-monthly-report-model",
+  "total_documents": 10,
+  "successful": 10,
+  "failed": 0,
+  "results": [
+    {
+      "document": "2025-11-13_135834.jpg",
+      "success": true,
+      "error": null,
+      "fields": {
+        "spouse_sin": {
+          "value": "TOTAL CHEQUE",
+          "confidence": 0.892
+        },
+        "income15": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_family_assets_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income13": {
+          "value": 0,
+          "confidence": 0.983
+        },
+        "checkbox_employment_changes_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income11": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income9": {
+          "value": null,
+          "confidence": 0.952
+        },
+        "spouse_income1": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_warrant_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income8": {
+          "value": 1380,
+          "confidence": 0.99
+        },
+        "checkbox_school_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_work_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "explain_changes": {
+          "value": "Started part time job, documents attached",
+          "confidence": 0.91
+        },
+        "phone": {
+          "value": "234-789-1111",
+          "confidence": 0.987
+        },
+        "spouse_income3": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_moved_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "name": {
+          "value": "Kevin Patel",
+          "confidence": 0.97
+        },
+        "checkbox_shelter_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_work_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income7": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income18": {
+          "value": null,
+          "confidence": 0.952
+        },
+        "spouse_phone": {
+          "value": null,
+          "confidence": 0.986
+        },
+        "checkbox_dependants_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_warrant_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_family_assets_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income13": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_employment_changes_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income5": {
+          "value": 25.67,
+          "confidence": 0.99
+        },
+        "checkbox_dependants_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income6": {
+          "value": null,
+          "confidence": 0.952
+        },
+        "spouse_income4": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_moved_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income8": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income7": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_need_assistance_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income6": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income18": {
+          "value": 0,
+          "confidence": 0.929
+        },
+        "checkbox_school_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income11": {
+          "value": null,
+          "confidence": 0.979
+        },
+        "checkbox_school_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_name": {
+          "value": null,
+          "confidence": 0.98
+        },
+        "spouse_income2": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income14": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income17": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income12": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income16": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income17": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "date": {
+          "value": "2025-09-13",
+          "confidence": 0.99
+        },
+        "checkbox_work_souse_yes": {
+          "value": "unselected",
+          "confidence": 0.987
+        },
+        "spouse_date": {
+          "value": "OTHER DEDUCTIONS",
+          "confidence": 0.555
+        },
+        "income9": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income10": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income1": {
+          "value": 2340,
+          "confidence": 0.99
+        },
+        "checkbox_moved_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_school_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_work_souse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income5": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income16": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income15": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income4": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income14": {
+          "value": null,
+          "confidence": 0.952
+        },
+        "checkbox_warrant_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "sin": {
+          "value": "123-456-78",
+          "confidence": 0.944
+        },
+        "checkbox_need_assistance_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income3": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_moved_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_signature": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income2": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "signature": {
+          "value": "Kradel",
+          "confidence": 0.99
+        },
+        "checkbox_shelter_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income10": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_warrant_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income12": {
+          "value": null,
+          "confidence": 0.953
+        }
+      }
+    },
+    {
+      "document": "Receipt_2025-11-12_124242.jpg",
+      "success": true,
+      "error": null,
+      "fields": {
+        "checkbox_need_assistance_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income10": {
+          "value": null,
+          "confidence": 0.957
+        },
+        "spouse_date": {
+          "value": "OTHER DEDUCTIONS",
+          "confidence": 0.665
+        },
+        "checkbox_moved_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_moved_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_school_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income4": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_warrant_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_dependants_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income6": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income5": {
+          "value": null,
+          "confidence": 0.986
+        },
+        "checkbox_work_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income13": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income9": {
+          "value": null,
+          "confidence": 0.96
+        },
+        "spouse_income15": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income3": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_need_assistance_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_shelter_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income15": {
+          "value": null,
+          "confidence": 0.988
+        },
+        "income6": {
+          "value": null,
+          "confidence": 0.987
+        },
+        "spouse_income16": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income2": {
+          "value": null,
+          "confidence": 0.981
+        },
+        "income11": {
+          "value": 742.89,
+          "confidence": 0.99
+        },
+        "checkbox_shelter_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income7": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income12": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income12": {
+          "value": 1,
+          "confidence": 0.99
+        },
+        "checkbox_warrant_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income14": {
+          "value": null,
+          "confidence": 0.988
+        },
+        "spouse_phone": {
+          "value": null,
+          "confidence": 0.984
+        },
+        "checkbox_employment_changes_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income4": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_warrant_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_family_assets_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "name": {
+          "value": "Sarah Thompson",
+          "confidence": 0.988
+        },
+        "checkbox_family_assets_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income17": {
+          "value": null,
+          "confidence": 0.956
+        },
+        "spouse_income11": {
+          "value": null,
+          "confidence": 0.983
+        },
+        "spouse_sin": {
+          "value": "TOTAL CHEQUE",
+          "confidence": 0.943
+        },
+        "sin": {
+          "value": "234-456-112",
+          "confidence": 0.943
+        },
+        "checkbox_moved_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income16": {
+          "value": null,
+          "confidence": 0.96
+        },
+        "checkbox_school_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income14": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_work_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "phone": {
+          "value": "234-567-8890",
+          "confidence": 0.987
+        },
+        "spouse_income5": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "explain_changes": {
+          "value": "Working part-time at Save-on-Foods, 20 hours a week. Started Oct 12. Pay Stubs attached",
+          "confidence": 0.892
+        },
+        "date": {
+          "value": "2025-11-11",
+          "confidence": 0.99
+        },
+        "income7": {
+          "value": null,
+          "confidence": 0.987
+        },
+        "income18": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income17": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_name": {
+          "value": null,
+          "confidence": 0.984
+        },
+        "checkbox_moved_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.989
+        },
+        "checkbox_warrant_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income1": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income13": {
+          "value": 68234,
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income1": {
+          "value": 1,
+          "confidence": 0.99
+        },
+        "income8": {
+          "value": null,
+          "confidence": 0.988
+        },
+        "spouse_income2": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income9": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income8": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_employment_changes_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income3": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income10": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_work_souse_yes": {
+          "value": "unselected",
+          "confidence": 0.988
+        },
+        "checkbox_work_souse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "signature": {
+          "value": "Station",
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_school_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_signature": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_school_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_dependants_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income18": {
+          "value": null,
+          "confidence": 0.953
+        }
+      }
+    },
+    {
+      "document": "Receipt_2025-11-12_124252 (2).jpg",
+      "success": true,
+      "error": null,
+      "fields": {
+        "checkbox_need_assistance_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income10": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_date": {
+          "value": "2025-Nov-12",
+          "confidence": 0.829
+        },
+        "checkbox_moved_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_moved_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_school_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income4": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_warrant_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_dependants_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income6": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income5": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_work_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income13": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income9": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income15": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income3": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_need_assistance_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_shelter_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income15": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income6": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income16": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income2": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income11": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_shelter_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income7": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income12": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income12": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_warrant_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income14": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_phone": {
+          "value": "234-567-8890",
+          "confidence": 0.971
+        },
+        "checkbox_employment_changes_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income4": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_warrant_spouse_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_family_assets_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "name": {
+          "value": "John Smith",
+          "confidence": 0.987
+        },
+        "checkbox_family_assets_yes": {
+          "value": "unselected",
+          "confidence": 0.988
+        },
+        "income17": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income11": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_sin": {
+          "value": "456-789-012",
+          "confidence": 0.99
+        },
+        "sin": {
+          "value": "123-456-789",
+          "confidence": 0.944
+        },
+        "checkbox_moved_spouse_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income16": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_school_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income14": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_work_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "phone": {
+          "value": "123-456-7789",
+          "confidence": 0.988
+        },
+        "spouse_income5": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "explain_changes": {
+          "value": "Began looking for work",
+          "confidence": 0.915
+        },
+        "date": {
+          "value": "2025-Nov-12",
+          "confidence": 0.99
+        },
+        "income7": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income18": {
+          "value": 0,
+          "confidence": 0.932
+        },
+        "spouse_income17": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_name": {
+          "value": "Maria Smith",
+          "confidence": 0.971
+        },
+        "checkbox_moved_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.988
+        },
+        "checkbox_warrant_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income1": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income13": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income1": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income8": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income2": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income9": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income8": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income3": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income10": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_work_souse_yes": {
+          "value": "unselected",
+          "confidence": 0.988
+        },
+        "checkbox_work_souse_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "signature": {
+          "value": "Ismael",
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_spouse_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_school_spouse_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_signature": {
+          "value": "Matth",
+          "confidence": 0.99
+        },
+        "checkbox_school_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_dependants_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income18": {
+          "value": null,
+          "confidence": 0.735
+        }
+      }
+    },
+    {
+      "document": "Receipt_2025-11-12_124301 (3).jpg",
+      "success": true,
+      "error": null,
+      "fields": {
+        "spouse_sin": {
+          "value": "TOTAL CHEQUE",
+          "confidence": 0.96
+        },
+        "income15": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_family_assets_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income13": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income11": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income9": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income1": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_warrant_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income8": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_school_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_work_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "explain_changes": {
+          "value": "no changes. Continue to receive CPP. DAS, Private pension",
+          "confidence": 0.911
+        },
+        "phone": {
+          "value": "234-556-7890",
+          "confidence": 0.988
+        },
+        "spouse_income3": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_moved_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "name": {
+          "value": "Jennifer Lee",
+          "confidence": 0.987
+        },
+        "checkbox_shelter_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_work_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income7": {
+          "value": "N/A",
+          "confidence": 0.99
+        },
+        "spouse_income18": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_phone": {
+          "value": null,
+          "confidence": 0.984
+        },
+        "checkbox_dependants_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_warrant_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_family_assets_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income13": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_employment_changes_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income5": {
+          "value": "-",
+          "confidence": 0.99
+        },
+        "checkbox_dependants_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income6": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income4": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_moved_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income8": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income7": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_need_assistance_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income6": {
+          "value": "none",
+          "confidence": 0.99
+        },
+        "income18": {
+          "value": 0,
+          "confidence": 0.932
+        },
+        "checkbox_school_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income11": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_school_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_name": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income2": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income14": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income17": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income12": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income16": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income17": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "date": {
+          "value": "2025-Jul-13",
+          "confidence": 0.99
+        },
+        "checkbox_work_souse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_date": {
+          "value": "OTHER DEDUCTIONS",
+          "confidence": 0.531
+        },
+        "income9": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income10": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income1": {
+          "value": 2546,
+          "confidence": 0.99
+        },
+        "checkbox_moved_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_school_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_work_souse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income5": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income16": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income15": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income4": {
+          "value": 0,
+          "confidence": 0.988
+        },
+        "spouse_income14": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_warrant_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "sin": {
+          "value": "235-678-012",
+          "confidence": 0.956
+        },
+        "checkbox_need_assistance_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income3": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_moved_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_signature": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income2": {
+          "value": 230,
+          "confidence": 0.99
+        },
+        "signature": {
+          "value": "JLee",
+          "confidence": 0.99
+        },
+        "checkbox_shelter_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income10": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_warrant_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income12": {
+          "value": null,
+          "confidence": 0.953
+        }
+      }
+    },
+    {
+      "document": "Receipt_2025-11-13_135843.jpg",
+      "success": true,
+      "error": null,
+      "fields": {
+        "spouse_sin": {
+          "value": "123-456-789",
+          "confidence": 0.99
+        },
+        "income15": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_family_assets_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income13": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income11": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income9": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income1": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_warrant_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income8": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_school_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_work_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "explain_changes": {
+          "value": "Rent increased, see lease update",
+          "confidence": 0.913
+        },
+        "phone": {
+          "value": "345-765-31",
+          "confidence": 0.988
+        },
+        "spouse_income3": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_moved_spouse_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "name": {
+          "value": "Dorothy Wilson",
+          "confidence": 0.987
+        },
+        "checkbox_shelter_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_work_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income7": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income18": {
+          "value": 0,
+          "confidence": 0.799
+        },
+        "spouse_phone": {
+          "value": "+1 236-789-387",
+          "confidence": 0.97
+        },
+        "checkbox_dependants_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_warrant_spouse_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_family_assets_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income13": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_spouse_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income5": {
+          "value": 2380.23,
+          "confidence": 0.99
+        },
+        "checkbox_dependants_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income6": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income4": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_moved_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income8": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income7": {
+          "value": 320,
+          "confidence": 0.99
+        },
+        "checkbox_need_assistance_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income6": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income18": {
+          "value": 0,
+          "confidence": 0.927
+        },
+        "checkbox_school_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income11": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_school_spouse_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_name": {
+          "value": "Harold Wilson",
+          "confidence": 0.971
+        },
+        "spouse_income2": {
+          "value": 650.25,
+          "confidence": 0.99
+        },
+        "income14": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income17": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income12": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income16": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income17": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "date": {
+          "value": "2025-11-12",
+          "confidence": 0.99
+        },
+        "checkbox_work_souse_yes": {
+          "value": "selected",
+          "confidence": 0.988
+        },
+        "spouse_date": {
+          "value": "Nov 25, 2025",
+          "confidence": 0.802
+        },
+        "income9": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income10": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income1": {
+          "value": 1389,
+          "confidence": 0.99
+        },
+        "checkbox_moved_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_school_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_work_souse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income5": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income16": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income15": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income4": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income14": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_warrant_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "sin": {
+          "value": "123-456-789",
+          "confidence": 0.941
+        },
+        "checkbox_need_assistance_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income3": {
+          "value": 0,
+          "confidence": 0.984
+        },
+        "checkbox_moved_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_signature": {
+          "value": "Khikan",
+          "confidence": 0.99
+        },
+        "income2": {
+          "value": 0,
+          "confidence": 0.989
+        },
+        "signature": {
+          "value": "Dwilson",
+          "confidence": 0.99
+        },
+        "checkbox_shelter_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income10": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_warrant_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income12": {
+          "value": 480,
+          "confidence": 0.99
+        }
+      }
+    },
+    {
+      "document": "Receipt_2025-11-13_135900 (2).jpg",
+      "success": true,
+      "error": null,
+      "fields": {
+        "phone": {
+          "value": "123-456-7789",
+          "confidence": 0.989
+        },
+        "income3": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_warrant_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income6": {
+          "value": null,
+          "confidence": 0.952
+        },
+        "checkbox_school_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_school_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_warrant_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income8": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_moved_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income18": {
+          "value": 350,
+          "confidence": 0.911
+        },
+        "income10": {
+          "value": 480.23,
+          "confidence": 0.99
+        },
+        "spouse_income5": {
+          "value": null,
+          "confidence": 0.952
+        },
+        "income17": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income7": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_sin": {
+          "value": "TOTAL CHEQUE",
+          "confidence": 0.942
+        },
+        "checkbox_employment_changes_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income16": {
+          "value": 680,
+          "confidence": 0.99
+        },
+        "checkbox_work_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_school_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_moved_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income13": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "name": {
+          "value": "Robert Chen",
+          "confidence": 0.971
+        },
+        "income4": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_shelter_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income11": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income2": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_moved_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_warrant_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income15": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_warrant_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_shelter_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_need_assistance_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_family_assets_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income4": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "signature": {
+          "value": "Kolum",
+          "confidence": 0.99
+        },
+        "spouse_income15": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "date": {
+          "value": "2025-Nov-12",
+          "confidence": 0.99
+        },
+        "spouse_income14": {
+          "value": null,
+          "confidence": 0.952
+        },
+        "checkbox_family_assets_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income9": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_employment_changes_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income10": {
+          "value": null,
+          "confidence": 0.954
+        },
+        "income5": {
+          "value": 56024,
+          "confidence": 0.989
+        },
+        "checkbox_employment_changes_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income11": {
+          "value": null,
+          "confidence": 0.983
+        },
+        "explain_changes": {
+          "value": "Began school, student loan received",
+          "confidence": 0.914
+        },
+        "checkbox_need_assistance_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_work_souse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_dependants_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income17": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "sin": {
+          "value": "123-456-789",
+          "confidence": 0.944
+        },
+        "income2": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income18": {
+          "value": null,
+          "confidence": 0.955
+        },
+        "spouse_signature": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income1": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income8": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_date": {
+          "value": "OTHER DEDUCTIONS",
+          "confidence": 0.467
+        },
+        "checkbox_work_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income6": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_phone": {
+          "value": null,
+          "confidence": 0.96
+        },
+        "checkbox_work_souse_yes": {
+          "value": "unselected",
+          "confidence": 0.988
+        },
+        "income7": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income16": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_dependants_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income3": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_moved_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_name": {
+          "value": null,
+          "confidence": 0.952
+        },
+        "income14": {
+          "value": "@",
+          "confidence": 0.99
+        },
+        "spouse_income1": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_school_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income9": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income13": {
+          "value": 123,
+          "confidence": 0.99
+        },
+        "spouse_income12": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income12": {
+          "value": 0,
+          "confidence": 0.99
+        }
+      }
+    },
+    {
+      "document": "Receipt_2025-11-13_135910 (3).jpg",
+      "success": true,
+      "error": null,
+      "fields": {
+        "checkbox_need_assistance_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income10": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_date": {
+          "value": "2025-nov-23",
+          "confidence": 0.739
+        },
+        "checkbox_moved_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_moved_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_school_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income4": {
+          "value": 0,
+          "confidence": 0.941
+        },
+        "checkbox_warrant_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_dependants_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income6": {
+          "value": null,
+          "confidence": 0.951
+        },
+        "income5": {
+          "value": 0,
+          "confidence": 0.97
+        },
+        "checkbox_work_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income13": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income9": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income15": {
+          "value": null,
+          "confidence": 0.951
+        },
+        "income3": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_need_assistance_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_shelter_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income15": {
+          "value": null,
+          "confidence": 0.986
+        },
+        "income6": {
+          "value": 0,
+          "confidence": 0.895
+        },
+        "spouse_income16": {
+          "value": 2680,
+          "confidence": 0.99
+        },
+        "income2": {
+          "value": 343.25,
+          "confidence": 0.983
+        },
+        "income11": {
+          "value": "-",
+          "confidence": 0.979
+        },
+        "checkbox_shelter_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income7": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income12": {
+          "value": null,
+          "confidence": 0.95
+        },
+        "income12": {
+          "value": ":",
+          "confidence": 0.962
+        },
+        "checkbox_warrant_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income14": {
+          "value": null,
+          "confidence": 0.986
+        },
+        "spouse_phone": {
+          "value": "(3211-246-2143",
+          "confidence": 0.971
+        },
+        "checkbox_employment_changes_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income4": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_warrant_spouse_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_family_assets_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "name": {
+          "value": "Patrick O'Connor",
+          "confidence": 0.971
+        },
+        "checkbox_family_assets_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income17": {
+          "value": null,
+          "confidence": 0.956
+        },
+        "spouse_income11": {
+          "value": 1580.23,
+          "confidence": 0.99
+        },
+        "spouse_sin": {
+          "value": "123-456-788",
+          "confidence": 0.99
+        },
+        "sin": {
+          "value": "123-456-789",
+          "confidence": 0.956
+        },
+        "checkbox_moved_spouse_no": {
+          "value": "selected",
+          "confidence": 0.989
+        },
+        "income16": {
+          "value": null,
+          "confidence": 0.98
+        },
+        "checkbox_school_spouse_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income14": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_work_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "phone": {
+          "value": "(234)-568-7890",
+          "confidence": 0.988
+        },
+        "spouse_income5": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "explain_changes": {
+          "value": "changed address , proof of move",
+          "confidence": 0.904
+        },
+        "date": {
+          "value": "2025-OCT- 22",
+          "confidence": 0.99
+        },
+        "income7": {
+          "value": 0,
+          "confidence": 0.972
+        },
+        "income18": {
+          "value": null,
+          "confidence": 0.949
+        },
+        "spouse_income17": {
+          "value": null,
+          "confidence": 0.836
+        },
+        "spouse_name": {
+          "value": "Lisa O'Connor",
+          "confidence": 0.97
+        },
+        "checkbox_moved_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.989
+        },
+        "checkbox_warrant_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income1": {
+          "value": null,
+          "confidence": 0.952
+        },
+        "income13": {
+          "value": null,
+          "confidence": 0.986
+        },
+        "checkbox_employment_changes_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income1": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income8": {
+          "value": 333.85,
+          "confidence": 0.99
+        },
+        "spouse_income2": {
+          "value": null,
+          "confidence": 0.952
+        },
+        "spouse_income9": {
+          "value": null,
+          "confidence": 0.952
+        },
+        "spouse_income8": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_employment_changes_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income3": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income10": {
+          "value": null,
+          "confidence": 0.945
+        },
+        "checkbox_work_souse_yes": {
+          "value": "unselected",
+          "confidence": 0.988
+        },
+        "checkbox_work_souse_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "signature": {
+          "value": "Pacenar",
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_spouse_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_school_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_signature": {
+          "value": "DOamor",
+          "confidence": 0.99
+        },
+        "checkbox_school_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_dependants_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income18": {
+          "value": null,
+          "confidence": 0.951
+        }
+      }
+    },
+    {
+      "document": "Receipt_2025-11-13_135924 (4).jpg",
+      "success": true,
+      "error": null,
+      "fields": {
+        "income4": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_work_souse_yes": {
+          "value": "unselected",
+          "confidence": 0.989
+        },
+        "checkbox_warrant_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income11": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_employment_changes_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_sin": {
+          "value": "TOTAL CHEQUE",
+          "confidence": 0.974
+        },
+        "spouse_income8": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_moved_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income1": {
+          "value": 300,
+          "confidence": 0.99
+        },
+        "checkbox_school_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income6": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_work_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_warrant_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_work_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_signature": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_shelter_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "sin": {
+          "value": "123-456-789",
+          "confidence": 0.946
+        },
+        "income3": {
+          "value": 400,
+          "confidence": 0.99
+        },
+        "income11": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_warrant_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income1": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_shelter_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income12": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income16": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income13": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income14": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_name": {
+          "value": null,
+          "confidence": 0.984
+        },
+        "checkbox_moved_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income3": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income17": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income15": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_warrant_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_school_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income13": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income7": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income4": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "name": {
+          "value": "Amanda Martinez - Jones",
+          "confidence": 0.97
+        },
+        "checkbox_moved_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.989
+        },
+        "income7": {
+          "value": 0,
+          "confidence": 0.987
+        },
+        "income12": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_spouse_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income10": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income5": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_date": {
+          "value": "OTHER DEDUCTIONS",
+          "confidence": 0.353
+        },
+        "income8": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income2": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income5": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income17": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_moved_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income14": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income2": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_school_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "date": {
+          "value": "2025-Nov-23",
+          "confidence": 0.99
+        },
+        "checkbox_school_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income18": {
+          "value": 0,
+          "confidence": 0.911
+        },
+        "phone": {
+          "value": "226-783-4854",
+          "confidence": 0.988
+        },
+        "checkbox_employment_changes_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_dependants_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income9": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income15": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_dependants_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_need_assistance_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income9": {
+          "value": null,
+          "confidence": 0.952
+        },
+        "checkbox_family_assets_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income16": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income10": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_phone": {
+          "value": null,
+          "confidence": 0.984
+        },
+        "checkbox_family_assets_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_need_assistance_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "signature": {
+          "value": "AMD",
+          "confidence": 0.99
+        },
+        "explain_changes": {
+          "value": "Received EI, statement submitted",
+          "confidence": 0.924
+        },
+        "spouse_income18": {
+          "value": null,
+          "confidence": 0.952
+        },
+        "checkbox_work_souse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income6": {
+          "value": 525.25,
+          "confidence": 0.99
+        }
+      }
+    },
+    {
+      "document": "Receipt_2025-11-13_135939 (5).jpg",
+      "success": true,
+      "error": null,
+      "fields": {
+        "checkbox_need_assistance_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income10": {
+          "value": 0,
+          "confidence": 0.989
+        },
+        "spouse_date": {
+          "value": "OTHER DEDUCTIONS",
+          "confidence": 0.466
+        },
+        "checkbox_moved_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_moved_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_school_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income4": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_warrant_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_dependants_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income6": {
+          "value": null,
+          "confidence": 0.952
+        },
+        "income5": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_work_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income13": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income9": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income15": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income3": {
+          "value": 245.68,
+          "confidence": 0.99
+        },
+        "checkbox_need_assistance_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_shelter_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income15": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income6": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income16": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income2": {
+          "value": 10,
+          "confidence": 0.99
+        },
+        "income11": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_shelter_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income7": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income12": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income12": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_warrant_spouse_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income14": {
+          "value": 6,
+          "confidence": 0.99
+        },
+        "spouse_phone": {
+          "value": null,
+          "confidence": 0.986
+        },
+        "checkbox_employment_changes_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income4": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_warrant_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_family_assets_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "name": {
+          "value": "Jim Jones",
+          "confidence": 0.941
+        },
+        "checkbox_family_assets_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income17": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "spouse_income11": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_sin": {
+          "value": "TOTAL CHEQUE",
+          "confidence": 0.971
+        },
+        "sin": {
+          "value": "234-456-789",
+          "confidence": 0.941
+        },
+        "checkbox_moved_spouse_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income16": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "checkbox_school_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income14": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_work_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "phone": {
+          "value": "123-456-7789",
+          "confidence": 0.988
+        },
+        "spouse_income5": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "explain_changes": {
+          "value": "Child support started, record altached",
+          "confidence": 0.91
+        },
+        "date": {
+          "value": "2025-Nov-23",
+          "confidence": 0.99
+        },
+        "income7": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income18": {
+          "value": 0,
+          "confidence": 0.916
+        },
+        "spouse_income17": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_name": {
+          "value": null,
+          "confidence": 0.98
+        },
+        "checkbox_moved_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.988
+        },
+        "checkbox_warrant_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income1": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income13": {
+          "value": 111,
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income1": {
+          "value": 0,
+          "confidence": 0.99
+        },
+        "income8": {
+          "value": 347.23,
+          "confidence": 0.99
+        },
+        "spouse_income2": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income9": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income8": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_employment_changes_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income3": {
+          "value": null,
+          "confidence": 0.952
+        },
+        "spouse_income10": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_work_souse_yes": {
+          "value": "selected",
+          "confidence": 0.988
+        },
+        "checkbox_work_souse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "signature": {
+          "value": "J.J.",
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_spouse_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_school_spouse_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_signature": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_school_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_dependants_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income18": {
+          "value": null,
+          "confidence": 0.952
+        }
+      }
+    },
+    {
+      "document": "Receipt_2025-11-13_135949 (6).jpg",
+      "success": true,
+      "error": null,
+      "fields": {
+        "checkbox_need_assistance_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income10": {
+          "value": null,
+          "confidence": 0.959
+        },
+        "spouse_date": {
+          "value": "OTHER DEDUCTIONS",
+          "confidence": 0.466
+        },
+        "checkbox_moved_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_moved_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_school_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "income4": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_warrant_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_dependants_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income6": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income5": {
+          "value": null,
+          "confidence": 0.952
+        },
+        "checkbox_work_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income13": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income9": {
+          "value": null,
+          "confidence": 0.96
+        },
+        "spouse_income15": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income3": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_need_assistance_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "checkbox_shelter_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income15": {
+          "value": null,
+          "confidence": 0.988
+        },
+        "income6": {
+          "value": 480,
+          "confidence": 0.99
+        },
+        "spouse_income16": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income2": {
+          "value": null,
+          "confidence": 0.985
+        },
+        "income11": {
+          "value": 300,
+          "confidence": 0.99
+        },
+        "checkbox_shelter_yes": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income7": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income12": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income12": {
+          "value": null,
+          "confidence": 0.958
+        },
+        "checkbox_warrant_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income14": {
+          "value": null,
+          "confidence": 0.988
+        },
+        "spouse_phone": {
+          "value": null,
+          "confidence": 0.986
+        },
+        "checkbox_employment_changes_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income4": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_warrant_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_family_assets_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "name": {
+          "value": "Michael Brown",
+          "confidence": 0.989
+        },
+        "checkbox_family_assets_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income17": {
+          "value": null,
+          "confidence": 0.986
+        },
+        "spouse_income11": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_sin": {
+          "value": "TOTAL CHEQUE",
+          "confidence": 0.937
+        },
+        "sin": {
+          "value": "234-256-789",
+          "confidence": 0.959
+        },
+        "checkbox_moved_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income16": {
+          "value": null,
+          "confidence": 0.986
+        },
+        "checkbox_school_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income14": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_work_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "phone": {
+          "value": "234-567-8895",
+          "confidence": 0.989
+        },
+        "spouse_income5": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "explain_changes": {
+          "value": "new roommate, room/board income enclosed",
+          "confidence": 0.879
+        },
+        "date": {
+          "value": "2025-Nov-12",
+          "confidence": 0.99
+        },
+        "income7": {
+          "value": null,
+          "confidence": 0.957
+        },
+        "income18": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income17": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_name": {
+          "value": null,
+          "confidence": 0.983
+        },
+        "checkbox_moved_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_warrant_no": {
+          "value": "selected",
+          "confidence": 0.99
+        },
+        "spouse_income1": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "income13": {
+          "value": null,
+          "confidence": 0.988
+        },
+        "checkbox_employment_changes_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "income1": {
+          "value": null,
+          "confidence": 0.984
+        },
+        "income8": {
+          "value": null,
+          "confidence": 0.988
+        },
+        "spouse_income2": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income9": {
+          "value": 600,
+          "confidence": 0.99
+        },
+        "spouse_income8": {
+          "value": null,
+          "confidence": 0.947
+        },
+        "checkbox_employment_changes_spouse_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income3": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "spouse_income10": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_work_souse_yes": {
+          "value": "unselected",
+          "confidence": 0.989
+        },
+        "checkbox_work_souse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "signature": {
+          "value": "Mbran",
+          "confidence": 0.99
+        },
+        "checkbox_employment_changes_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_school_spouse_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_signature": {
+          "value": null,
+          "confidence": 0.953
+        },
+        "checkbox_school_yes": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "checkbox_dependants_no": {
+          "value": "unselected",
+          "confidence": 0.99
+        },
+        "spouse_income18": {
+          "value": null,
+          "confidence": 0.953
+        }
+      }
+    }
+  ]
+}

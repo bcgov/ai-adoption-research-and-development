@@ -25,7 +25,7 @@ if str(project_root) not in sys.path:
 from dotenv import load_dotenv
 load_dotenv(project_root / ".env")
 
-from src.utils import load_json, save_json, print_progress
+from src.utils import load_json, save_json
 from src.azure_client import get_document_intelligence_client
 
 print(f"Project root: {project_root}")
@@ -41,7 +41,8 @@ INPUTS_DIR = DATA_DIR / "inputs" / "sample_forms"
 OUTPUTS_DIR = DATA_DIR / "outputs"
 
 # Rate limiting (Azure has quotas)
-DELAY_BETWEEN_REQUESTS = 1.0  # seconds
+# Note: Polling is done internally in analyze_document, so this is just a small delay between submissions
+DELAY_BETWEEN_REQUESTS = 0.5  # seconds
 
 # Ensure output directory exists
 OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -69,7 +70,9 @@ else:
 
 # %%
 # Initialize Document Intelligence client
-di_client = get_document_intelligence_client()
+# Set verbose=True to enable detailed HTTP request/response logging for debugging
+VERBOSE = False  # Set to True if you need to debug API calls
+di_client = get_document_intelligence_client(verbose=VERBOSE)
 print("Document Intelligence client initialized.")
 
 # %% [markdown]
@@ -90,18 +93,20 @@ for f in input_files:
 # ## 5. Batch Analysis Function
 
 # %%
-def analyze_document(client, model_id: str, document_path: Path) -> dict:
+def analyze_document(model_id: str, document_path: Path) -> dict:
     """
-    Analyze a single document and return extracted fields.
+    Analyze a single document and return extracted fields using manual polling.
 
     Args:
-        client: DocumentIntelligenceClient
         model_id: Custom model ID
         document_path: Path to document
 
     Returns:
         Dict with extracted fields and metadata
     """
+    import requests
+    import time
+
     result_data = {
         "document": document_path.name,
         "success": False,
@@ -113,35 +118,81 @@ def analyze_document(client, model_id: str, document_path: Path) -> dict:
         with open(document_path, "rb") as f:
             document_data = f.read()
 
-        poller = client.begin_analyze_document(
-            model_id=model_id,
-            body=document_data,
-            content_type="application/octet-stream",
-        )
+        # Get endpoint and API key from environment
+        endpoint = os.environ.get("AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT")
+        api_key = os.environ.get("AZURE_DOCUMENT_INTELLIGENCE_KEY")
 
-        result = poller.result()
+        # Submit document for analysis
+        analyze_url = f"{endpoint}/documentintelligence/documentModels/{model_id}:analyze?api-version=2024-11-30"
 
-        if result.documents:
-            for doc in result.documents:
-                if doc.fields:
-                    for field_name, field in doc.fields.items():
-                        # Extract value
+        headers = {
+            "api-key": api_key,
+            "Content-Type": "application/octet-stream",
+        }
+
+        response = requests.post(analyze_url, headers=headers, data=document_data)
+
+        if response.status_code != 202:
+            result_data["error"] = f"HTTP {response.status_code}: {response.text}"
+            return result_data
+
+        # Get the operation location for polling
+        operation_location = response.headers.get("Operation-Location")
+        if not operation_location:
+            result_data["error"] = "No Operation-Location header in response"
+            return result_data
+
+        # Poll until complete
+        poll_headers = {"api-key": api_key}
+        max_attempts = 60  # 60 attempts * 2 seconds = 2 minutes max
+        attempt = 0
+
+        while attempt < max_attempts:
+            attempt += 1
+            time.sleep(2)  # Wait 2 seconds between polls
+
+            poll_response = requests.get(operation_location, headers=poll_headers)
+            poll_data = poll_response.json()
+
+            status = poll_data.get("status", "unknown")
+
+            if status == "succeeded":
+                # Parse the result
+                analyze_result_data = poll_data.get("analyzeResult", {})
+
+                # Parse documents
+                for doc_data in analyze_result_data.get('documents', []):
+                    # Parse fields
+                    for field_name, field_data in doc_data.get('fields', {}).items():
+                        # Extract value based on field type
                         value = None
-                        if hasattr(field, 'value'):
-                            value = field.value
-                        elif hasattr(field, 'content'):
-                            value = field.content
-                        elif hasattr(field, 'value_selection_mark'):
-                            value = field.value_selection_mark
+                        if 'valueString' in field_data:
+                            value = field_data['valueString']
+                        elif 'valueNumber' in field_data:
+                            value = field_data['valueNumber']
+                        elif 'valueDate' in field_data:
+                            value = field_data['valueDate']
+                        elif 'valueSelectionMark' in field_data:
+                            value = field_data['valueSelectionMark']
+                        elif 'content' in field_data:
+                            value = field_data['content']
 
-                        confidence = getattr(field, 'confidence', 0.0)
+                        confidence = field_data.get('confidence', 0.0)
 
                         result_data["fields"][field_name] = {
                             "value": value,
                             "confidence": confidence,
                         }
 
-        result_data["success"] = True
+                result_data["success"] = True
+                break
+
+            elif status == "failed":
+                result_data["error"] = f"Analysis failed: {poll_data.get('error', 'Unknown error')}"
+                break
+
+        if attempt >= max_attempts:
+            result_data["error"] = "Polling timed out after 2 minutes"
 
     except Exception as e:
         result_data["error"] = str(e)
@@ -160,10 +211,15 @@ all_results = []
 start_time = time.time()
 
 for i, doc_path in enumerate(input_files):
-    print_progress(i + 1, len(input_files), "Analyzing")
+    print(f"\n[{i+1}/{len(input_files)}] Analyzing: {doc_path.name}")
 
-    result = analyze_document(di_client, MODEL_ID, doc_path)
+    result = analyze_document(MODEL_ID, doc_path)
     all_results.append(result)
+
+    if result["success"]:
+        print(f"  ✓ Success - {len(result['fields'])} fields extracted")
+    else:
+        print(f"  ✗ Failed - {result['error']}")
 
     # Rate limiting
     if i < len(input_files) - 1:

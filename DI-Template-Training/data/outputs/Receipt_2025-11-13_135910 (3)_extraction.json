@@ -1,0 +1,306 @@
+{
+  "document": "Receipt_2025-11-13_135910 (3).jpg",
+  "model_id": "sdpr-monthly-report-model",
+  "fields": {
+    "phone": {
+      "value": "(234)-568-7890",
+      "confidence": 0.988
+    },
+    "income3": {
+      "value": 0,
+      "confidence": 0.99
+    },
+    "checkbox_warrant_yes": {
+      "value": "selected",
+      "confidence": 0.99
+    },
+    "spouse_income6": {
+      "value": null,
+      "confidence": 0.951
+    },
+    "checkbox_school_spouse_no": {
+      "value": "unselected",
+      "confidence": 0.99
+    },
+    "checkbox_school_spouse_yes": {
+      "value": "selected",
+      "confidence": 0.99
+    },
+    "checkbox_warrant_spouse_no": {
+      "value": "selected",
+      "confidence": 0.99
+    },
+    "spouse_income8": {
+      "value": null,
+      "confidence": 0.953
+    },
+    "checkbox_moved_spouse_no": {
+      "value": "selected",
+      "confidence": 0.989
+    },
+    "income18": {
+      "value": null,
+      "confidence": 0.949
+    },
+    "income10": {
+      "value": 0,
+      "confidence": 0.99
+    },
+    "spouse_income5": {
+      "value": null,
+      "confidence": 0.953
+    },
+    "income17": {
+      "value": null,
+      "confidence": 0.956
+    },
+    "spouse_income7": {
+      "value": null,
+      "confidence": 0.953
+    },
+    "spouse_sin": {
+      "value": "123-456-788",
+      "confidence": 0.99
+    },
+    "checkbox_employment_changes_spouse_no": {
+      "value": "selected",
+      "confidence": 0.99
+    },
+    "income16": {
+      "value": null,
+      "confidence": 0.98
+    },
+    "checkbox_work_no": {
+      "value": "unselected",
+      "confidence": 0.99
+    },
+    "checkbox_school_no": {
+      "value": "selected",
+      "confidence": 0.99
+    },
+    "checkbox_moved_no": {
+      "value": "selected",
+      "confidence": 0.99
+    },
+    "checkbox_employment_changes_spouse_yes": {
+      "value": "unselected",
+      "confidence": 0.99
+    },
+    "spouse_income13": {
+      "value": null,
+      "confidence": 0.953
+    },
+    "name": {
+      "value": "Patrick O'Connor",
+      "confidence": 0.971
+    },
+    "income4": {
+      "value": 0,
+      "confidence": 0.941
+    },
+    "checkbox_shelter_yes": {
+      "value": "unselected",
+      "confidence": 0.99
+    },
+    "income11": {
+      "value": "-",
+      "confidence": 0.979
+    },
+    "spouse_income2": {
+      "value": null,
+      "confidence": 0.952
+    },
+    "checkbox_moved_spouse_yes": {
+      "value": "unselected",
+      "confidence": 0.989
+    },
+    "checkbox_warrant_spouse_yes": {
+      "value": "unselected",
+      "confidence": 0.99
+    },
+    "income15": {
+      "value": null,
+      "confidence": 0.986
+    },
+    "checkbox_warrant_no": {
+      "value": "unselected",
+      "confidence": 0.99
+    },
+    "checkbox_shelter_no": {
+      "value": "selected",
+      "confidence": 0.99
+    },
+    "checkbox_need_assistance_yes": {
+      "value": "unselected",
+      "confidence": 0.99
+    },
+    "checkbox_family_assets_yes": {
+      "value": "selected",
+      "confidence": 0.99
+    },
+    "spouse_income4": {
+      "value": null,
+      "confidence": 0.953
+    },
+    "signature": {
+      "value": "Pacenar",
+      "confidence": 0.99
+    },
+    "spouse_income15": {
+      "value": null,
+      "confidence": 0.951
+    },
+    "date": {
+      "value": "2025-OCT- 22",
+      "confidence": 0.99
+    },
+    "spouse_income14": {
+      "value": null,
+      "confidence": 0.953
+    },
+    "checkbox_family_assets_no": {
+      "value": "unselected",
+      "confidence": 0.99
+    },
+    "spouse_income9": {
+      "value": null,
+      "confidence": 0.952
+    },
+    "checkbox_employment_changes_yes": {
+      "value": "unselected",
+      "confidence": 0.99
+    },
+    "spouse_income10": {
+      "value": null,
+      "confidence": 0.945
+    },
+    "income5": {
+      "value": 0,
+      "confidence": 0.97
+    },
+    "checkbox_employment_changes_no": {
+      "value": "selected",
+      "confidence": 0.99
+    },
+    "spouse_income11": {
+      "value": 1580.23,
+      "confidence": 0.99
+    },
+    "explain_changes": {
+      "value": "changed address , proof of move",
+      "confidence": 0.904
+    },
+    "checkbox_need_assistance_no": {
+      "value": "selected",
+      "confidence": 0.99
+    },
+    "checkbox_work_souse_no": {
+      "value": "selected",
+      "confidence": 0.99
+    },
+    "checkbox_dependants_yes": {
+      "value": "selected",
+      "confidence": 0.99
+    },
+    "spouse_income17": {
+      "value": null,
+      "confidence": 0.836
+    },
+    "sin": {
+      "value": "123-456-789",
+      "confidence": 0.956
+    },
+    "income2": {
+      "value": 343.25,
+      "confidence": 0.983
+    },
+    "spouse_income18": {
+      "value": null,
+      "confidence": 0.951
+    },
+    "spouse_signature": {
+      "value": "DOamor",
+      "confidence": 0.99
+    },
+    "income1": {
+      "value": 0,
+      "confidence": 0.99
+    },
+    "income8": {
+      "value": 333.85,
+      "confidence": 0.99
+    },
+    "spouse_date": {
+      "value": "2025-nov-23",
+      "confidence": 0.739
+    },
+    "checkbox_work_yes": {
+      "value": "selected",
+      "confidence": 0.99
+    },
+    "income6": {
+      "value": 0,
+      "confidence": 0.895
+    },
+    "spouse_phone": {
+      "value": "(3211-246-2143",
+      "confidence": 0.971
+    },
+    "checkbox_work_souse_yes": {
+      "value": "unselected",
+      "confidence": 0.988
+    },
+    "income7": {
+      "value": 0,
+      "confidence": 0.972
+    },
+    "spouse_income16": {
+      "value": 2680,
+      "confidence": 0.99
+    },
+    "checkbox_dependants_no": {
+      "value": "unselected",
+      "confidence": 0.99
+    },
+    "spouse_income3": {
+      "value": null,
+      "confidence": 0.953
+    },
+    "checkbox_moved_yes": {
+      "value": "unselected",
+      "confidence": 0.99
+    },
+    "spouse_name": {
+      "value": "Lisa O'Connor",
+      "confidence": 0.97
+    },
+    "income14": {
+      "value": null,
+      "confidence": 0.986
+    },
+    "spouse_income1": {
+      "value": null,
+      "confidence": 0.952
+    },
+    "checkbox_school_yes": {
+      "value": "unselected",
+      "confidence": 0.99
+    },
+    "income9": {
+      "value": 0,
+      "confidence": 0.99
+    },
+    "income13": {
+      "value": null,
+      "confidence": 0.986
+    },
+    "spouse_income12": {
+      "value": null,
+      "confidence": 0.95
+    },
+    "income12": {
+      "value": ":",
+      "confidence": 0.962
+    }
+  }
+}

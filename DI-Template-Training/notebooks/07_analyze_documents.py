@@ -77,7 +77,7 @@ else:
 # %%
 # Initialize Document Intelligence client
 # Set verbose=True to enable detailed HTTP request/response logging for debugging
-VERBOSE = True  # Set to True if you need to debug API calls
+VERBOSE = False  # Set to True if you need to debug API calls
 di_client = get_document_intelligence_client(verbose=VERBOSE)
 print("Document Intelligence client initialized.")
 
@@ -95,7 +95,7 @@ for i, f in enumerate(input_files):
 # %%
 # Select a document to analyze
 # Change this index to test different documents
-DOCUMENT_INDEX = 5
+DOCUMENT_INDEX = 6
 
 if input_files:
     test_document = input_files[DOCUMENT_INDEX]
@@ -205,11 +205,46 @@ if test_document:
 
                             # Parse fields
                             for field_name, field_data in doc_data.get('fields', {}).items():
+                                # Extract value based on field type
+                                field_type = field_data.get('type', 'string')
+                                value = None
+                                if 'valueString' in field_data:
+                                    value = field_data['valueString']
+                                elif 'valueNumber' in field_data:
+                                    value = field_data['valueNumber']
+                                elif 'valueDate' in field_data:
+                                    value = field_data['valueDate']
+                                elif 'valueSelectionMark' in field_data:
+                                    value = field_data['valueSelectionMark']
+                                elif 'content' in field_data:
+                                    value = field_data['content']
+
+                                # Parse bounding regions
+                                bounding_regions = []
+                                for br_data in field_data.get('boundingRegions', []):
+                                    polygon = br_data.get('polygon', [])
+                                    # Convert flat list [x1,y1,x2,y2,...] to list of points
+                                    if polygon and isinstance(polygon, list):
+                                        if isinstance(polygon[0], (int, float)):
+                                            # Flat array format - convert to points
+                                            points = []
+                                            for i in range(0, len(polygon), 2):
+                                                if i + 1 < len(polygon):
+                                                    points.append(type('Point', (), {'x': polygon[i], 'y': polygon[i+1]})())
+                                            polygon = points
+
+                                    br = type('BoundingRegion', (), {
+                                        'page_number': br_data.get('pageNumber', 1),
+                                        'polygon': polygon
+                                    })()
+                                    bounding_regions.append(br)
+
                                 field = type('DocumentField', (), {
-                                    'value': field_data.get('content') or field_data.get('valueString') or field_data.get('valueNumber'),
+                                    'value': value,
                                     'content': field_data.get('content'),
                                     'confidence': field_data.get('confidence', 0.0),
-                                    'bounding_regions': field_data.get('boundingRegions', [])
+                                    'bounding_regions': bounding_regions,
+                                    'type': field_type
                                 })()
                                 doc.fields[field_name] = field
 
@@ -283,9 +318,9 @@ def get_field_bounding_regions(field):
 # %%
 if 'result' in dir() and result is not None:
     print("\nExtracted Fields:")
-    print("=" * 70)
-    print(f"{'Field Name':<35} {'Value':<25} {'Confidence'}")
-    print("-" * 70)
+    print("=" * 100)
+    print(f"{'Field Name':<40} {'Value':<45} {'Confidence'}")
+    print("-" * 100)
 
     extracted_data = {}
 
@@ -302,12 +337,23 @@ if 'result' in dir() and result is not None:
                         "confidence": confidence,
                     }
 
-                    # Display
-                    value_str = str(value)[:25] if value else "N/A"
+                    # Display - don't truncate, but wrap long values
+                    value_str = str(value) if value else "N/A"
                     conf_str = f"{confidence:.2%}" if confidence else "N/A"
-                    print(f"{field_name:<35} {value_str:<25} {conf_str}")
 
-    print("-" * 70)
+                    # For long values, print on multiple lines
+                    if len(value_str) > 45:
+                        print(f"{field_name:<40} {value_str[:45]:<45} {conf_str}")
+                        # Print remaining value on continuation lines
+                        remaining = value_str[45:]
+                        while remaining:
+                            chunk = remaining[:45]
+                            remaining = remaining[45:]
+                            print(f"{'':<40} {chunk:<45}")
+                    else:
+                        print(f"{field_name:<40} {value_str:<45} {conf_str}")
+
+    print("-" * 100)
     print(f"Total fields extracted: {len(extracted_data)}")
 
 # %% [markdown]
@@ -318,6 +364,7 @@ if 'result' in dir() and result is not None and test_document:
     # Load document image
     image = load_image(test_document)
     height, width = image.shape[:2]
+    print(f"\nImage dimensions: {width}x{height}")
 
     fig, ax = plt.subplots(figsize=(12, 15))
     ax.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
@@ -332,6 +379,7 @@ if 'result' in dir() and result is not None and test_document:
             return 'red'
 
     # Draw bounding boxes
+    boxes_drawn = 0
     if result.documents:
         for doc in result.documents:
             if doc.fields:
@@ -343,8 +391,17 @@ if 'result' in dir() and result is not None and test_document:
                     for region in regions:
                         if hasattr(region, 'polygon') and region.polygon:
                             polygon = region.polygon
-                            # Convert to pixel coordinates
-                            points = [(p.x * width, p.y * height) for p in polygon]
+                            # Convert to pixel coordinates (already in pixels from our parsing)
+                            points = []
+                            for p in polygon:
+                                if hasattr(p, 'x') and hasattr(p, 'y'):
+                                    # If normalized (0-1), multiply by dimensions
+                                    if p.x <= 1.0 and p.y <= 1.0:
+                                        points.append((p.x * width, p.y * height))
+                                    else:
+                                        # Already in pixels
+                                        points.append((p.x, p.y))
+
                             if points:
                                 xs = [p[0] for p in points]
                                 ys = [p[1] for p in points]
@@ -365,6 +422,9 @@ if 'result' in dir() and result is not None and test_document:
                                     color=color,
                                     bbox=dict(boxstyle='round', facecolor='white', alpha=0.7),
                                 )
+                                boxes_drawn += 1
+
+    print(f"Total bounding boxes drawn: {boxes_drawn}")
 
     ax.set_title(
         f"Extraction Results: {test_document.name}\n"
@@ -373,6 +433,12 @@ if 'result' in dir() and result is not None and test_document:
     )
     ax.axis('off')
     plt.tight_layout()
+
+    # Save the visualization
+    viz_output_path = OUTPUTS_DIR / f"{test_document.stem}_visualization.png"
+    plt.savefig(viz_output_path, dpi=150, bbox_inches='tight')
+    print(f"\nVisualization saved to: {viz_output_path}")
+
     plt.show()
 
 # %% [markdown]
