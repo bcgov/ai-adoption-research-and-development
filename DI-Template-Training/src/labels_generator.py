@@ -28,6 +28,9 @@ def get_field_type(field_name: str) -> dict[str, str]:
     """Get Azure DI field type for a field name."""
     for rule_fn, field_type in FIELD_TYPE_RULES:
         if rule_fn(field_name):
+            # Add subtype for date fields
+            if field_type.get("type") == "date":
+                return {**field_type, "subtype": "dmy"}
             return field_type
     return {"type": "string"}
 
@@ -46,17 +49,18 @@ def generate_fields_json(
         exclude_checkboxes: Whether to exclude checkbox fields
 
     Returns:
-        The fields.json data with fields as a dictionary (field_name -> field_type_info)
+        The fields.json data with fields as a list of field objects
     """
-    fields = {}
+    fields = []
 
     for cat_id, name in sorted(categories.items(), key=lambda x: x[0]):
         if exclude_checkboxes and name.startswith("checkbox_"):
             continue
 
         field_type = get_field_type(name)
-        # Store field type info without the name (name is the key)
-        fields[name] = field_type
+        # Create field object with name and type info
+        field_obj = {"name": name, **field_type}
+        fields.append(field_obj)
 
     fields_data = {"fields": fields}
     save_json(fields_data, output_path)

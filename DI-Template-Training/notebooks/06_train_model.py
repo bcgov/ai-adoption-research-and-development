@@ -70,7 +70,155 @@ else:
     SAS_URL = None
 
 # %% [markdown]
-# ## 3. Initialize Document Intelligence Admin Client
+# ## 3. Validate fields.json and labels.json Alignment
+#
+# This step ensures consistency between the field definitions and all label files
+# before attempting to train the model.
+
+# %%
+# def validate_fields_and_labels(training_dir: Path) -> None:
+#     """
+#     Validate that fields.json and all *labels.json files are aligned.
+
+#     Checks performed:
+#     1. fields.json exists and has valid structure
+#     2. All *labels.json files exist and have valid structure
+#     3. Every label in labels files is present in fields.json (no extra labels)
+#     4. No duplicate labels within a single labels file
+#     5. Field types in fields.json are valid
+
+#     Note: Fields defined in fields.json but missing from labels files are allowed.
+
+#     Raises:
+#         ValueError: If any validation check fails
+#     """
+#     # Valid field types for Azure Document Intelligence
+#     VALID_FIELD_TYPES = {"string", "number", "date", "time", "integer",
+#                          "selectionMark", "countryRegion", "signature"}
+
+#     # --- Check fields.json ---
+#     fields_path = training_dir / "fields.json"
+#     if not fields_path.exists():
+#         raise ValueError(f"fields.json not found at: {fields_path}")
+
+#     fields_data = load_json(fields_path)
+
+#     if "fields" not in fields_data:
+#         raise ValueError("fields.json must contain a 'fields' key")
+
+#     fields_dict = fields_data["fields"]
+#     if not isinstance(fields_dict, dict):
+#         raise ValueError("fields.json 'fields' must be a dictionary")
+
+#     if len(fields_dict) == 0:
+#         raise ValueError("fields.json has no fields defined")
+
+#     defined_fields = set(fields_dict.keys())
+#     print(f"fields.json defines {len(defined_fields)} fields")
+
+#     # Validate field types
+#     invalid_types = []
+#     for field_name, field_info in fields_dict.items():
+#         if not isinstance(field_info, dict):
+#             raise ValueError(f"Field '{field_name}' must be a dictionary, got: {type(field_info)}")
+#         if "type" not in field_info:
+#             raise ValueError(f"Field '{field_name}' is missing 'type' key")
+#         field_type = field_info["type"]
+#         if field_type not in VALID_FIELD_TYPES:
+#             invalid_types.append((field_name, field_type))
+
+#     if invalid_types:
+#         raise ValueError(
+#             f"Invalid field types found:\n" +
+#             "\n".join(f"  - {name}: '{ftype}' (valid: {VALID_FIELD_TYPES})"
+#                       for name, ftype in invalid_types)
+#         )
+
+#     # --- Find and validate all labels.json files ---
+#     labels_files = list(training_dir.glob("*.labels.json"))
+#     if len(labels_files) == 0:
+#         raise ValueError(f"No *.labels.json files found in: {training_dir}")
+
+#     print(f"Found {len(labels_files)} labels files")
+
+#     all_errors = []
+
+#     for labels_path in labels_files:
+#         file_errors = []
+#         labels_data = load_json(labels_path)
+#         filename = labels_path.name
+
+#         # Check required keys
+#         if "document" not in labels_data:
+#             file_errors.append("Missing 'document' key")
+
+#         if "labels" not in labels_data:
+#             file_errors.append("Missing 'labels' key")
+#             all_errors.append((filename, file_errors))
+#             continue
+
+#         labels_list = labels_data["labels"]
+#         if not isinstance(labels_list, list):
+#             file_errors.append(f"'labels' must be a list, got: {type(labels_list)}")
+#             all_errors.append((filename, file_errors))
+#             continue
+
+#         # Extract label names
+#         label_names = []
+#         for i, label_entry in enumerate(labels_list):
+#             if not isinstance(label_entry, dict):
+#                 file_errors.append(f"Label entry {i} must be a dictionary")
+#                 continue
+#             if "label" not in label_entry:
+#                 file_errors.append(f"Label entry {i} missing 'label' key")
+#                 continue
+#             label_names.append(label_entry["label"])
+
+#         # Check for duplicates within this file
+#         seen = set()
+#         duplicates = []
+#         for name in label_names:
+#             if name in seen:
+#                 duplicates.append(name)
+#             seen.add(name)
+
+#         if duplicates:
+#             file_errors.append(f"Duplicate labels: {duplicates}")
+
+#         labels_in_file = set(label_names)
+
+#         # Check: labels in file but not in fields.json (extra labels)
+#         extra_in_labels = labels_in_file - defined_fields
+#         if extra_in_labels:
+#             file_errors.append(
+#                 f"Labels in file but NOT defined in fields.json: {sorted(extra_in_labels)}"
+#             )
+
+#         if file_errors:
+#             all_errors.append((filename, file_errors))
+
+#     # --- Report results ---
+#     if all_errors:
+#         error_msg = "VALIDATION FAILED - fields.json and labels.json files are not aligned:\n\n"
+#         for filename, errors in all_errors:
+#             error_msg += f"{filename}:\n"
+#             for err in errors:
+#                 error_msg += f"  - {err}\n"
+#             error_msg += "\n"
+#         raise ValueError(error_msg)
+
+#     print("Validation PASSED: fields.json and all labels files are aligned.")
+
+
+# # Run validation
+# TRAINING_DIR = project_root / "data" / "training"
+# print(f"Validating training data in: {TRAINING_DIR}")
+# print("-" * 50)
+# validate_fields_and_labels(TRAINING_DIR)
+# print("-" * 50)
+
+# %% [markdown]
+# ## 4. Initialize Document Intelligence Admin Client
 
 # %%
 # Initialize admin client (for model management)
@@ -82,7 +230,7 @@ endpoint = os.environ.get("AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT", "")
 print(f"Endpoint: {endpoint}")
 
 # %% [markdown]
-# ## 4. Check Existing Models
+# ## 5. Check Existing Models
 
 # %%
 # List existing custom models
@@ -108,7 +256,7 @@ if existing_model:
     print("Training will create a new version or fail if names conflict.")
 
 # %% [markdown]
-# ## 5. Start Model Training
+# ## 6. Start Model Training
 
 # %%
 from azure.ai.documentintelligence.models import (
@@ -162,7 +310,7 @@ if SAS_URL:
     print("\nTraining started. This may take 1-5 minutes...")
 
 # %% [markdown]
-# ## 6. Monitor Training Progress
+# ## 7. Monitor Training Progress
 
 # %%
 if 'poller' in dir():
@@ -229,7 +377,7 @@ if 'poller' in dir():
         raise  # Re-raise the exception
 
 # %% [markdown]
-# ## 7. Display Model Details
+# ## 8. Display Model Details
 
 # %%
 if 'model' in dir():
@@ -254,7 +402,7 @@ if 'model' in dir():
                     print(f"      ... and {len(info.field_schema) - 10} more fields")
 
 # %% [markdown]
-# ## 8. Save Model Configuration
+# ## 9. Save Model Configuration
 
 # %%
 if 'model' in dir():
@@ -279,7 +427,7 @@ if 'model' in dir():
     print(f"\nModel configuration saved to: {config_path}")
 
 # %% [markdown]
-# ## 9. Summary
+# ## 10. Summary
 
 # %%
 print("\n" + "=" * 60)
