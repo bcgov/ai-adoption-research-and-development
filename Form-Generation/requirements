@@ -24,6 +24,7 @@ ffmpy==1.0.0
 filelock==3.20.3
 flatbuffers==25.12.19
 fonttools==4.61.1
+freetype-py==2.5.1
 fsspec==2026.1.0
 future==1.0.0
 gast==0.7.0
@@ -44,6 +45,7 @@ Jinja2==3.1.6
 keras==3.13.0
 kiwisolver==1.4.9
 libclang==18.1.1
+lxml==6.0.2
 Markdown==3.10
 markdown-it-py==4.0.0
 MarkupSafe==3.0.3
@@ -63,6 +65,7 @@ pandas==2.3.3
 pillow==11.0.0
 protobuf==5.28.3
 psutil==7.2.1
+pycairo==1.29.0
 pycparser==2.23
 pydantic==2.11.10
 pydantic_core==2.33.2
@@ -75,8 +78,10 @@ python-multipart==0.0.21
 pytz==2025.2
 PyYAML==6.0.3
 regex==2025.11.3
+reportlab==4.4.7
 requests==2.32.5
 rich==14.2.0
+rlPyCairo==0.4.0
 ruff==0.14.11
 safehttpx==0.1.7
 safetensors==0.7.0
@@ -88,6 +93,7 @@ shellingham==1.5.4
 six==1.17.0
 soupsieve==2.8.1
 starlette==0.50.0
+svglib==1.6.0
 sympy==1.13.1
 tensorboard==2.20.0
 tensorboard-data-server==0.7.2
