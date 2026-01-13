@@ -55,12 +55,27 @@ for c in categories:
 					if text_img_list:
 						text_img, _ = text_img_list[0]
 						bbox = annotation['bbox']
-						# Resize text_img to fit bbox width and height
 						bbox_width = int(bbox[2])
 						bbox_height = int(bbox[3])
-						text_img = text_img.resize((bbox_width, bbox_height))
+						orig_width, orig_height = text_img.size
+						if 'income' in name.lower():
+							# No offset, use full bbox
+							new_height = bbox_height
+							new_width = max(1, int(orig_width * (new_height / orig_height)))
+							text_img = text_img.resize((new_width, new_height))
+							paste_x = int(bbox[0]) + max((bbox_width - new_width) // 2, 0)
+							paste_y = int(bbox[1])
+						else:
+							# Add vertical offset for field label and decrease height for text
+							field_label_offset = int(0.3 * bbox_height)  # 30% of bbox height reserved for label
+							available_height = bbox_height - field_label_offset
+							new_height = max(1, available_height)
+							new_width = max(1, int(orig_width * (new_height / orig_height)))
+							text_img = text_img.resize((new_width, new_height))
+							paste_x = int(bbox[0]) + max((bbox_width - new_width) // 2, 0)
+							paste_y = int(bbox[1]) + field_label_offset
 						# Paste text_img onto template_image at bbox (x, y)
-						template_image.paste(text_img, (int(bbox[0]), int(bbox[1])))
+						template_image.paste(text_img, (paste_x, paste_y))
 
 # Trying SVG Generation with handwriting-synthesis
 # Has issues with some special characters and sizing			

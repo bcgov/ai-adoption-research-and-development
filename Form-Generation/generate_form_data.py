@@ -200,7 +200,7 @@ def generate_data():
   # If it is, we roll to see if it's just a 0.
   def valueOrZero():
        # Is filled?
-       if roll100(10):
+       if roll100(30):
             # Is that a non-zero amount?
             return generate_money_value() if roll100(80) else 0
        else:
