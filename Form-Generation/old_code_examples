@@ -1,0 +1,191 @@
+        
+  # Using TRDG for image generation. 
+  # Some issues here with legibility and consistency
+  # for c in categories:
+  # 	name = c['name']
+  # 	value = data.get(name)
+  # 	annotation = get_annotation_by_category_name(name)
+  # 	if value is not None and annotation is not None:
+  # 		if isinstance(value, bool):
+  # 			# If true, generate and paste an 'X' image in the bbox
+  # 			if value:
+  # 				bbox = annotation['bbox']
+  # 				bbox_width = int(bbox[2])
+  # 				bbox_height = int(bbox[3])
+  # 				x_img_list = generate_text_image(['X'], 1)
+  # 				if x_img_list:
+  # 					x_img, _ = x_img_list[0]
+  # 					orig_width, orig_height = x_img.size
+  # 					new_height = bbox_height
+  # 					new_width = max(1, int(orig_width * (new_height / orig_height)))
+  # 					x_img = x_img.resize((new_width, new_height))
+  # 					paste_x = int(bbox[0]) + max((bbox_width - new_width) // 2, 0)
+  # 					paste_y = int(bbox[1])
+  # 					template_image.paste(x_img, (paste_x, paste_y), mask=x_img)
+  # 		else:
+  # 			# Create an image for this text
+  # 			text_img_list = generate_text_image([str(value)], 1)
+  # 			if text_img_list:
+  # 				text_img, _ = text_img_list[0]
+  # 				bbox = annotation['bbox']
+  # 				bbox_width = int(bbox[2])
+  # 				bbox_height = int(bbox[3])
+  # 				orig_width, orig_height = text_img.size
+  # 				if 'income' in name.lower():
+  # 					# No offset, use full bbox
+  # 					new_height = bbox_height
+  # 					new_width = max(1, int(orig_width * (new_height / orig_height)))
+  # 					text_img = text_img.resize((new_width, new_height))
+  # 					paste_x = int(bbox[0]) + max((bbox_width - new_width) // 2, 0)
+  # 					paste_y = int(bbox[1])
+  # 				else:
+  # 					# Add vertical offset for field label and decrease height for text
+  # 					field_label_offset = int(0.3 * bbox_height)  # 30% of bbox height reserved for label
+  # 					available_height = bbox_height - field_label_offset
+  # 					new_height = max(1, available_height)
+  # 					new_width = max(1, int(orig_width * (new_height / orig_height)))
+  # 					text_img = text_img.resize((new_width, new_height))
+  # 					paste_x = int(bbox[0]) + max((bbox_width - new_width) // 2, 0)
+  # 					paste_y = int(bbox[1]) + field_label_offset
+  # 				# Paste text_img onto template_image at bbox (x, y), using mask to preserve transparency
+  # 				template_image.paste(text_img, (paste_x, paste_y), mask=text_img)
+
+  # Trying SVG Generation with handwriting-synthesis
+  # Has issues with some special characters and sizing			
+  # import io
+  # from svglib.svglib import svg2rlg
+  # from reportlab.graphics import renderPM
+  # for c in categories:
+  # 	name = c['name']
+  # 	value = data.get(name)
+  # 	annotation = get_annotation_by_category_name(name)
+  # 	if value is not None and annotation is not None:
+  # 		if isinstance(value, bool):
+  # 			# Handle checkbox logic here (not implemented)
+  # 			pass
+  # 		else:
+  # 			# Generate SVG handwriting for this text
+  # 			svg_str = generate_handwriting_svg(str(value), style=0, alignment="left")
+  # 			# Strip XML declaration if present
+  # 			if svg_str.strip().startswith('<?xml'):
+  # 				svg_str = svg_str.split('?>', 1)[-1]
+  # 			# Use svglib to convert SVG string to ReportLab Drawing
+  # 			drawing = svg2rlg(io.StringIO(svg_str))
+  # 			if drawing is None:
+  # 				print(f"Warning: Failed to parse SVG for value '{value}'. Skipping.")
+  # 				continue
+  # 			# Render Drawing to PNG bytes
+  # 			png_bytes = renderPM.drawToString(drawing, fmt='PNG')
+  # 			# Open PNG as PIL Image
+  # 			text_img = Image.open(io.BytesIO(png_bytes))
+  # 			bbox = annotation['bbox']
+  # 			bbox_width = int(bbox[2])
+  # 			bbox_height = int(bbox[3])
+  # 			text_img = text_img.resize((bbox_width, bbox_height))
+  # 			template_image.paste(text_img, (int(bbox[0]), int(bbox[1])))
+
+
+
+from trdg.generators import (
+    GeneratorFromStrings,
+)
+import os
+import requests
+
+def generate_text_image(text_list, count=1):
+    generator = GeneratorFromStrings(
+        text_list,
+        count,
+        language="en",
+        background_type=1,
+        text_color="#000000",
+        is_handwritten=True,
+        fonts=[],
+        size=128,
+        skewing_angle=0,
+        random_skew=False,
+        blur=0,
+        random_blur=False,
+        distorsion_type=0,
+        distorsion_orientation=0,
+        width=-1,
+        alignment=1,
+        orientation=0,
+        space_width=1.0,
+        character_spacing=0,
+        margins=(5, 5, 5, 5),
+        fit=False,
+        output_mask=False,
+        word_split=False,
+        stroke_width=1, 
+        stroke_fill="#000000",
+        image_mode="RGBA",
+        output_bboxes=0,
+        rtl=False,
+    )
+
+    # Return these images as a list, converting white to transparent
+    images = []
+    for (img, label) in generator:
+        # Convert white background to transparent
+        img = img.convert("RGBA")
+        datas = img.getdata()
+        newData = []
+        for item in datas:
+            # item is (R, G, B, A)
+            if item[0] > 250 and item[1] > 250 and item[2] > 250:
+                # If white, make transparent
+                newData.append((255, 255, 255, 0))
+            else:
+                newData.append(item)
+        img.putdata(newData)
+        images.append((img, label))
+    return images
+
+def generate_handwriting_svg(text, style=0, alignment="left", api_url="http://localhost:3000/api/preview"):
+    """
+    Sends a POST request to the handwriting synthesis API and returns the SVG string.
+    Args:
+        text (str): The text to render.
+        style (int): The handwriting style index.
+        alignment (str): 'left' or 'center'.
+        api_url (str): The API endpoint URL.
+    Returns:
+        str: SVG content as a string.
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+    payload = {
+        "text": text,
+        "style": style,
+        "alignment": alignment
+    }
+    response = requests.post(api_url, json=payload)
+    try:
+        response.raise_for_status()
+    except requests.HTTPError as e:
+        print(f"HTTP error: {e}\nStatus code: {response.status_code}\nResponse text: {response.text}")
+        raise
+
+    try:
+        data = response.json()
+    except Exception as e:
+        print(f"JSON decode error: {e}\nRaw response: {response.text}")
+        raise
+    return data.get("svg", "")
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) > 1:
+        texts = sys.argv[1:]
+        images = generate_text_image(texts, 5)
+
+        output_dir = './output'
+        os.makedirs(output_dir, exist_ok=True)
+
+        for i, (img, label) in enumerate(images):
+            img_path = os.path.join(output_dir, f"{label}_{i}.png")
+            img.save(img_path)
+            print(f"Saved: {img_path}")
+    else:
+        print("Usage: python generate_text_image.py <text1> <text2> ...")
