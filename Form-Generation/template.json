@@ -1460,11 +1460,11 @@
     },
     {
       "id": 74,
-      "name": "checkbox_work_souse_yes"
+      "name": "checkbox_work_spouse_yes"
     },
     {
       "id": 75,
-      "name": "checkbox_work_souse_no"
+      "name": "checkbox_work_spouse_no"
     }
   ]
 }
