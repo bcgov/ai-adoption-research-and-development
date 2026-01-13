@@ -10,10 +10,16 @@ def roll100(percentage):
 	"""
 	return random.uniform(0, 100) < percentage
 
-def generate_money_value(min_value=1, max_value=10000, decimal_places=2):
-	value = faker.pydecimal(left_digits=5, right_digits=decimal_places, positive=True)
-	value = max(min_value, min(float(value), max_value))
-	return f"{value:,.2f}"
+def generate_money_value(min_value=1, max_value=10000):
+    value = random.uniform(min_value, max_value)
+    # Randomly decide on formatting style
+    show_cents = roll100(70)  # 70% chance to show cents
+    show_comma = roll100(50)  # 50% chance to show comma
+    if show_cents:
+        fmt = ",.2f" if show_comma else ".2f"
+    else:
+        fmt = ",.0f" if show_comma else ".0f"
+    return format(value, fmt)
 
 def generate_full_name():
 	return faker.name()
@@ -32,7 +38,7 @@ def generate_telephone():
         result += char
   return result
 
-def generate_short_text(max_length=10):
+def generate_short_text(max_length=20):
 	text = faker.sentence(nb_words=8)
 	return text if len(text) <= max_length else text[:max_length]
 
