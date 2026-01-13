@@ -74,8 +74,8 @@ for c in categories:
 							text_img = text_img.resize((new_width, new_height))
 							paste_x = int(bbox[0]) + max((bbox_width - new_width) // 2, 0)
 							paste_y = int(bbox[1]) + field_label_offset
-						# Paste text_img onto template_image at bbox (x, y)
-						template_image.paste(text_img, (paste_x, paste_y))
+						# Paste text_img onto template_image at bbox (x, y), using mask to preserve transparency
+						template_image.paste(text_img, (paste_x, paste_y), mask=text_img)
 
 # Trying SVG Generation with handwriting-synthesis
 # Has issues with some special characters and sizing			

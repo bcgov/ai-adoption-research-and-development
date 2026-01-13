@@ -33,16 +33,27 @@ def generate_text_image(text_list, count=1):
         word_split=False,
         stroke_width=1, 
         stroke_fill="#000000",
-        image_mode="RGB",
+        image_mode="RGBA",
         output_bboxes=0,
         rtl=False,
     )
 
-    # Return these images as a list
+    # Return these images as a list, converting white to transparent
     images = []
     for (img, label) in generator:
+        # Convert white background to transparent
+        img = img.convert("RGBA")
+        datas = img.getdata()
+        newData = []
+        for item in datas:
+            # item is (R, G, B, A)
+            if item[0] > 250 and item[1] > 250 and item[2] > 250:
+                # If white, make transparent
+                newData.append((255, 255, 255, 0))
+            else:
+                newData.append(item)
+        img.putdata(newData)
         images.append((img, label))
-    
     return images
 
 if __name__ == "__main__":
