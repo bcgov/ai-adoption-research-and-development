@@ -1,6 +1,6 @@
 
 from PIL import Image
-from generate_text_image import generate_image
+from generate_text_image import generate_handwriting_svg, generate_text_image
 from generate_form_data import generate_data
 
 
@@ -51,7 +51,7 @@ for c in categories:
 						pass
 				else:
 					# Create an image for this text
-					text_img_list = generate_image([str(value)], 1)
+					text_img_list = generate_text_image([str(value)], 1)
 					if text_img_list:
 						text_img, _ = text_img_list[0]
 						bbox = annotation['bbox']
@@ -61,6 +61,40 @@ for c in categories:
 						text_img = text_img.resize((bbox_width, bbox_height))
 						# Paste text_img onto template_image at bbox (x, y)
 						template_image.paste(text_img, (int(bbox[0]), int(bbox[1])))
+
+# Trying SVG Generation with handwriting-synthesis
+# Has issues with some special characters and sizing			
+# import io
+# from svglib.svglib import svg2rlg
+# from reportlab.graphics import renderPM
+# for c in categories:
+# 	name = c['name']
+# 	value = data.get(name)
+# 	annotation = get_annotation_by_category_name(name)
+# 	if value is not None and annotation is not None:
+# 		if isinstance(value, bool):
+# 			# Handle checkbox logic here (not implemented)
+# 			pass
+# 		else:
+# 			# Generate SVG handwriting for this text
+# 			svg_str = generate_handwriting_svg(str(value), style=0, alignment="left")
+# 			# Strip XML declaration if present
+# 			if svg_str.strip().startswith('<?xml'):
+# 				svg_str = svg_str.split('?>', 1)[-1]
+# 			# Use svglib to convert SVG string to ReportLab Drawing
+# 			drawing = svg2rlg(io.StringIO(svg_str))
+# 			if drawing is None:
+# 				print(f"Warning: Failed to parse SVG for value '{value}'. Skipping.")
+# 				continue
+# 			# Render Drawing to PNG bytes
+# 			png_bytes = renderPM.drawToString(drawing, fmt='PNG')
+# 			# Open PNG as PIL Image
+# 			text_img = Image.open(io.BytesIO(png_bytes))
+# 			bbox = annotation['bbox']
+# 			bbox_width = int(bbox[2])
+# 			bbox_height = int(bbox[3])
+# 			text_img = text_img.resize((bbox_width, bbox_height))
+# 			template_image.paste(text_img, (int(bbox[0]), int(bbox[1])))
 
 # Save the composed template image
 output_path = "output/composed_template.jpg"

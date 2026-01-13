@@ -19,7 +19,18 @@ def generate_full_name():
 	return faker.name()
 
 def generate_telephone():
-	return faker.phone_number()
+  patterns = ["###-###-###", "### ### ###", "#########", "(###) ### ###", "(###) ###-###", "###.###.###"]
+  pattern = random.choice(patterns)
+  digits = [str(random.randint(0, 9)) for _ in range(pattern.count('#'))]
+  result = ""
+  digit_idx = 0
+  for char in pattern:
+    if char == '#':
+        result += digits[digit_idx]
+        digit_idx += 1
+    else:
+        result += char
+  return result
 
 def generate_short_text(max_length=10):
 	text = faker.sentence(nb_words=8)

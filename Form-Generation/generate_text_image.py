@@ -1,9 +1,12 @@
+import requests
+
+
 from trdg.generators import (
     GeneratorFromStrings,
 )
 import os
 
-def generate_image(text_list, count=1):
+def generate_text_image(text_list, count=1):
     generator = GeneratorFromStrings(
         text_list,
         count,
@@ -46,7 +49,7 @@ if __name__ == "__main__":
     import sys
     if len(sys.argv) > 1:
         texts = sys.argv[1:]
-        images = generate_image(texts, 5)
+        images = generate_text_image(texts, 5)
 
         output_dir = './output'
         os.makedirs(output_dir, exist_ok=True)
@@ -58,3 +61,35 @@ if __name__ == "__main__":
 
     else:
         print("Usage: python generate_text_image.py <text1> <text2> ...")
+
+def generate_handwriting_svg(text, style=0, alignment="left", api_url="http://localhost:3000/api/preview"):
+    """
+    Sends a POST request to the handwriting synthesis API and returns the SVG string.
+    Args:
+        text (str): The text to render.
+        style (int): The handwriting style index.
+        alignment (str): 'left' or 'center'.
+        api_url (str): The API endpoint URL.
+    Returns:
+        str: SVG content as a string.
+    Raises:
+        requests.HTTPError: If the request fails.
+    """
+    payload = {
+        "text": text,
+        "style": style,
+        "alignment": alignment
+    }
+    response = requests.post(api_url, json=payload)
+    try:
+        response.raise_for_status()
+    except requests.HTTPError as e:
+        print(f"HTTP error: {e}\nStatus code: {response.status_code}\nResponse text: {response.text}")
+        raise
+
+    try:
+        data = response.json()
+    except Exception as e:
+        print(f"JSON decode error: {e}\nRaw response: {response.text}")
+        raise
+    return data.get("svg", "")
