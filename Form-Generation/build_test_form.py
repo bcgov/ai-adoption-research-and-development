@@ -42,40 +42,53 @@ def get_annotation_by_category_name(name):
 # Anything else, we need to generate text
 
 for c in categories:
-		name = c['name']
-		value = data.get(name)
-		annotation = get_annotation_by_category_name(name)
-		if value is not None and annotation is not None:
-				if isinstance(value, bool):
-						# Handle checkbox logic here (not implemented)
-						pass
+	name = c['name']
+	value = data.get(name)
+	annotation = get_annotation_by_category_name(name)
+	if value is not None and annotation is not None:
+		if isinstance(value, bool):
+			# If true, generate and paste an 'X' image in the bbox
+			if value:
+				bbox = annotation['bbox']
+				bbox_width = int(bbox[2])
+				bbox_height = int(bbox[3])
+				x_img_list = generate_text_image(['X'], 1)
+				if x_img_list:
+					x_img, _ = x_img_list[0]
+					orig_width, orig_height = x_img.size
+					new_height = bbox_height
+					new_width = max(1, int(orig_width * (new_height / orig_height)))
+					x_img = x_img.resize((new_width, new_height))
+					paste_x = int(bbox[0]) + max((bbox_width - new_width) // 2, 0)
+					paste_y = int(bbox[1])
+					template_image.paste(x_img, (paste_x, paste_y), mask=x_img)
+		else:
+			# Create an image for this text
+			text_img_list = generate_text_image([str(value)], 1)
+			if text_img_list:
+				text_img, _ = text_img_list[0]
+				bbox = annotation['bbox']
+				bbox_width = int(bbox[2])
+				bbox_height = int(bbox[3])
+				orig_width, orig_height = text_img.size
+				if 'income' in name.lower():
+					# No offset, use full bbox
+					new_height = bbox_height
+					new_width = max(1, int(orig_width * (new_height / orig_height)))
+					text_img = text_img.resize((new_width, new_height))
+					paste_x = int(bbox[0]) + max((bbox_width - new_width) // 2, 0)
+					paste_y = int(bbox[1])
 				else:
-					# Create an image for this text
-					text_img_list = generate_text_image([str(value)], 1)
-					if text_img_list:
-						text_img, _ = text_img_list[0]
-						bbox = annotation['bbox']
-						bbox_width = int(bbox[2])
-						bbox_height = int(bbox[3])
-						orig_width, orig_height = text_img.size
-						if 'income' in name.lower():
-							# No offset, use full bbox
-							new_height = bbox_height
-							new_width = max(1, int(orig_width * (new_height / orig_height)))
-							text_img = text_img.resize((new_width, new_height))
-							paste_x = int(bbox[0]) + max((bbox_width - new_width) // 2, 0)
-							paste_y = int(bbox[1])
-						else:
-							# Add vertical offset for field label and decrease height for text
-							field_label_offset = int(0.3 * bbox_height)  # 30% of bbox height reserved for label
-							available_height = bbox_height - field_label_offset
-							new_height = max(1, available_height)
-							new_width = max(1, int(orig_width * (new_height / orig_height)))
-							text_img = text_img.resize((new_width, new_height))
-							paste_x = int(bbox[0]) + max((bbox_width - new_width) // 2, 0)
-							paste_y = int(bbox[1]) + field_label_offset
-						# Paste text_img onto template_image at bbox (x, y), using mask to preserve transparency
-						template_image.paste(text_img, (paste_x, paste_y), mask=text_img)
+					# Add vertical offset for field label and decrease height for text
+					field_label_offset = int(0.3 * bbox_height)  # 30% of bbox height reserved for label
+					available_height = bbox_height - field_label_offset
+					new_height = max(1, available_height)
+					new_width = max(1, int(orig_width * (new_height / orig_height)))
+					text_img = text_img.resize((new_width, new_height))
+					paste_x = int(bbox[0]) + max((bbox_width - new_width) // 2, 0)
+					paste_y = int(bbox[1]) + field_label_offset
+				# Paste text_img onto template_image at bbox (x, y), using mask to preserve transparency
+				template_image.paste(text_img, (paste_x, paste_y), mask=text_img)
 
 # Trying SVG Generation with handwriting-synthesis
 # Has issues with some special characters and sizing			
