@@ -307,7 +307,7 @@
       "id": 10,
       "iscrowd": 0,
       "image_id": 1,
-      "category_id": 31,
+      "category_id": 33,
       "segmentation": [
         [
           2463.875314408911,
@@ -1460,11 +1460,11 @@
     },
     {
       "id": 74,
-      "name": "checkbox_work_spouse_yes"
+      "name": "checkbox_work_souse_yes"
     },
     {
       "id": 75,
-      "name": "checkbox_work_spouse_no"
+      "name": "checkbox_work_souse_no"
     }
   ]
 }
