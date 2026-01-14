@@ -14,6 +14,15 @@ This assumes you've already followed the instructions in the README file for `Li
         url: http://host.docker.internal:8001/mcp/
     ```
 
+    I would also recommend adding or uncommenting this section:
+
+    ```yaml
+    mcpSettings:
+      allowedDomains:
+        - 'host.docker.internal'    # Docker host access (required for Docker setups)
+        - 'localhost'               # Local development
+    ```
+
 1. Start the two included MCP servers. Use two different terminal windows to observe, but use the following commands:
     - `fastmcp run calendar_server.py:mcp --transport http --port 8001`
     - `fastmcp run weather_server.py:mcp --transport http --port 8002`
