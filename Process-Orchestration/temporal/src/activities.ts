@@ -141,8 +141,8 @@ export async function submitToAzureOCR(
       'api-key': apiKey ? `${apiKey.substring(0, 4)}...${apiKey.substring(apiKey.length - 4)}` : 'MISSING',
       'Content-Type': fileData.contentType
     };
-    console.log(`[SubmitToAzureOCR] Request headers:`, {
-      'api-key': requestHeaders['api-key'],
+    console.log(`[SubmitToAzureOCR] Request headers (sanitized):`, {
+      'apiKeyConfigured': !!apiKey,
       'Content-Type': requestHeaders['Content-Type']
     });
 
