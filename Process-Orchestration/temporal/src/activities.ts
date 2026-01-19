@@ -116,8 +116,7 @@ export async function submitToAzureOCR(
   console.log('[SubmitToAzureOCR] ===== DEBUG START =====');
   console.log(`[SubmitToAzureOCR] Endpoint (raw): ${endpoint}`);
   console.log(`[SubmitToAzureOCR] API Key present: ${!!apiKey}`);
-  console.log(`[SubmitToAzureOCR] API Key length: ${apiKey?.length || 0}`);
-  
+
   if (!endpoint || !apiKey) {
     console.error('[SubmitToAzureOCR] Missing credentials!');
     throw new Error(
