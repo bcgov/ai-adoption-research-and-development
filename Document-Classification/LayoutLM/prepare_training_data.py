@@ -21,6 +21,7 @@ def encode_folder(folder_path, label, max_length=512):
     for fname in os.listdir(folder_path):
         fpath = os.path.join(folder_path, fname)
         print(fpath)
+        # Only images
         if not (
             fname.lower().endswith(".jpg")
             or fname.lower().endswith(".png")

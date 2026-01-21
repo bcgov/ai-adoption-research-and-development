@@ -23,6 +23,7 @@ from datasets import Dataset
 train_dataset = Dataset.from_list(train_data)
 eval_dataset = Dataset.from_list(eval_data)
 
+# This example only uses two labels, but in a larger scenario this should be based on training data.
 model = LayoutLMv3ForSequenceClassification.from_pretrained(
     "microsoft/layoutlmv3-base", num_labels=2
 )
@@ -31,7 +32,6 @@ training_args = TrainingArguments(
     output_dir="./results", per_device_train_batch_size=4, num_train_epochs=3
 )
 
-# Example: use train_dataset as the single-item dataset
 trainer = Trainer(
     model=model,
     args=training_args,
