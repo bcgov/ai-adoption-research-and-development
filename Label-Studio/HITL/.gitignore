@@ -1,0 +1,32 @@
+# HITL/.gitignore
+
+# Environment
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# Data
+data/
+*.json
+
+# Docker volumes
+postgres_data/
+labelstudio_data/
+webhook_data/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
