@@ -1,0 +1,99 @@
+# HITL/docker-compose.yml
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: hitl-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hitl-network
+
+  labelstudio:
+    image: heartexlabs/label-studio:latest
+    container_name: hitl-labelstudio
+    ports:
+      - "${LABEL_STUDIO_PORT}:8080"
+    environment:
+      DJANGO_DB: default
+      POSTGRE_NAME: ${POSTGRES_DB}
+      POSTGRE_USER: ${POSTGRES_USER}
+      POSTGRE_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRE_HOST: ${POSTGRES_HOST}
+      POSTGRE_PORT: ${POSTGRES_PORT}
+      LABEL_STUDIO_USERNAME: ${LABEL_STUDIO_USERNAME}
+      LABEL_STUDIO_PASSWORD: ${LABEL_STUDIO_PASSWORD}
+      LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED: "true"
+      LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT: /label-studio/data/images
+    volumes:
+      - labelstudio_data:/label-studio/data
+      - ./images:/label-studio/data/images:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+    networks:
+      - hitl-network
+
+  ml_backend:
+    build:
+      context: ./ml_backend
+      dockerfile: Dockerfile
+    container_name: hitl-ml-backend
+    ports:
+      - "${ML_BACKEND_PORT}:9090"
+    environment:
+      LABEL_STUDIO_URL: http://${LABEL_STUDIO_HOST}:8080
+      CONFIDENCE_THRESHOLD: ${CONFIDENCE_THRESHOLD}
+    volumes:
+      - ./images:/app/images:ro
+    depends_on:
+      labelstudio:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9090/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hitl-network
+
+  webhook_receiver:
+    build:
+      context: ./webhook_receiver
+      dockerfile: Dockerfile
+    container_name: hitl-webhook
+    ports:
+      - "${WEBHOOK_PORT}:8000"
+    volumes:
+      - webhook_data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hitl-network
+
+volumes:
+  postgres_data:
+  labelstudio_data:
+  webhook_data:
+
+networks:
+  hitl-network:
+    driver: bridge
