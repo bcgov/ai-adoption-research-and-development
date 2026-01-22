@@ -1,0 +1,91 @@
+[build-system]
+requires = ["setuptools>=70.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["paias*"]
+
+[project]
+name = "paias"
+version = "0.1.0"
+description = "Personal AI Assistant System - Phase 1 vertical slice"
+authors = [{ name = "PAIAS Team" }]
+requires-python = ">=3.11,<4.0"
+dependencies = [
+  "sqlmodel>=0.0.24",
+  "asyncpg>=0.30",
+  "pydantic>=2.0",
+  "pydantic-settings>=2.0",
+  "pydantic-ai>=1.0.0,<2.0.0",
+  "openai>=1.51.0",
+  "python-dotenv>=1.0.1",
+  "mcp>=1.2.0,<2.0.0",
+  "markdownify>=0.14.1",
+  "pgvector>=0.3.0",
+  "opentelemetry-api>=1.39.1",
+  "opentelemetry-sdk>=1.39.1",
+  "opentelemetry-exporter-otlp>=1.39.1",
+  "alembic>=1.14",
+  "langgraph>=1.0.0",
+  "wmill>=1.596.0",
+  "httpx>=0.27.0",
+  "streamlit>=1.50.0",
+  "mem0ai>=1.0.0",
+  "qdrant-client>=1.16.2",
+  "ollama (>=0.6.1,<0.7.0)",
+  "azure-identity>=1.19.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "ruff>=0.13.0",
+  "black>=24.10.0",
+  "mypy>=1.10.0",
+  "pytest>=7.0",
+  "pytest-asyncio>=1.2.0",
+  "pytest-cov>=4.0",
+  "pyyaml>=6.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+addopts = "--cov=paias --cov-fail-under=80"
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+skip-string-normalization = true
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+exclude = ["tests"]
+
+[tool.ruff.lint]
+select = [
+  "E",
+  "F",
+  "I",
+  "B",
+]
+ignore = []
+
+[tool.mypy]
+python_version = "3.14"
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+warn_return_any = true
+warn_unused_ignores = true
+no_implicit_optional = true
+strict_equality = true
+show_error_codes = true
+pretty = true
+explicit_package_bases = true
+
+[[tool.mypy.overrides]]
+module = ["pgvector.*"]
+ignore_missing_imports = true
+

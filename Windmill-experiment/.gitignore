@@ -1,0 +1,47 @@
+.specstory/
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+dist/
+build/
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Environment and secrets
+.env
+
+# Tooling
+.ruff_cache/
+.mypy_cache/
+
+# Node.js
+node_modules/
+package-lock.json
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Other
+/u/
+
+wmill-lock.yaml
+
+# Private local work (not committed)
+.private/
+f/private
