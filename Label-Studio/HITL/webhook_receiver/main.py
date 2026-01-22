@@ -30,7 +30,7 @@ class StoredAnnotation(BaseModel):
     image_path: str
     regions: List[AnnotationRegion]
     completed_at: str
-    raw_result: Optional[Dict[str, Any]] = None
+    raw_result: Optional[List[Dict[str, Any]]] = None
 
 
 def load_annotations() -> List[Dict]:

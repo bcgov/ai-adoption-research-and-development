@@ -1,11 +1,11 @@
 # HITL/client/label_studio_client.py
-"""Label Studio SDK client wrapper for HITL OCR workflow."""
+"""Label Studio client wrapper for HITL OCR workflow using direct API calls."""
 
 import os
 from typing import List, Optional
 
+import requests
 from dotenv import load_dotenv
-from label_studio_sdk import Client
 
 
 class HITLClient:
@@ -33,7 +33,35 @@ class HITLClient:
                 "Get your API key from Label Studio > Account & Settings > Access Token"
             )
 
-        self.client = Client(url=self.url, api_key=self.api_key)
+        # Handle Personal Access Tokens (JWT format starting with 'eyJ')
+        # PATs are refresh tokens that must be exchanged for access tokens
+        if self.api_key.startswith('eyJ'):
+            self.access_token = self._exchange_pat_for_access_token(self.api_key)
+            self.auth_header = {"Authorization": f"Bearer {self.access_token}"}
+        else:
+            # Legacy token - use Token auth
+            self.access_token = self.api_key
+            self.auth_header = {"Authorization": f"Token {self.api_key}"}
+
+        self.session = requests.Session()
+        self.session.headers.update(self.auth_header)
+
+    def _exchange_pat_for_access_token(self, pat: str) -> str:
+        """Exchange a Personal Access Token (refresh token) for a short-lived access token."""
+        response = requests.post(
+            f"{self.url}/api/token/refresh",
+            headers={"Content-Type": "application/json"},
+            json={"refresh": pat}
+        )
+        response.raise_for_status()
+        return response.json()['access']
+
+    def _request(self, method: str, endpoint: str, **kwargs) -> requests.Response:
+        """Make an authenticated request to the Label Studio API."""
+        url = f"{self.url}{endpoint}"
+        response = self.session.request(method, url, **kwargs)
+        response.raise_for_status()
+        return response
 
     def create_project(
         self,
@@ -55,13 +83,17 @@ class HITLClient:
         with open(labeling_config_path, 'r') as f:
             labeling_config = f.read()
 
-        project = self.client.start_project(
-            title=name,
-            label_config=labeling_config,
-            description=description
+        response = self._request(
+            "POST",
+            "/api/projects",
+            json={
+                "title": name,
+                "label_config": labeling_config,
+                "description": description
+            }
         )
 
-        return project.id
+        return response.json()['id']
 
     def configure_ml_backend(
         self,
@@ -70,7 +102,7 @@ class HITLClient:
         title: str = "Tesseract OCR"
     ) -> int:
         """
-        Connect an ML backend to a project.
+        Connect an ML backend to a project with interactive predictions enabled.
 
         Args:
             project_id: Project ID
@@ -80,14 +112,18 @@ class HITLClient:
         Returns:
             ML backend ID
         """
-        project = self.client.get_project(project_id)
-
-        ml_backend = project.connect_ml_backend(
-            url=ml_backend_url,
-            title=title
+        response = self._request(
+            "POST",
+            "/api/ml",
+            json={
+                "project": project_id,
+                "url": ml_backend_url,
+                "title": title,
+                "is_interactive": True  # Enable auto-predictions when opening tasks
+            }
         )
 
-        return ml_backend.id
+        return response.json()['id']
 
     def configure_webhook(
         self,
@@ -109,13 +145,9 @@ class HITLClient:
         if actions is None:
             actions = ['ANNOTATION_CREATED', 'ANNOTATION_UPDATED']
 
-        project = self.client.get_project(project_id)
-
-        # Use the webhooks API directly
-        import requests
-        response = requests.post(
-            f"{self.url}/api/webhooks",
-            headers={"Authorization": f"Token {self.api_key}"},
+        response = self._request(
+            "POST",
+            "/api/webhooks",
             json={
                 "url": webhook_url,
                 "project": project_id,
@@ -124,7 +156,6 @@ class HITLClient:
                 "actions": actions
             }
         )
-        response.raise_for_status()
 
         return response.json()['id']
 
@@ -143,13 +174,13 @@ class HITLClient:
         Returns:
             Task ID
         """
-        project = self.client.get_project(project_id)
+        response = self._request(
+            "POST",
+            f"/api/projects/{project_id}/import",
+            json=[{"image": image_path}]
+        )
 
-        task = project.import_tasks([
-            {"image": image_path}
-        ])
-
-        return task[0]['id']
+        return response.json()[0]['id']
 
     def create_tasks_from_directory(
         self,
@@ -171,23 +202,46 @@ class HITLClient:
         if extensions is None:
             extensions = ['.jpg', '.jpeg', '.png']
 
-        project = self.client.get_project(project_id)
-
         # Find all image files
         tasks_data = []
-        for filename in os.listdir(directory):
+        filenames = []
+        for filename in sorted(os.listdir(directory)):
             ext = os.path.splitext(filename)[1].lower()
             if ext in extensions:
                 # Use local file serving path
                 tasks_data.append({
                     "image": f"/data/local-files/?d=images/{filename}"
                 })
+                filenames.append(filename)
 
         if not tasks_data:
             return []
 
-        tasks = project.import_tasks(tasks_data)
-        return [t['id'] for t in tasks]
+        # Get existing task count
+        existing_tasks = self._request("GET", f"/api/projects/{project_id}/tasks").json()
+        existing_count = len(existing_tasks)
+
+        # Import new tasks
+        response = self._request(
+            "POST",
+            f"/api/projects/{project_id}/import",
+            json=tasks_data
+        )
+        import_result = response.json()
+        new_count = import_result.get('task_count', 0)
+
+        # Get the newly created task IDs
+        all_tasks = self._request("GET", f"/api/projects/{project_id}/tasks").json()
+        # Sort by ID descending to get newest first, then take the new ones
+        all_tasks_sorted = sorted(all_tasks, key=lambda t: t['id'], reverse=True)
+        new_task_ids = [t['id'] for t in all_tasks_sorted[:new_count]]
+
+        return new_task_ids
+
+    def get_projects(self) -> List[dict]:
+        """Get all projects."""
+        response = self._request("GET", "/api/projects")
+        return response.json().get('results', [])
 
     def get_annotations(
         self,
@@ -204,12 +258,13 @@ class HITLClient:
         Returns:
             List of annotations
         """
-        project = self.client.get_project(project_id)
-
-        tasks = project.get_labeled_tasks() if only_completed else project.get_tasks()
+        response = self._request("GET", f"/api/projects/{project_id}/tasks")
+        tasks = response.json()
 
         annotations = []
         for task in tasks:
+            if only_completed and not task.get('annotations'):
+                continue
             for annotation in task.get('annotations', []):
                 annotations.append({
                     'task_id': task['id'],
@@ -228,9 +283,39 @@ class HITLClient:
             project_id: Project ID
             ml_backend_id: ML backend ID
         """
-        import requests
-        response = requests.post(
-            f"{self.url}/api/ml/{ml_backend_id}/predict",
-            headers={"Authorization": f"Token {self.api_key}"}
+        self._request("POST", f"/api/ml/{ml_backend_id}/predict")
+
+    def configure_local_storage(
+        self,
+        project_id: int,
+        path: str,
+        title: str = "Local Images"
+    ) -> int:
+        """
+        Configure local file storage for a project.
+
+        Args:
+            project_id: Project ID
+            path: Path to local files inside the container
+            title: Display name for the storage
+
+        Returns:
+            Storage ID
+        """
+        response = self._request(
+            "POST",
+            "/api/storages/localfiles",
+            json={
+                "project": project_id,
+                "title": title,
+                "path": path,
+                "use_blob_urls": True
+            }
         )
-        response.raise_for_status()
+
+        storage_id = response.json()['id']
+
+        # Sync the storage to make files available
+        self._request("POST", f"/api/storages/localfiles/{storage_id}/sync")
+
+        return storage_id

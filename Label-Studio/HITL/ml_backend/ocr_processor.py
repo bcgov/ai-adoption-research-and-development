@@ -26,6 +26,9 @@ def process_image(image_path: str) -> Dict[str, Any]:
     regions = []
     confidences = []
 
+    # Minimum confidence threshold to filter noise
+    MIN_WORD_CONFIDENCE = 20
+
     # Group by block_num to get text blocks
     current_block = None
     block_text = []
@@ -37,20 +40,21 @@ def process_image(image_path: str) -> Dict[str, Any]:
         conf = data['conf'][i]
         block_num = data['block_num'][i]
 
-        # Skip empty entries or low confidence (-1 means no confidence)
-        if not text or conf == -1:
+        # Skip empty entries, invalid confidence, or very low confidence (noise)
+        if not text or conf == -1 or conf < MIN_WORD_CONFIDENCE:
             continue
 
         # New block detected
         if block_num != current_block:
             # Save previous block if exists
             if current_block is not None and block_text:
+                avg_conf = sum(block_conf) / len(block_conf) / 100  # Normalize to 0-1
                 regions.append({
                     'text': ' '.join(block_text),
                     'bbox': block_bbox,
-                    'confidence': sum(block_conf) / len(block_conf) / 100  # Normalize to 0-1
+                    'confidence': avg_conf
                 })
-                confidences.append(sum(block_conf) / len(block_conf) / 100)
+                confidences.append(avg_conf)
 
             # Start new block
             current_block = block_num
@@ -76,14 +80,16 @@ def process_image(image_path: str) -> Dict[str, Any]:
 
     # Don't forget the last block
     if block_text:
+        avg_conf = sum(block_conf) / len(block_conf) / 100
         regions.append({
             'text': ' '.join(block_text),
             'bbox': block_bbox,
-            'confidence': sum(block_conf) / len(block_conf) / 100
+            'confidence': avg_conf
         })
-        confidences.append(sum(block_conf) / len(block_conf) / 100)
+        confidences.append(avg_conf)
 
-    overall_score = min(confidences) if confidences else 0.0
+    # Use average confidence instead of min (more representative)
+    overall_score = sum(confidences) / len(confidences) if confidences else 0.0
 
     return {
         'regions': regions,
@@ -93,12 +99,13 @@ def process_image(image_path: str) -> Dict[str, Any]:
     }
 
 
-def format_for_label_studio(ocr_result: Dict[str, Any]) -> Dict[str, Any]:
+def format_for_label_studio(ocr_result: Dict[str, Any], auto_accept_threshold: float = 0.90) -> Dict[str, Any]:
     """
     Convert OCR result to Label Studio prediction format.
 
     Args:
         ocr_result: Output from process_image()
+        auto_accept_threshold: Confidence threshold for auto-accepting regions (default 0.90)
 
     Returns:
         Label Studio prediction dict
@@ -107,6 +114,15 @@ def format_for_label_studio(ocr_result: Dict[str, Any]) -> Dict[str, Any]:
 
     for region in ocr_result['regions']:
         region_id = str(uuid.uuid4())[:8]
+        confidence = region['confidence']
+
+        # Determine status based on confidence
+        if confidence >= auto_accept_threshold:
+            status = 'Accepted'
+        elif confidence >= 0.75:
+            status = 'Needs Review'
+        else:
+            status = 'Needs Review'
 
         # Rectangle label for bounding box
         result.append({
@@ -135,6 +151,17 @@ def format_for_label_studio(ocr_result: Dict[str, Any]) -> Dict[str, Any]:
             'to_name': 'image',
             'value': {
                 'text': [region['text']]
+            }
+        })
+
+        # Choices for status (auto-set based on confidence)
+        result.append({
+            'id': region_id,
+            'type': 'choices',
+            'from_name': 'status',
+            'to_name': 'image',
+            'value': {
+                'choices': [status]
             }
         })
 

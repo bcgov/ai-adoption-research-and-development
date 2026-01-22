@@ -34,12 +34,12 @@ def main():
 
     # Find project if not specified
     if project_id is None:
-        projects = client.client.get_projects()
+        projects = client.get_projects()
         if not projects:
             print("ERROR: No projects found. Run setup_project.py first.")
             sys.exit(1)
-        project_id = projects[0].id
-        print(f"Using project: {projects[0].title} (ID: {project_id})")
+        project_id = projects[0]['id']
+        print(f"Using project: {projects[0]['title']} (ID: {project_id})")
 
     # Check for images
     if not os.path.exists(images_dir):
@@ -65,8 +65,8 @@ def main():
     )
 
     print(f"\nCreated {len(task_ids)} tasks:")
-    for i, (filename, task_id) in enumerate(zip(image_files, task_ids)):
-        print(f"  {i+1}. {filename} -> Task ID: {task_id}")
+    for i, task_id in enumerate(task_ids):
+        print(f"  {i+1}. Task ID: {task_id}")
 
     print(f"\nOpen Label Studio to start annotating:")
     print(f"  {label_studio_url}/projects/{project_id}/data")

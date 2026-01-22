@@ -74,6 +74,18 @@ def main():
     )
     print(f"  Project ID: {project_id}")
 
+    print("\nConfiguring local file storage...")
+    try:
+        storage_id = client.configure_local_storage(
+            project_id=project_id,
+            path="/label-studio/data/images",
+            title="Local Images"
+        )
+        print(f"  Storage ID: {storage_id}")
+    except Exception as e:
+        print(f"  WARNING: Could not configure local storage: {e}")
+        print("  You may need to configure it manually in Label Studio settings")
+
     print(f"\nConnecting ML backend: {ml_backend_url}")
     try:
         ml_backend_id = client.configure_ml_backend(

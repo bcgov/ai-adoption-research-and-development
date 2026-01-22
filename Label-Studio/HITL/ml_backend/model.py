@@ -64,9 +64,28 @@ class TesseractOCRModel(LabelStudioMLBase):
         Handles:
         - Local file paths
         - HTTP/HTTPS URLs (downloads to temp)
-        - Label Studio local file serving URLs
+        - Label Studio local file serving URLs (/data/local-files/?d=...)
         """
+        from urllib.parse import parse_qs
+
         parsed = urlparse(image_url)
+
+        # Label Studio local file serving URL: /data/local-files/?d=images/form1.jpg
+        if parsed.path == '/data/local-files/' or parsed.path.startswith('/data/local-files'):
+            query_params = parse_qs(parsed.query)
+            if 'd' in query_params:
+                # d parameter contains the relative path like "images/form1.jpg"
+                relative_path = query_params['d'][0]
+                # Images are mounted at /app/images, so strip the "images/" prefix if present
+                if relative_path.startswith('images/'):
+                    filename = relative_path[7:]  # Remove "images/" prefix
+                else:
+                    filename = relative_path
+                local_path = f"/app/images/{filename}"
+                if os.path.exists(local_path):
+                    return local_path
+                print(f"Local file not found: {local_path}")
+            return None
 
         # Local file path
         if not parsed.scheme or parsed.scheme == 'file':
