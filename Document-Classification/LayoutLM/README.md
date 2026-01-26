@@ -80,3 +80,11 @@ python use_model.py <model_path> <image_path>
 Finally, you can check the predicted label for a specific document with `use_model.py`. Provide the model path and image path as arguments.
 
 The output will contain the predicted label for that document. As per the `labels_enum.py` file, the label is actually an integer value, with 0 representing a monthly report and 1 representing any other document.
+
+## 7. Demo with Streamlit
+
+There's a simple UI to demo your checkpoints.
+
+Run `streamlit run streamlit_app.py`, and it should start in your browser.
+
+In the UI, select your checkpoint and upload an image for the classification output.
