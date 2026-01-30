@@ -24,15 +24,13 @@ export async function pollOperation<T = any>(
   let result: T;
 
   // Fetch initial result before entering the loop
-  {
-    const pollResp = await fetch(operationLocation, {
-      headers: { "api-key": apiKey },
-    });
-    result = await pollResp.json();
-    status = getStatus(result);
-    logger(`Operation status: ${status}`);
-  }
-
+  const pollResp = await fetch(operationLocation, {
+    headers: { "api-key": apiKey },
+  });
+  result = await pollResp.json();
+  status = getStatus(result);
+  logger(`Operation status: ${status}`);
+  
   while (status !== "succeeded" && status !== "failed") {
     await new Promise((res) => setTimeout(res, interval));
     const pollResp = await fetch(operationLocation, {

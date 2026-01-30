@@ -55,7 +55,7 @@ export const trainClassifier = async (classifierName: string, description: strin
     // Must replace with our actual Doc Intelligence endpoint (not training one)
     const docIntelligenceEndpoint = Deno.env.get("AZURE_DOCUMENT_INTELLIGENCE_TRAIN_ENDPOINT")!;
     operationLocation = operationLocation.replace(
-      /https:\/\/[^/]+/,
+      /https:\/\/[^/]+\/documentintelligence/,
       docIntelligenceEndpoint
     );
     await pollOperation(operationLocation, async () => {

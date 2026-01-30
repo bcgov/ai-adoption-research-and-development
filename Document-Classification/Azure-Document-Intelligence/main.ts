@@ -20,22 +20,24 @@ const trainingClient = DocumentIntelligence(trainEndpoint, { key: apiKey }, {
 });
 
 // This config informs upload, layout generation, and training instructions.
-const uploadConfigs: UploadConfig[] = [
-  { label: 'monthly-report', fromFolder: './report_documents', blobFolder: 'monthly-reports' },
-  { label: 'other', fromFolder: './other_documents', blobFolder: 'other' }
-]
+const uploadConfigs: UploadConfig[] = JSON.parse(
+  await Deno.readTextFile('./uploadConfigs.json')
+);
 
 // Upload documents
+console.log('Starting file upload');
 for (const uc of uploadConfigs) {
   await uploadDocuments(blob, containerName, uc.fromFolder, uc.blobFolder);
 }
 
 // Produce layout files for these folders (from blob storage, use urlSource, save JSON to blob storage)
+console.log('Starting layout generation');
 await createLayoutJson(blob, containerName, uploadConfigs, trainingClient);
 
 const classifierName = 'monthly-report-classifier';
 
 // Train classifier.
+console.log('Starting classifier training');
 await trainClassifier(
   classifierName,
   'montly report classifier',
@@ -57,8 +59,8 @@ const testDocuments = [
   './other_documents/0001463282.png'
 ]
 
-
 // Has to be done in two parts: one to request, another to retrieve.
+console.log('Starting sample classification')
 for (const d of testDocuments) {
   const { status, content } = await requestClassification(trainingClient, classifierName, d);
   console.log(status, content)
