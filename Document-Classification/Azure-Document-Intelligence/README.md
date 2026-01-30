@@ -32,3 +32,9 @@ This project was built using Deno.
 To run the main file, use `deno task launch`.
 
 There's a hardcoded couple of file paths that I used for testing in the `main.ts` file. You may want to change those depending on your training data.
+
+## 4. Use the Demo
+
+Run `deno task demo` to start the demo server. By default, it's available at `http://localhost:8081/demo/`.
+
+In the demo, you can upload an image for classification, and it will show both the image and results in the browser.
