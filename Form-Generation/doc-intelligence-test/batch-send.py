@@ -30,24 +30,28 @@ from dotenv import load_dotenv
 def analyze_document_async(file_path, output_txt_path="result_id.txt"):
     """
     Loads a file, sends it to Azure Document Intelligence async API, returns the result id, and saves it to a text file.
-    API key and endpoint are loaded from .env file (DOCUMENT_INTELLIGENCE_ENDPOINT, DOCUMENT_INTELLIGENCE_KEY).
+    API key and endpoint are loaded from .env file (AZURE_DOCUMENT_INTELLIGENCE_TRAIN_ENDPOINT, AZURE_DOCUMENT_INTELLIGENCE_API_KEY).
     """
     load_dotenv()
-    endpoint = os.getenv("DOCUMENT_INTELLIGENCE_ENDPOINT")
-    api_key = os.getenv("DOCUMENT_INTELLIGENCE_KEY")
+    endpoint = os.getenv("AZURE_DOCUMENT_INTELLIGENCE_TRAIN_ENDPOINT")
+    api_key = os.getenv("AZURE_DOCUMENT_INTELLIGENCE_API_KEY")
     if not endpoint or not api_key:
         raise ValueError(
-            "Missing DOCUMENT_INTELLIGENCE_ENDPOINT or DOCUMENT_INTELLIGENCE_KEY in .env"
+            "Missing AZURE_DOCUMENT_INTELLIGENCE_TRAIN_ENDPOINT or AZURE_DOCUMENT_INTELLIGENCE_API_KEY in .env"
         )
 
-    url = f"{endpoint}/formrecognizer/documentModels/prebuilt-document:analyze?api-version=2023-07-31"
+    url = f"{endpoint}/documentintelligence/documentModels/prebuilt-layout:analyze?api-version=2024-11-30"
     headers = {
-        "Ocp-Apim-Subscription-Key": api_key,
-        "Content-Type": "image/jpeg",
+        "api-key": api_key,
+        "Content-Type": "application/json",
     }
     with open(file_path, "rb") as f:
         data = f.read()
-    response = requests.post(url, headers=headers, data=data)
+    import base64
+
+    base64_str = base64.b64encode(data).decode("utf-8")
+    payload = {"base64Source": base64_str}
+    response = requests.post(url, headers=headers, json=payload)
     if response.status_code != 202:
         raise Exception(f"Request failed: {response.status_code} {response.text}")
     operation_location = response.headers.get("operation-location")
@@ -58,3 +62,8 @@ def analyze_document_async(file_path, output_txt_path="result_id.txt"):
     with open(output_txt_path, "a") as out:
         out.write(result_id + "\n")
     return result_id
+
+
+# Run analyze_all_jpgs_in_output_folder if this script is executed directly
+if __name__ == "__main__":
+    analyze_all_jpgs_in_output_folder()
