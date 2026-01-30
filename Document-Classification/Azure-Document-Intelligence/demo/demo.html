@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Classifier Demo</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; }
+    .result { margin-top: 2em; padding: 1em; border: 1px solid #ccc; background: #f9f9f9; }
+    .loading { color: #888; }
+  </style>
+</head>
+<body>
+  <h1>Document Classifier Demo</h1>
+  <form id="uploadForm">
+    <label for="fileInput">Select a file to classify:</label>
+    <input type="file" id="fileInput" name="file" accept="image/*,.pdf" required />
+    <button type="submit">Classify</button>
+  </form>
+  <div id="result" class="result" style="display:none;"></div>
+  <script src="demo.js"></script>
+</body>
+</html>
