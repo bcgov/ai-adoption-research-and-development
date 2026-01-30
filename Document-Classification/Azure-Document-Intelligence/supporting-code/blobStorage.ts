@@ -37,17 +37,17 @@ export class BlobStorage {
   private readonly deleteRetryDelayMs = 5000;
   private readonly deleteRetryAttempts = 24;
 
-    constructor() {
-      const connectionString = Deno.env.get("AZURE_STORAGE_CONNECTION_STRING");
-      this.accountName = Deno.env.get("AZURE_STORAGE_ACCOUNT_NAME") || '';
-      this.accountKey = Deno.env.get("AZURE_STORAGE_ACCOUNT_KEY") || '';
+  constructor() {
+    const connectionString = Deno.env.get("AZURE_STORAGE_CONNECTION_STRING");
+    this.accountName = Deno.env.get("AZURE_STORAGE_ACCOUNT_NAME") || '';
+    this.accountKey = Deno.env.get("AZURE_STORAGE_ACCOUNT_KEY") || '';
 
-      if (!connectionString) {
-        console.warn(
-          'AZURE_STORAGE_CONNECTION_STRING not configured. Blob storage features will not work.',
-        );
-        return;
-      }
+    if (!connectionString) {
+      console.warn(
+        'AZURE_STORAGE_CONNECTION_STRING not configured. Blob storage features will not work.',
+      );
+      return;
+    }
 
     this.blobServiceClient =
       BlobServiceClient.fromConnectionString(connectionString);
@@ -193,7 +193,7 @@ export class BlobStorage {
       const containerClient =
         this.blobServiceClient.getContainerClient(containerName);
 
-        const sharedKeyCredential = new StorageSharedKeyCredential(
+      const sharedKeyCredential = new StorageSharedKeyCredential(
         this.accountName,
         this.accountKey,
       );
@@ -232,7 +232,7 @@ export class BlobStorage {
     }
   }
 
-  
+
 
   /**
    * Validate a container SAS URL by attempting to list blobs.
@@ -385,12 +385,12 @@ export class BlobStorage {
     return this.blobServiceClient.getContainerClient(containerName);
   }
 
-    /**
-   * Generate a SAS URL for a specific blob
-   * @param containerName The name of the container
-   * @param blobName The path/name of the blob
-   * @param expiresInMinutes How long the SAS should be valid (default: 60)
-   */
+  /**
+ * Generate a SAS URL for a specific blob
+ * @param containerName The name of the container
+ * @param blobName The path/name of the blob
+ * @param expiresInMinutes How long the SAS should be valid (default: 60)
+ */
   getBlobSasUrl(containerName: string, blobName: string, expiresInMinutes = 60): string {
     if (!this.accountName || !this.accountKey) {
       throw new Error('Storage account name/key not configured.');
@@ -409,36 +409,5 @@ export class BlobStorage {
       protocol: SASProtocol.Https,
     }, sharedKeyCredential).toString();
     return `${blobClient.url}?${sas}`;
-  }
-
-    /**
-   * Generate a SAS URL for a specific folder (prefix) in a container
-   * @param containerName The name of the container
-   * @param folderPrefix The folder/prefix within the container (should end with /)
-   * @param expiryDays How long the SAS should be valid (default: 7)
-   * @returns SAS URL string for the folder
-   */
-  getFolderSasUrl(containerName: string, folderPrefix: string, expiryDays = 7): string {
-    if (!this.accountName || !this.accountKey) {
-      throw new Error('Storage account name/key not configured.');
-    }
-    // Remove leading slash if present
-    const prefix = folderPrefix.replace(/^\//, '');
-    const sharedKeyCredential = new StorageSharedKeyCredential(this.accountName, this.accountKey);
-    const containerClient = this.blobServiceClient.getContainerClient(containerName);
-    const now = new Date();
-    now.setMinutes(now.getMinutes() - 5);
-    const expires = new Date(now.getTime() + expiryDays * 24 * 60 * 60 * 1000);
-    const permissions = ContainerSASPermissions.parse('rl');
-    const sas = generateBlobSASQueryParameters({
-      containerName,
-      permissions,
-      startsOn: now,
-      expiresOn: expires,
-      protocol: SASProtocol.Https,
-      // Directory-level SAS is not natively supported, but you can append the prefix to the URL for client-side filtering
-    }, sharedKeyCredential).toString();
-    // Return the container SAS URL with the prefix as a pseudo-path (for client use)
-    return `${containerClient.url}/${encodeURIComponent(prefix)}?${sas}`;
   }
 }
