@@ -38,6 +38,5 @@ debug_data/
 debug_slices/
 document_intelligence/.env
 .claude/
-
-# Environment variables
-.env
+node_modules/
+**/.env
