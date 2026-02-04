@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kreuzberg Explorer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Kreuzberg Explorer</h1>
+  <p class="subtitle">Test document extraction, OCR, embeddings, and more</p>
+
+  <div class="main-grid">
+    <div class="left-col">
+      <div class="drop-zone" id="dropZone">
+        <div class="icon">📄</div>
+        <p>Drag & drop files here or click to select</p>
+        <p class="hint">Supports images, PDFs, Office docs, and 50+ formats</p>
+        <input type="file" id="fileInput" multiple accept="image/*,.pdf,.docx,.doc,.xlsx,.xls,.pptx,.txt,.html,.csv,.json,.epub">
+        <div class="file-list" id="fileList"></div>
+      </div>
+    </div>
+
+    <div class="config-panel">
+      <h2>Extraction Settings</h2>
+
+      <div class="config-section">
+        <h3>OCR Options</h3>
+        <div class="config-row checkbox-row">
+          <label><input type="checkbox" id="forceOcr" checked> Force OCR</label>
+        </div>
+        <div class="config-row">
+          <label>Backend</label>
+          <select id="ocrBackend">
+            <option value="tesseract" selected>Tesseract (Fast)</option>
+            <option value="easyocr">EasyOCR (Better handwriting)</option>
+            <option value="paddleocr">PaddleOCR (Asian languages)</option>
+          </select>
+        </div>
+        <div class="config-row">
+          <label>Language(s)</label>
+          <input type="text" id="ocrLanguage" value="eng" placeholder="eng, deu, fra, etc.">
+          <span class="hint">Use + for multiple: eng+deu+fra</span>
+        </div>
+        <div class="config-row checkbox-row">
+          <label><input type="checkbox" id="enableTableDetection" checked> Enable table detection</label>
+        </div>
+      </div>
+
+      <div class="config-section">
+        <h3>Chunking (for RAG)</h3>
+        <div class="config-row checkbox-row">
+          <label><input type="checkbox" id="enableChunking"> Enable chunking</label>
+        </div>
+        <div class="config-row">
+          <label>Max chars per chunk</label>
+          <input type="number" id="chunkMaxChars" value="1000" min="100" max="10000">
+        </div>
+        <div class="config-row">
+          <label>Overlap chars</label>
+          <input type="number" id="chunkOverlap" value="200" min="0" max="500">
+        </div>
+      </div>
+
+      <button class="btn" id="extractBtn" disabled>Extract</button>
+    </div>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p id="loadingText">Processing...</p>
+    </div>
+
+    <div class="error" id="error"></div>
+
+    <div class="results" id="results"></div>
+
+    <div class="embeddings-section" id="embeddingsSection">
+      <h2>Embeddings Generator</h2>
+      <p class="hint">Generate vector embeddings for semantic search / RAG pipelines</p>
+
+      <div class="embed-input-row">
+        <textarea id="embedText1" placeholder="Enter first text to embed..."></textarea>
+        <textarea id="embedText2" placeholder="Enter second text to compare (optional)..."></textarea>
+      </div>
+
+      <div class="embed-config">
+        <div class="config-row">
+          <label>Model</label>
+          <select id="embedModel">
+            <option value="fast">Fast (smaller vectors)</option>
+            <option value="balanced" selected>Balanced (recommended)</option>
+            <option value="accurate">Accurate (best quality)</option>
+          </select>
+        </div>
+        <button class="btn" id="embedBtn" style="width: auto; margin: 0;">Generate Embeddings</button>
+      </div>
+
+      <div id="embedResults" style="margin-top: 15px;"></div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:9473';
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+    const extractBtn = document.getElementById('extractBtn');
+    const loading = document.getElementById('loading');
+    const loadingText = document.getElementById('loadingText');
+    const error = document.getElementById('error');
+    const results = document.getElementById('results');
+    const embeddingsSection = document.getElementById('embeddingsSection');
+
+    let selectedFiles = [];
+    let lastExtractedTexts = [];
+
+    // Drop zone events
+    dropZone.addEventListener('click', (e) => {
+      if (e.target.closest('.file-item')) return;
+      fileInput.click();
+    });
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      addFiles(e.dataTransfer.files);
+    });
+    fileInput.addEventListener('change', () => {
+      addFiles(fileInput.files);
+      fileInput.value = '';
+    });
+
+    function addFiles(files) {
+      for (const file of files) {
+        if (!selectedFiles.some(f => f.name === file.name)) {
+          selectedFiles.push(file);
+        }
+      }
+      renderFileList();
+    }
+
+    function removeFile(index) {
+      selectedFiles.splice(index, 1);
+      renderFileList();
+    }
+
+    function renderFileList() {
+      fileList.innerHTML = selectedFiles.map((file, i) => `
+        <div class="file-item">
+          <span class="name">${file.name} (${formatSize(file.size)})</span>
+          <button class="remove" onclick="removeFile(${i})">&times;</button>
+        </div>
+      `).join('');
+      extractBtn.disabled = selectedFiles.length === 0;
+    }
+
+    function formatSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    extractBtn.addEventListener('click', async () => {
+      if (selectedFiles.length === 0) return;
+
+      loading.classList.add('show');
+      loadingText.textContent = 'Processing with OCR...';
+      error.classList.remove('show');
+      results.classList.remove('show');
+      extractBtn.disabled = true;
+
+      try {
+        const config = buildConfig();
+        const formData = new FormData();
+        selectedFiles.forEach(file => formData.append('files', file));
+        formData.append('config', JSON.stringify(config));
+
+        const response = await fetch(`${API_BASE}/extract`, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData.message || `HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        lastExtractedTexts = data.map(r => r.content);
+        renderResults(data);
+        embeddingsSection.classList.add('show');
+
+        // Pre-fill embeddings with first extracted text
+        if (lastExtractedTexts[0]) {
+          document.getElementById('embedText1').value = lastExtractedTexts[0].substring(0, 500);
+        }
+      } catch (err) {
+        error.textContent = `Error: ${err.message}. Make sure Kreuzberg is running on port 9473.`;
+        error.classList.add('show');
+      } finally {
+        loading.classList.remove('show');
+        extractBtn.disabled = false;
+      }
+    });
+
+    function buildConfig() {
+      const config = {
+        force_ocr: document.getElementById('forceOcr').checked,
+        ocr: {
+          backend: document.getElementById('ocrBackend').value,
+          language: document.getElementById('ocrLanguage').value,
+          tesseract_config: {
+            enable_table_detection: document.getElementById('enableTableDetection').checked
+          }
+        }
+      };
+
+      if (document.getElementById('enableChunking').checked) {
+        config.chunking = {
+          max_chars: parseInt(document.getElementById('chunkMaxChars').value),
+          max_overlap: parseInt(document.getElementById('chunkOverlap').value)
+        };
+      }
+
+      return config;
+    }
+
+    function renderResults(data) {
+      results.innerHTML = data.map((result, i) => {
+        const file = selectedFiles[i];
+        const hasTable = result.tables && result.tables.length > 0;
+        const hasChunks = result.chunks && result.chunks.length > 0;
+        const tabId = `tabs-${i}`;
+        const isImage = file?.type?.startsWith('image/');
+
+        return `
+          <div class="result-card">
+            <div class="result-header">
+              ${isImage ? `<img src="${URL.createObjectURL(file)}" class="preview-img">` : ''}
+              <div>
+                <h3>${file?.name || `Result ${i + 1}`}</h3>
+                <div class="meta">
+                  <div class="meta-item"><strong>Type:</strong> ${result.mime_type}</div>
+                  ${result.metadata?.width ? `<div class="meta-item"><strong>Size:</strong> ${result.metadata.width}x${result.metadata.height}</div>` : ''}
+                  <div class="meta-item"><strong>Tables:</strong> ${result.tables?.length || 0}</div>
+                  ${hasChunks ? `<div class="meta-item"><strong>Chunks:</strong> ${result.chunks.length}</div>` : ''}
+                  ${result.metadata?.language ? `<div class="meta-item"><strong>Lang:</strong> ${result.metadata.language}</div>` : ''}
+                </div>
+              </div>
+            </div>
+
+            <div class="tabs">
+              <button class="tab active" onclick="switchTab('${tabId}', 'text', this)">Extracted Text</button>
+              ${hasTable ? `<button class="tab" onclick="switchTab('${tabId}', 'table', this)">Tables (${result.tables.length})</button>` : ''}
+              ${hasChunks ? `<button class="tab" onclick="switchTab('${tabId}', 'chunks', this)">Chunks (${result.chunks.length})</button>` : ''}
+              <button class="tab" onclick="switchTab('${tabId}', 'metadata', this)">Metadata</button>
+              <button class="tab" onclick="switchTab('${tabId}', 'json', this)">Raw JSON</button>
+            </div>
+
+            <div id="${tabId}-text" class="tab-content active">
+              <div class="content-box">${escapeHtml(result.content || 'No text extracted')}</div>
+            </div>
+            ${hasTable ? `
+              <div id="${tabId}-table" class="tab-content">
+                ${result.tables.map((table, ti) => `
+                  <p><strong>Table ${ti + 1}</strong> (Page ${table.page_number ?? 'N/A'})</p>
+                  <div class="content-box">${escapeHtml(table.markdown)}</div>
+                `).join('')}
+              </div>
+            ` : ''}
+            ${hasChunks ? `
+              <div id="${tabId}-chunks" class="tab-content">
+                ${result.chunks.map((chunk, ci) => `
+                  <p><strong>Chunk ${ci + 1}</strong> (${chunk.length} chars)</p>
+                  <div class="content-box" style="max-height: 150px; margin-bottom: 10px;">${escapeHtml(chunk)}</div>
+                `).join('')}
+              </div>
+            ` : ''}
+            <div id="${tabId}-metadata" class="tab-content">
+              <div class="content-box">${escapeHtml(JSON.stringify(result.metadata, null, 2))}</div>
+            </div>
+            <div id="${tabId}-json" class="tab-content">
+              <div class="content-box">${escapeHtml(JSON.stringify(result, null, 2))}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      results.classList.add('show');
+    }
+
+    function switchTab(tabId, tab, btn) {
+      document.querySelectorAll(`[id^="${tabId}-"]`).forEach(el => el.classList.remove('active'));
+      document.getElementById(`${tabId}-${tab}`).classList.add('active');
+      btn.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Embeddings
+    document.getElementById('embedBtn').addEventListener('click', async () => {
+      const text1 = document.getElementById('embedText1').value.trim();
+      const text2 = document.getElementById('embedText2').value.trim();
+
+      if (!text1) {
+        alert('Please enter at least one text to embed');
+        return;
+      }
+
+      const texts = [text1];
+      if (text2) texts.push(text2);
+
+      const embedResults = document.getElementById('embedResults');
+      embedResults.innerHTML = '<div class="spinner"></div>';
+
+      try {
+        const model = document.getElementById('embedModel').value;
+        const response = await fetch(`${API_BASE}/embed`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            texts,
+            config: {
+              model: { type: 'preset', name: model },
+              normalize: true
+            }
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        let html = `
+          <p><strong>Model:</strong> ${data.model} | <strong>Dimensions:</strong> ${data.dimensions}</p>
+        `;
+
+        data.embeddings.forEach((emb, i) => {
+          const preview = emb.slice(0, 10).map(n => n.toFixed(4)).join(', ');
+          html += `
+            <p><strong>Text ${i + 1} embedding</strong> (${emb.length} dimensions)</p>
+            <div class="vector-display">[${preview}, ... ]</div>
+          `;
+        });
+
+        // Calculate cosine similarity if two texts
+        if (data.embeddings.length === 2) {
+          const similarity = cosineSimilarity(data.embeddings[0], data.embeddings[1]);
+          html += `
+            <div class="similarity-result">
+              <strong>Cosine Similarity:</strong> ${(similarity * 100).toFixed(2)}%
+              <br><small>${getSimilarityLabel(similarity)}</small>
+            </div>
+          `;
+        }
+
+        embedResults.innerHTML = html;
+      } catch (err) {
+        embedResults.innerHTML = `<div class="error show">Error generating embeddings: ${err.message}</div>`;
+      }
+    });
+
+    function cosineSimilarity(a, b) {
+      let dot = 0, normA = 0, normB = 0;
+      for (let i = 0; i < a.length; i++) {
+        dot += a[i] * b[i];
+        normA += a[i] * a[i];
+        normB += b[i] * b[i];
+      }
+      return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+    }
+
+    function getSimilarityLabel(sim) {
+      if (sim > 0.9) return 'Very similar / Nearly identical meaning';
+      if (sim > 0.7) return 'Similar meaning';
+      if (sim > 0.5) return 'Somewhat related';
+      if (sim > 0.3) return 'Loosely related';
+      return 'Different / Unrelated';
+    }
+
+    // Show embeddings section on load
+    embeddingsSection.classList.add('show');
+  </script>
+</body>
+</html>

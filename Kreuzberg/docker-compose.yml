@@ -1,0 +1,8 @@
+services:
+  kreuzberg:
+    image: ghcr.io/kreuzberg-dev/kreuzberg:latest
+    ports:
+      - "9473:8000"
+    volumes:
+      - ./images:/data/images:ro
+    restart: unless-stopped
