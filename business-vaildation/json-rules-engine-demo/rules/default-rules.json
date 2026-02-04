@@ -1,0 +1,269 @@
+{
+  "name": "Default Invoice Processing Rules",
+  "description": "Complete rule set for invoice OCR post-processing",
+  "version": "1.0.0",
+  "rules": [
+    {
+      "name": "fix-vendor-name-ocr-errors",
+      "description": "Fix common OCR errors in vendor names (0->O, 1->I, etc.)",
+      "priority": 90,
+      "enabled": true,
+      "type": "correction",
+      "condition": {
+        "operator": "exists",
+        "field": "vendorName"
+      },
+      "action": {
+        "type": "correct",
+        "field": "vendorName",
+        "operation": "regex_replace",
+        "params": {
+          "pattern": "([A-Z])0([A-Z])",
+          "replacement": "$1O$2",
+          "flags": "g"
+        }
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "normalize-tax-id",
+      "description": "Remove non-alphanumeric characters from tax ID and convert to uppercase",
+      "priority": 80,
+      "enabled": true,
+      "type": "transformation",
+      "condition": {
+        "operator": "exists",
+        "field": "taxId"
+      },
+      "action": {
+        "type": "transform",
+        "field": "taxId",
+        "operation": "regex_replace",
+        "params": {
+          "pattern": "[^A-Z0-9]",
+          "replacement": "",
+          "flags": "g"
+        }
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "uppercase-tax-id",
+      "description": "Convert tax ID to uppercase",
+      "priority": 75,
+      "enabled": true,
+      "type": "transformation",
+      "condition": {
+        "operator": "exists",
+        "field": "taxId"
+      },
+      "action": {
+        "type": "transform",
+        "field": "taxId",
+        "operation": "uppercase"
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "trim-vendor-name",
+      "description": "Remove leading and trailing whitespace from vendor name",
+      "priority": 70,
+      "enabled": true,
+      "type": "transformation",
+      "condition": {
+        "operator": "exists",
+        "field": "vendorName"
+      },
+      "action": {
+        "type": "transform",
+        "field": "vendorName",
+        "operation": "trim"
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "format-currency-default",
+      "description": "Set default currency to USD if not specified",
+      "priority": 60,
+      "enabled": true,
+      "type": "transformation",
+      "condition": {
+        "operator": "not_exists",
+        "field": "currency"
+      },
+      "action": {
+        "type": "transform",
+        "field": "currency",
+        "operation": "set",
+        "value": "USD"
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "calculate-line-item-totals",
+      "description": "Calculate total for each line item (quantity * unitPrice)",
+      "priority": 50,
+      "enabled": true,
+      "type": "enrichment",
+      "condition": {
+        "operator": "exists",
+        "field": "lineItems"
+      },
+      "action": {
+        "type": "enrich",
+        "field": "lineItems[*].total",
+        "operation": "calculate",
+        "expression": "quantity * unitPrice"
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "add-processing-timestamp",
+      "description": "Add timestamp when the invoice was processed",
+      "priority": 40,
+      "enabled": true,
+      "type": "enrichment",
+      "condition": {
+        "operator": "exists",
+        "field": "invoiceNumber"
+      },
+      "action": {
+        "type": "enrich",
+        "field": "processedAt",
+        "operation": "set",
+        "value": "$NOW"
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "validate-invoice-amount-required",
+      "description": "Ensure invoice amount is present and positive",
+      "priority": 100,
+      "enabled": true,
+      "type": "validation",
+      "condition": {
+        "operator": "or",
+        "conditions": [
+          {
+            "operator": "not_exists",
+            "field": "amount"
+          },
+          {
+            "operator": "lt",
+            "field": "amount",
+            "value": 0
+          }
+        ]
+      },
+      "action": {
+        "type": "validate",
+        "field": "amount",
+        "message": "Invoice amount must be present and positive"
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "validate-invoice-number-format",
+      "description": "Validate invoice number format",
+      "priority": 90,
+      "enabled": true,
+      "type": "validation",
+      "condition": {
+        "operator": "and",
+        "conditions": [
+          {
+            "operator": "exists",
+            "field": "invoiceNumber"
+          },
+          {
+            "operator": "not",
+            "conditions": [
+              {
+                "operator": "regex",
+                "field": "invoiceNumber",
+                "value": "^INV-[0-9]{4}-[0-9]{3}$"
+              }
+            ]
+          }
+        ]
+      },
+      "action": {
+        "type": "validate",
+        "field": "invoiceNumber",
+        "message": "Invoice number should match format INV-YYYY-NNN (warning only)"
+      },
+      "onSuccess": "continue",
+      "onFailure": "warn"
+    },
+    {
+      "name": "validate-tax-id-format",
+      "description": "Validate tax ID format (9-15 alphanumeric uppercase)",
+      "priority": 85,
+      "enabled": true,
+      "type": "validation",
+      "condition": {
+        "operator": "and",
+        "conditions": [
+          {
+            "operator": "exists",
+            "field": "taxId"
+          },
+          {
+            "operator": "not",
+            "conditions": [
+              {
+                "operator": "regex",
+                "field": "taxId",
+                "value": "^[A-Z0-9]{9,15}$"
+              }
+            ]
+          }
+        ]
+      },
+      "action": {
+        "type": "validate",
+        "field": "taxId",
+        "message": "Tax ID should be 9-15 alphanumeric characters (uppercase) - warning only"
+      },
+      "onSuccess": "continue",
+      "onFailure": "warn"
+    },
+    {
+      "name": "validate-line-items-required",
+      "description": "Ensure at least one line item exists",
+      "priority": 100,
+      "enabled": true,
+      "type": "validation",
+      "condition": {
+        "operator": "or",
+        "conditions": [
+          {
+            "operator": "not_exists",
+            "field": "lineItems"
+          },
+          {
+            "operator": "lt",
+            "field": "lineItems.length",
+            "value": 1
+          }
+        ]
+      },
+      "action": {
+        "type": "validate",
+        "field": "lineItems",
+        "message": "At least one line item is required"
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    }
+  ]
+}
+

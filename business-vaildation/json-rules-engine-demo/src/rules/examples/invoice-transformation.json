@@ -1,0 +1,101 @@
+{
+  "rules": [
+    {
+      "name": "normalize-tax-id",
+      "description": "Remove non-alphanumeric characters from tax ID and convert to uppercase",
+      "priority": 80,
+      "enabled": true,
+      "type": "transformation",
+      "condition": {
+        "operator": "exists",
+        "field": "taxId"
+      },
+      "action": {
+        "type": "transform",
+        "field": "taxId",
+        "operation": "regex_replace",
+        "params": {
+          "pattern": "[^A-Z0-9]",
+          "replacement": "",
+          "flags": "g"
+        }
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "uppercase-tax-id",
+      "description": "Convert tax ID to uppercase",
+      "priority": 75,
+      "enabled": true,
+      "type": "transformation",
+      "condition": {
+        "operator": "exists",
+        "field": "taxId"
+      },
+      "action": {
+        "type": "transform",
+        "field": "taxId",
+        "operation": "uppercase"
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "trim-vendor-name",
+      "description": "Remove leading and trailing whitespace from vendor name",
+      "priority": 70,
+      "enabled": true,
+      "type": "transformation",
+      "condition": {
+        "operator": "exists",
+        "field": "vendorName"
+      },
+      "action": {
+        "type": "transform",
+        "field": "vendorName",
+        "operation": "trim"
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "normalize-invoice-number",
+      "description": "Normalize invoice number format",
+      "priority": 65,
+      "enabled": true,
+      "type": "transformation",
+      "condition": {
+        "operator": "exists",
+        "field": "invoiceNumber"
+      },
+      "action": {
+        "type": "transform",
+        "field": "invoiceNumber",
+        "operation": "uppercase"
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "format-currency-default",
+      "description": "Set default currency to USD if not specified",
+      "priority": 60,
+      "enabled": true,
+      "type": "transformation",
+      "condition": {
+        "operator": "not_exists",
+        "field": "currency"
+      },
+      "action": {
+        "type": "transform",
+        "field": "currency",
+        "operation": "set",
+        "value": "USD"
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    }
+  ]
+}
+

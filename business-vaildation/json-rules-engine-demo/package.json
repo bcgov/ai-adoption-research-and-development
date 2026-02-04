@@ -1,0 +1,30 @@
+{
+  "name": "json-rules-engine-demo",
+  "version": "1.0.0",
+  "description": "A flexible JSON-driven rules engine for OCR post-processing",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "demo": "ts-node src/examples/demo.ts",
+    "dev": "ts-node src/main.ts"
+  },
+  "keywords": [
+    "rules-engine",
+    "ocr",
+    "json",
+    "validation",
+    "transformation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "jsonpath-plus": "^7.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
+

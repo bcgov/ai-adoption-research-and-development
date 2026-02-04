@@ -1,0 +1,139 @@
+{
+  "rules": [
+    {
+      "name": "fix-vendor-name-ocr-errors",
+      "description": "Fix common OCR errors in vendor names (0->O, 1->I, etc.)",
+      "priority": 90,
+      "enabled": true,
+      "type": "correction",
+      "condition": {
+        "operator": "exists",
+        "field": "vendorName"
+      },
+      "action": {
+        "type": "correct",
+        "field": "vendorName",
+        "operation": "regex_replace",
+        "params": {
+          "pattern": "([A-Z])0([A-Z])",
+          "replacement": "$1O$2",
+          "flags": "g"
+        }
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "fix-invoice-number-ocr-errors",
+      "description": "Fix common OCR errors in invoice numbers",
+      "priority": 85,
+      "enabled": true,
+      "type": "correction",
+      "condition": {
+        "operator": "exists",
+        "field": "invoiceNumber"
+      },
+      "action": {
+        "type": "correct",
+        "field": "invoiceNumber",
+        "operation": "regex_replace",
+        "params": {
+          "pattern": "([A-Z])1([A-Z])",
+          "replacement": "$1I$2",
+          "flags": "g"
+        }
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "fix-tax-id-ocr-errors",
+      "description": "Fix common OCR errors in tax IDs (0->O in letter context)",
+      "priority": 80,
+      "enabled": true,
+      "type": "correction",
+      "condition": {
+        "operator": "and",
+        "conditions": [
+          {
+            "operator": "exists",
+            "field": "taxId"
+          },
+          {
+            "operator": "contains",
+            "field": "taxId",
+            "value": "0"
+          }
+        ]
+      },
+      "action": {
+        "type": "correct",
+        "field": "taxId",
+        "operation": "regex_replace",
+        "params": {
+          "pattern": "([A-Z])0([A-Z0-9])",
+          "replacement": "$1O$2",
+          "flags": "g"
+        }
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "fix-amount-spacing",
+      "description": "Fix spacing issues in amount fields",
+      "priority": 75,
+      "enabled": true,
+      "type": "correction",
+      "condition": {
+        "operator": "exists",
+        "field": "amount"
+      },
+      "action": {
+        "type": "correct",
+        "field": "amount",
+        "operation": "regex_replace",
+        "params": {
+          "pattern": "\\s+",
+          "replacement": "",
+          "flags": "g"
+        }
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "normalize-whitespace",
+      "description": "Normalize multiple spaces to single space in text fields",
+      "priority": 70,
+      "enabled": true,
+      "type": "correction",
+      "condition": {
+        "operator": "or",
+        "conditions": [
+          {
+            "operator": "exists",
+            "field": "vendorName"
+          },
+          {
+            "operator": "exists",
+            "field": "notes"
+          }
+        ]
+      },
+      "action": {
+        "type": "correct",
+        "field": "vendorName",
+        "operation": "regex_replace",
+        "params": {
+          "pattern": "\\s+",
+          "replacement": " ",
+          "flags": "g"
+        }
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    }
+  ]
+}
+

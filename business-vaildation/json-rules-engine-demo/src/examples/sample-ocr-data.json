@@ -1,0 +1,87 @@
+[
+  {
+    "name": "Perfect OCR Result",
+    "data": {
+      "invoiceNumber": "INV-2024-001",
+      "date": "2024-01-15T10:30:00Z",
+      "amount": 1250.50,
+      "taxId": "TAX123456789",
+      "vendorName": "Acme Corporation",
+      "lineItems": [
+        {
+          "description": "Software License",
+          "quantity": 1,
+          "unitPrice": 1000.00
+        },
+        {
+          "description": "Support Services",
+          "quantity": 2.5,
+          "unitPrice": 100.20
+        }
+      ],
+      "currency": "USD"
+    }
+  },
+  {
+    "name": "OCR with Format Errors",
+    "data": {
+      "invoiceNumber": "inv-2024-002",
+      "date": "2024-01-15",
+      "amount": 2500.75,
+      "taxId": "tax-123-456",
+      "vendorName": "Tech Solutions Inc",
+      "lineItems": [
+        {
+          "description": "Hardware",
+          "quantity": 5,
+          "unitPrice": 500.15
+        }
+      ]
+    }
+  },
+  {
+    "name": "OCR with Character Errors",
+    "data": {
+      "invoiceNumber": "INV-2024-003",
+      "date": "2024-01-15T10:30:00Z",
+      "amount": 1500.00,
+      "taxId": "TAX987654321",
+      "vendorName": "Acme C0rp",
+      "lineItems": [
+        {
+          "description": "Consulting Services",
+          "quantity": 10,
+          "unitPrice": 150.00
+        }
+      ],
+      "currency": "USD"
+    }
+  },
+  {
+    "name": "OCR with Missing Fields",
+    "data": {
+      "invoiceNumber": "INV-2024-004",
+      "amount": 750.25,
+      "vendorName": "Quick Services",
+      "lineItems": [
+        {
+          "description": "Maintenance",
+          "quantity": 3,
+          "unitPrice": 250.08
+        }
+      ]
+    }
+  },
+  {
+    "name": "OCR with Validation Issues",
+    "data": {
+      "invoiceNumber": "INV-2024-005",
+      "date": "2025-12-31T00:00:00Z",
+      "amount": -100.00,
+      "taxId": "TAX111222333",
+      "vendorName": "Global Services",
+      "lineItems": []
+    }
+  }
+]
+
