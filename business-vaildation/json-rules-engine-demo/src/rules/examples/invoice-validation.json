@@ -1,0 +1,155 @@
+{
+  "rules": [
+    {
+      "name": "validate-invoice-amount-required",
+      "description": "Ensure invoice amount is present and positive",
+      "priority": 100,
+      "enabled": true,
+      "type": "validation",
+      "condition": {
+        "operator": "or",
+        "conditions": [
+          {
+            "operator": "not_exists",
+            "field": "amount"
+          },
+          {
+            "operator": "lt",
+            "field": "amount",
+            "value": 0
+          }
+        ]
+      },
+      "action": {
+        "type": "validate",
+        "field": "amount",
+        "message": "Invoice amount must be present and positive"
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "validate-invoice-number-format",
+      "description": "Validate invoice number format",
+      "priority": 90,
+      "enabled": true,
+      "type": "validation",
+      "condition": {
+        "operator": "and",
+        "conditions": [
+          {
+            "operator": "exists",
+            "field": "invoiceNumber"
+          },
+          {
+            "operator": "not",
+            "conditions": [
+              {
+                "operator": "regex",
+                "field": "invoiceNumber",
+                "value": "^INV-[0-9]{4}-[0-9]{3}$"
+              }
+            ]
+          }
+        ]
+      },
+      "action": {
+        "type": "validate",
+        "field": "invoiceNumber",
+        "message": "Invoice number must match format INV-YYYY-NNN"
+      },
+      "onSuccess": "continue",
+      "onFailure": "warn"
+    },
+    {
+      "name": "validate-date-not-future",
+      "description": "Ensure invoice date is not in the future",
+      "priority": 95,
+      "enabled": true,
+      "type": "validation",
+      "condition": {
+        "operator": "and",
+        "conditions": [
+          {
+            "operator": "exists",
+            "field": "date"
+          },
+          {
+            "operator": "gt",
+            "field": "date",
+            "value": "$NOW"
+          }
+        ]
+      },
+      "action": {
+        "type": "validate",
+        "field": "date",
+        "message": "Invoice date cannot be in the future"
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "validate-tax-id-format",
+      "description": "Validate tax ID format (9-15 alphanumeric uppercase)",
+      "priority": 85,
+      "enabled": true,
+      "type": "validation",
+      "condition": {
+        "operator": "and",
+        "conditions": [
+          {
+            "operator": "exists",
+            "field": "taxId"
+          },
+          {
+            "operator": "not",
+            "conditions": [
+              {
+                "operator": "regex",
+                "field": "taxId",
+                "value": "^[A-Z0-9]{9,15}$"
+              }
+            ]
+          }
+        ]
+      },
+      "action": {
+        "type": "validate",
+        "field": "taxId",
+        "message": "Tax ID must be 9-15 alphanumeric characters (uppercase)"
+      },
+      "onSuccess": "continue",
+      "onFailure": "warn"
+    },
+    {
+      "name": "validate-line-items-required",
+      "description": "Ensure at least one line item exists",
+      "priority": 100,
+      "enabled": true,
+      "type": "validation",
+      "condition": {
+        "operator": "or",
+        "conditions": [
+          {
+            "operator": "not_exists",
+            "field": "lineItems"
+          },
+          {
+            "operator": "lt",
+            "field": "lineItems.length",
+            "value": 1
+          }
+        ]
+      },
+      "action": {
+        "type": "validate",
+        "field": "lineItems",
+        "message": "At least one line item is required"
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    }
+  ]
+}
+

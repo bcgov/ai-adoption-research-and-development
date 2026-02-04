@@ -1,0 +1,80 @@
+{
+  "rules": [
+    {
+      "name": "calculate-line-item-totals",
+      "description": "Calculate total for each line item (quantity * unitPrice)",
+      "priority": 50,
+      "enabled": true,
+      "type": "enrichment",
+      "condition": {
+        "operator": "exists",
+        "field": "lineItems"
+      },
+      "action": {
+        "type": "enrich",
+        "field": "lineItems[*].total",
+        "operation": "calculate",
+        "expression": "quantity * unitPrice"
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "calculate-subtotal",
+      "description": "Calculate subtotal from line items (sum of all line item totals)",
+      "priority": 45,
+      "enabled": false,
+      "type": "enrichment",
+      "condition": {
+        "operator": "exists",
+        "field": "lineItems"
+      },
+      "action": {
+        "type": "enrich",
+        "field": "subtotal",
+        "operation": "set",
+        "value": 0
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "add-processing-timestamp",
+      "description": "Add timestamp when the invoice was processed",
+      "priority": 40,
+      "enabled": true,
+      "type": "enrichment",
+      "condition": {
+        "operator": "always"
+      },
+      "action": {
+        "type": "enrich",
+        "field": "processedAt",
+        "operation": "set",
+        "value": "$NOW"
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    },
+    {
+      "name": "add-line-item-count",
+      "description": "Add count of line items",
+      "priority": 35,
+      "enabled": true,
+      "type": "enrichment",
+      "condition": {
+        "operator": "exists",
+        "field": "lineItems"
+      },
+      "action": {
+        "type": "enrich",
+        "field": "lineItemCount",
+        "operation": "calculate",
+        "expression": "lineItems.length"
+      },
+      "onSuccess": "continue",
+      "onFailure": "continue"
+    }
+  ]
+}
+

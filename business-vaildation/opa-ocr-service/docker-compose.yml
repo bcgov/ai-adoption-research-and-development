@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  opa:
+    image: openpolicyagent/opa:latest
+    container_name: opa-server
+    ports:
+      - "8181:8181"
+    command:
+      - "run"
+      - "--server"
+      - "--log-level=info"
+      - "/policies"
+    volumes:
+      - ./policies:/policies:ro
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8181/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  opa-ocr-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: opa-ocr-service
+    ports:
+      - "3001:3001"
+    environment:
+      - OPA_SERVER_URL=http://opa:8181
+      - POLICIES_DIR=/policies
+      - PORT=3001
+    depends_on:
+      - opa
+    volumes:
+      - ./policies:/policies:ro
+
