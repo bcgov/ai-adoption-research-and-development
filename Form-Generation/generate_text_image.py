@@ -75,12 +75,13 @@ def generate_handwriting_image(text, api_url="http://localhost:8000/generate", u
     else:
         return _generate_handwriting_image_impl(text, api_url)
 
-def generate_handwriting_images_batch(texts, api_url="http://localhost:8000/generate"):
+def generate_handwriting_images_batch(texts, api_url="http://localhost:8000/generate", options=None):
     """
     Batch API: Generate multiple handwriting images in a single request.
     Args:
         texts (list[str]): List of texts to render.
         api_url (str): The Deno service endpoint URL (should be /generate-batch).
+        options (dict, optional): Passed to handwritten.js (e.g. {"lineWidth": 95} if using a patched build).
     Returns:
         list[bytes]: List of PNG image bytes.
     """
@@ -89,6 +90,8 @@ def generate_handwriting_images_batch(texts, api_url="http://localhost:8000/gene
     
     start_time = time.time()
     payload = {"texts": texts}
+    if options is not None and isinstance(options, dict):
+        payload["options"] = options
     session = get_session()
     
     request_start = time.time()

@@ -116,13 +116,15 @@ def generate_signature_from_name(full_name):
     ]
     return random.choice(styles)
 
-def generate_data(complete_fill=False):
+def generate_data(complete_fill=False, explain_min_words=30, explain_max_words=60):
   """
   Generate form data with realistic values.
-  
+
   Args:
     complete_fill: If True, ensures all fields are filled with proper data.
                    If False, uses probabilistic rules (default behavior).
+    explain_min_words: When complete_fill, min word count for explain_changes paragraph.
+    explain_max_words: When complete_fill, max word count for explain_changes paragraph.
   """
   test_data = {}
   
@@ -187,7 +189,7 @@ def generate_data(complete_fill=False):
 
   # Explain changes
   if complete_fill:
-      test_data['explain_changes'] = generate_long_text()
+      test_data['explain_changes'] = generate_long_text(min_words=explain_min_words, max_words=explain_max_words)
   else:
       test_data['explain_changes'] = generate_short_text()
 

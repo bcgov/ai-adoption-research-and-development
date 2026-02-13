@@ -16,11 +16,11 @@ async function processQueue() {
   
   isProcessing = true;
   while (processingQueue.length > 0) {
-    const { id, text } = processingQueue.shift()!;
+    const { id, text, options } = processingQueue.shift()!;
     const preview = text.length > 25 ? text.slice(0, 22) + "..." : text;
     const start = Date.now();
     try {
-      const base64 = await handwritten(text, { outputType: 'png/b64' });
+      const base64 = await handwritten(text, { outputType: 'png/b64', ...options });
       const elapsed = Date.now() - start;
       log(`id=${id} done in ${elapsed} ms (${text.length} chars) "${preview}"`);
       self.postMessage({ id, success: true, image: base64 });
@@ -33,7 +33,7 @@ async function processQueue() {
 }
 
 self.onmessage = (e: MessageEvent) => {
-  const { id, text } = e.data;
-  processingQueue.push({ id, text });
+  const { id, text, options } = e.data;
+  processingQueue.push({ id, text, options: options ?? {} });
   processQueue();
 };

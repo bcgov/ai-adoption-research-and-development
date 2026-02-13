@@ -47,12 +47,13 @@ async function handler(req: Request): Promise<Response> {
   // Batch generation endpoint (new, optimized with parallel workers)
   if (req.method === "POST" && pathname === "/generate-batch") {
     try {
-      const { texts } = await req.json();
+      const { texts, options: batchOptions } = await req.json();
       if (!Array.isArray(texts) || texts.length === 0) {
         log("ERROR", "Batch: missing or invalid 'texts' (must be non-empty array)");
         return new Response(JSON.stringify({ error: "Missing or invalid 'texts' field (must be non-empty array)" }), { status: 400 });
       }
-      
+      const options = batchOptions && typeof batchOptions === "object" ? batchOptions : undefined;
+
       for (const text of texts) {
         if (typeof text !== "string") {
           log("ERROR", "Batch: non-string item in 'texts' array");
@@ -109,8 +110,8 @@ async function handler(req: Request): Promise<Response> {
         return new Promise<string>((resolve, reject) => {
           resolvers[index] = { resolve, reject };
           
-          // Check cache first - if cached, simulate worker response for consistency
-          if (cache.has(text)) {
+          // Check cache first (only when no options; options change output e.g. lineWidth)
+          if (!options && cache.has(text)) {
             cacheHits.push(index);
             // Simulate async worker response by using setTimeout with minimal delay
             // This ensures cache hits go through the same async path as worker responses
@@ -123,11 +124,11 @@ async function handler(req: Request): Promise<Response> {
             }, 0);
             return;
           }
-          
-          // Not cached - send to worker
+
+          // Not cached - send to worker (with optional options for e.g. lineWidth)
           cacheMisses.push(index);
           const workerIndex = index % maxWorkers;
-          workers[workerIndex].postMessage({ id: index, text });
+          workers[workerIndex].postMessage({ id: index, text, options });
         });
       });
       
@@ -155,19 +156,20 @@ async function handler(req: Request): Promise<Response> {
         }
       }
       
-      // Cache all generated images for future use (verify text matches)
-      images.forEach((image, index) => {
-        const text = texts[index];
-        if (!cache.has(text)) {
-          cache.set(text, image);
-        } else {
-          // Verify cached image matches (sanity check)
-          const cachedImage = cache.get(text);
-          if (cachedImage !== image) {
-            log("WARN", `Batch: cache mismatch index=${index} text="${text.slice(0, 30)}..."`);
+      // Cache all generated images for future use (skip when options were used, e.g. lineWidth)
+      if (!options) {
+        images.forEach((image, index) => {
+          const text = texts[index];
+          if (!cache.has(text)) {
+            cache.set(text, image);
+          } else {
+            const cachedImage = cache.get(text);
+            if (cachedImage !== image) {
+              log("WARN", `Batch: cache mismatch index=${index} text="${text.slice(0, 30)}..."`);
+            }
           }
-        }
-      });
+        });
+      }
       
       if (images.length !== texts.length) {
         log("ERROR", `Batch: image count mismatch expected=${texts.length} got=${images.length}`);

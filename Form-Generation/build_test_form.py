@@ -3,6 +3,44 @@ from generate_text_image import generate_handwriting_image, generate_handwriting
 from generate_form_data import generate_data
 import time
 
+# -----------------------------------------------------------------------------
+# Control knobs – change these to tune layout and handwriting (--complete-fill)
+#
+# Before running, start the handwriting server yourself (in another terminal):
+#   ./start_handwriting_server.sh
+# or:  cd handwriting-generator && node server-node.js
+# -----------------------------------------------------------------------------
+
+# Checkboxes: scale the "X" image to this fraction of the bbox size (0.7 = 70%).
+CHECKBOX_SCALE = 0.7
+
+# Explain-changes field (complete-fill only, single-pass):
+#   Fraction of bbox height reserved for the printed label (e.g. "Explain any changes").
+EXPLAIN_LABEL_RESERVE_FRAC = 0.20
+#   Extra padding (fraction of bbox height) below the label before handwriting starts.
+EXPLAIN_TOP_MARGIN_FRAC = 0.03
+#   Horizontal margin (fraction of bbox width) on left/right inside the box.
+EXPLAIN_H_MARGIN_FRAC = 0.02
+#   Characters per line for wrapping (used only with patched handwritten.js; see HANDWRITING_LINE_WIDTH.md).
+EXPLAIN_LINE_WIDTH = 70
+#   Length of the generated paragraph in complete-fill mode (word count range; Faker sentences).
+EXPLAIN_MIN_WORDS = 60
+EXPLAIN_MAX_WORDS = 60
+
+# Other text fields (name, date, phone, income, etc.):
+#   Target height in pixels for single-line text.
+TEXT_FIXED_HEIGHT = 32
+#   Income fields: horizontal padding as fraction of bbox width (each side).
+INCOME_H_PADDING_FRAC = 0.05
+#   Other fields: fraction of bbox height reserved for the label above the value.
+OTHER_FIELD_LABEL_OFFSET_FRAC = 0.30
+#   Other fields: horizontal padding as fraction of bbox width (each side).
+OTHER_FIELD_H_PADDING_FRAC = 0.02
+
+# Explain-changes in non–complete-fill mode: max size for the single-line image (px).
+EXPLAIN_SINGLE_LINE_MAX_WIDTH = 600
+EXPLAIN_SINGLE_LINE_MAX_HEIGHT = 200
+
 
 def build_test_form(data, number=0, use_batch=True, complete_fill=False):
   # Load template image
@@ -116,9 +154,8 @@ def build_test_form(data, number=0, use_batch=True, complete_fill=False):
           if img_time > 0.01:
             print(f"    [Image Processing] PIL open/convert: {img_time:.3f}s")
           # Shrink the checkbox image to % of the bbox size, centered
-          scale_factor = 0.7
-          new_height = int(bbox_height * scale_factor)
-          new_width = int(bbox_width * scale_factor)
+          new_height = int(bbox_height * CHECKBOX_SCALE)
+          new_width = int(bbox_width * CHECKBOX_SCALE)
           orig_width, orig_height = x_img.size
           # Maintain aspect ratio
           scale = min(new_width / orig_width, new_height / orig_height)
@@ -137,9 +174,9 @@ def build_test_form(data, number=0, use_batch=True, complete_fill=False):
           bbox_width = int(bbox[2])
           bbox_height = int(bbox[3])
 
-          label_reserve = int(0.20 * bbox_height)
-          top_margin = int(0.03 * bbox_height)
-          h_margin = int(0.02 * bbox_width)
+          label_reserve = int(EXPLAIN_LABEL_RESERVE_FRAC * bbox_height)
+          top_margin = int(EXPLAIN_TOP_MARGIN_FRAC * bbox_height)
+          h_margin = int(EXPLAIN_H_MARGIN_FRAC * bbox_width)
           available_width = bbox_width - 2 * h_margin
           available_height = bbox_height - label_reserve - top_margin
 
@@ -147,8 +184,11 @@ def build_test_form(data, number=0, use_batch=True, complete_fill=False):
           if not text:
             continue
 
-          # Single batch call with one item → one image
-          line_images_bytes = generate_handwriting_images_batch([text], "http://localhost:8000/generate-batch")
+          # Single batch call with one item → one image (lineWidth from EXPLAIN_LINE_WIDTH; needs patched handwritten.js)
+          explain_options = {"lineWidth": EXPLAIN_LINE_WIDTH}
+          line_images_bytes = generate_handwriting_images_batch(
+              [text], "http://localhost:8000/generate-batch", options=explain_options
+          )
           if not line_images_bytes:
             continue
 
@@ -207,10 +247,9 @@ def build_test_form(data, number=0, use_batch=True, complete_fill=False):
         bbox_height = int(bbox[3])
         orig_width, orig_height = text_img.size
         if name == 'explain_changes':
-            # Single-line rendering for normal mode
-            # Use a standard bounding box, but maintain aspect ratio
-            max_width = 600  # desired max width
-            max_height = 200  # desired max height
+            # Single-line rendering for normal mode (not complete-fill)
+            max_width = EXPLAIN_SINGLE_LINE_MAX_WIDTH
+            max_height = EXPLAIN_SINGLE_LINE_MAX_HEIGHT
             scale = min(max_width / orig_width, max_height / orig_height)
             new_width = max(1, int(orig_width * scale))
             new_height = max(1, int(orig_height * scale))
@@ -219,9 +258,8 @@ def build_test_form(data, number=0, use_batch=True, complete_fill=False):
             paste_y = int(bbox[1]) + max((bbox_height - new_height) // 2, 0)
             template_image.paste(text_img, (paste_x, paste_y), mask=text_img)
         elif 'income' in name.lower():
-            # Use a fixed target height for all income fields, with horizontal padding
-            fixed_height = 32  # Set your desired fixed height in pixels
-            horizontal_padding = int(bbox_width * 0.05)  # 5% padding on each side
+            fixed_height = TEXT_FIXED_HEIGHT
+            horizontal_padding = int(bbox_width * INCOME_H_PADDING_FRAC)
             available_width = bbox_width - 2 * horizontal_padding
             scale = fixed_height / orig_height
             new_height = fixed_height
@@ -236,11 +274,10 @@ def build_test_form(data, number=0, use_batch=True, complete_fill=False):
             paste_y = int(bbox[1]) + max((bbox_height - new_height) // 2, 0)
             template_image.paste(text_img, (paste_x, paste_y), mask=text_img)
         else:
-            # Use a fixed target height for all other fields, with horizontal padding
-            fixed_height = 32  # Set your desired fixed height in pixels
-            field_label_offset = int(0.3 * bbox_height)  # 30% of bbox height reserved for label
+            fixed_height = TEXT_FIXED_HEIGHT
+            field_label_offset = int(OTHER_FIELD_LABEL_OFFSET_FRAC * bbox_height)
             available_height = bbox_height - field_label_offset
-            horizontal_padding = int(bbox_width * 0.02)
+            horizontal_padding = int(bbox_width * OTHER_FIELD_H_PADDING_FRAC)
             available_width = bbox_width - 2 * horizontal_padding
             scale = fixed_height / orig_height
             new_height = fixed_height
@@ -288,7 +325,11 @@ def generate_single_form(i, use_batch=True, complete_fill=False):
     
     try:
         data_gen_start = time.time()
-        data = generate_data(complete_fill=complete_fill)
+        data = generate_data(
+            complete_fill=complete_fill,
+            explain_min_words=EXPLAIN_MIN_WORDS,
+            explain_max_words=EXPLAIN_MAX_WORDS,
+        )
         data_gen_time = time.time() - data_gen_start
         print(f"[Form {i}] Data generation: {data_gen_time:.3f}s")
         

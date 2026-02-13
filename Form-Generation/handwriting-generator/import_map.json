@@ -1,5 +1,1 @@
-{
-  "imports": {
-    "handwritten.js": "npm:handwritten.js"
-  }
-}
+{"imports":{"handwritten.js":"npm:handwritten.js"}}
