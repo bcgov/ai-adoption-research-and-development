@@ -1,8 +1,9 @@
 // Worker script for parallel handwriting generation
 import handwritten from "npm:handwritten.js";
 
-// Queue to process messages sequentially per worker to avoid race conditions
-let processingQueue: Array<{ id: number; text: string; resolve: () => void }> = [];
+// Process messages sequentially per worker to ensure correct order
+// This prevents race conditions while still allowing parallel processing across workers
+let processingQueue: Array<{ id: number; text: string }> = [];
 let isProcessing = false;
 
 async function processQueue() {
@@ -26,6 +27,6 @@ async function processQueue() {
 // Listen for messages from main thread
 self.onmessage = (e: MessageEvent) => {
   const { id, text } = e.data;
-  processingQueue.push({ id, text, resolve: () => {} });
+  processingQueue.push({ id, text });
   processQueue();
 };

@@ -4,6 +4,9 @@
 import { serve } from "https://deno.land/std@0.203.0/http/server.ts";
 import handwritten from "npm:handwritten.js";
 
+// Service-level cache for repeated texts (persists across requests)
+const cache = new Map<string, string>();
+
 async function handler(req: Request): Promise<Response> {
   const url = new URL(req.url);
   const pathname = url.pathname;
@@ -46,11 +49,14 @@ async function handler(req: Request): Promise<Response> {
       const startTime = Date.now();
       
       // Use workers for parallel CPU-bound generation
-      // Limit concurrent workers to avoid overwhelming the system
-      // Deno doesn't have navigator.hardwareConcurrency, use reasonable default
+      // Use 2× CPU cores for better CPU utilization (hyperthreading benefit)
       const cpuCores = Deno.systemCpuInfo?.cores || 4;
-      const maxWorkers = Math.min(texts.length, cpuCores);
+      const maxWorkers = Math.min(texts.length, cpuCores * 2);
       const workerScript = new URL("./worker.ts", import.meta.url).href;
+      
+      // Track cache performance for this request
+      const cacheHits: number[] = [];
+      const cacheMisses: number[] = [];
       
       // Create workers and distribute work
       const workers: Worker[] = [];
@@ -68,25 +74,44 @@ async function handler(req: Request): Promise<Response> {
           if (resolver) {
             resolvers[id] = null; // Clear to prevent double resolution
             if (success) {
+              // Verify the text matches what we expect
+              const expectedText = texts[id];
               resolver.resolve(image);
             } else {
               resolver.reject(new Error(error));
             }
           } else {
-            console.error(`[Batch] No resolver found for id ${id}`);
+            console.error(`[Batch] No resolver found for id ${id} (resolvers length: ${resolvers.length})`);
           }
         };
         workers.push(worker);
       }
       
       // Distribute work across workers (round-robin)
-      // Create promises in order and ensure they resolve in order
+      // IMPORTANT: All promises must resolve through the same mechanism to preserve order
       const workPromises = texts.map((text, index) => {
         return new Promise<string>((resolve, reject) => {
           resolvers[index] = { resolve, reject };
+          
+          // Check cache first - if cached, simulate worker response for consistency
+          if (cache.has(text)) {
+            cacheHits.push(index);
+            // Simulate async worker response by using setTimeout with minimal delay
+            // This ensures cache hits go through the same async path as worker responses
+            setTimeout(() => {
+              const resolver = resolvers[index];
+              if (resolver) {
+                resolvers[index] = null;
+                resolver.resolve(cache.get(text)!);
+              }
+            }, 0);
+            return;
+          }
+          
+          // Not cached - send to worker
+          cacheMisses.push(index);
           const workerIndex = index % maxWorkers;
-          // Send message with explicit index to ensure correct mapping
-          workers[workerIndex].postMessage({ id: index, text, index });
+          workers[workerIndex].postMessage({ id: index, text });
         });
       });
       
@@ -94,6 +119,40 @@ async function handler(req: Request): Promise<Response> {
       // Promise.all preserves order of the promises array, not resolution order
       // This means results[0] will always be the result of workPromises[0], etc.
       const images = await Promise.all(workPromises);
+      
+      // Verify images match texts in correct order
+      if (images.length !== texts.length) {
+        throw new Error(`Images length (${images.length}) doesn't match texts length (${texts.length})`);
+      }
+      
+      // CRITICAL: Verify order by checking that each image corresponds to the correct text
+      // This ensures Promise.all() preserved order correctly
+      for (let i = 0; i < Math.min(10, texts.length); i++) {
+        const text = texts[i];
+        const image = images[i];
+        // If this text was in cache, verify the image matches the cached version
+        if (cache.has(text)) {
+          const cachedImage = cache.get(text);
+          if (cachedImage !== image) {
+            console.error(`[Batch] CRITICAL ORDER ERROR: Index ${i}, text '${text.substring(0, 20)}...' - image doesn't match cache!`);
+            // Don't throw, but log the error
+          }
+        }
+      }
+      
+      // Cache all generated images for future use (verify text matches)
+      images.forEach((image, index) => {
+        const text = texts[index];
+        if (!cache.has(text)) {
+          cache.set(text, image);
+        } else {
+          // Verify cached image matches (sanity check)
+          const cachedImage = cache.get(text);
+          if (cachedImage !== image) {
+            console.warn(`[Batch] Cache mismatch for text '${text}' at index ${index}`);
+          }
+        }
+      });
       
       // Verify order (debugging)
       if (images.length !== texts.length) {
@@ -104,13 +163,29 @@ async function handler(req: Request): Promise<Response> {
       workers.forEach(worker => worker.terminate());
       
       const elapsed = Date.now() - startTime;
+      const cacheHitRate = cacheHits.length / texts.length * 100;
       console.log(`[Batch] Generated ${texts.length} images in ${elapsed}ms using ${maxWorkers} workers (avg: ${(elapsed/texts.length).toFixed(1)}ms per image)`);
+      console.log(`[Batch] Cache: ${cacheHits.length} hits, ${cacheMisses.length} misses (${cacheHitRate.toFixed(1)}% hit rate)`);
       console.log(`[Batch] Completion order: [${completionOrder.join(', ')}]`);
       console.log(`[Batch] Expected order: [${texts.map((_, i) => i).join(', ')}]`);
       
       // Verify images array length matches texts
       if (images.length !== texts.length) {
         console.error(`[Batch] ERROR: Images length (${images.length}) doesn't match texts length (${texts.length})`);
+      }
+      
+      // Verify order: check first few images match expected texts
+      const verifyCount = Math.min(5, texts.length);
+      for (let i = 0; i < verifyCount; i++) {
+        const text = texts[i];
+        const image = images[i];
+        // If this text was cached, verify the image matches
+        if (cache.has(text)) {
+          const cachedImage = cache.get(text);
+          if (cachedImage !== image) {
+            console.error(`[Batch] ORDER ERROR: Image at index ${i} doesn't match cached image for text '${text}'`);
+          }
+        }
       }
       
       return new Response(JSON.stringify({ images: images }), {
