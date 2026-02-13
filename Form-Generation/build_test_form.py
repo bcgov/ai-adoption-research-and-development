@@ -131,134 +131,47 @@ def build_test_form(data, number=0, use_batch=True, complete_fill=False):
       else:
         # Handle explain_changes separately in complete_fill mode (skip batch image)
         if name == 'explain_changes' and complete_fill:
-          # Multi-line rendering for complete fill mode
+          # Single-pass: one image for full text, fill full width of container (no per-line scaling)
           from io import BytesIO
-          import math
           bbox = annotation['bbox']
           bbox_width = int(bbox[2])
           bbox_height = int(bbox[3])
 
-          # Reserve space for printed label (inside top ~20% of bbox) + small padding below label
-          label_reserve = int(0.20 * bbox_height)   # ~45px for bbox_h ~226
-          top_margin = int(0.03 * bbox_height)      # ~6px extra padding below label
+          label_reserve = int(0.20 * bbox_height)
+          top_margin = int(0.03 * bbox_height)
           h_margin = int(0.02 * bbox_width)
           available_width = bbox_width - 2 * h_margin
           available_height = bbox_height - label_reserve - top_margin
 
-          text = str(value)
-          text_length = len(text)
-
-          # Calibrate handwriting metrics from worker output (avoids wrong wrap → height overflow)
-          def _calibrate_handwriting_metrics():
-            sample = "The quick brown fox jumps over the lazy dog 1234567890."
-            sample = sample[:60]
-            try:
-              img_bytes = generate_handwriting_image(
-                sample,
-                api_url="http://localhost:8000/generate",
-                use_cache=True,
-              )
-              img = Image.open(BytesIO(img_bytes)).convert("RGBA")
-              img.load()
-              img = crop_to_text(img)
-              w, h = img.size
-              if w <= 0 or h <= 0:
-                return None
-              px_per_char = w / max(1, len(sample))
-              line_height = float(h)
-              px_per_char = max(10.0, min(px_per_char, 120.0))
-              line_height = max(15.0, min(line_height, 250.0))
-              return px_per_char, line_height
-            except Exception as e:
-              print(f"    [Explain] Calibration failed, using defaults: {e}")
-              return None
-
-          metrics = _calibrate_handwriting_metrics()
-          if metrics:
-            PX_PER_CHAR, LINE_HEIGHT = metrics
-          else:
-            PX_PER_CHAR, LINE_HEIGHT = 33, 60
-
-          # Calculate optimal chars per line to fill the box well.
-          # handwritten.js renders ~PX_PER_CHAR pixels per character, ~LINE_HEIGHT pixels tall.
-          # After scaling to fit available_width, each line height becomes:
-          #   LINE_HEIGHT * available_width / (chars * PX_PER_CHAR)
-          # With N = text_length/chars lines, total height should ≈ available_height.
-          # Solving: chars ≈ sqrt(LINE_HEIGHT * available_width * text_length / (PX_PER_CHAR * available_height))
-          optimal_chars = int(math.sqrt(
-              LINE_HEIGHT * available_width * text_length /
-              (PX_PER_CHAR * available_height * 0.85)  # 0.85 accounts for line spacing
-          ))
-          chars_per_line = max(45, min(optimal_chars, 140))
-
-          # Word wrap
-          words = text.split()
-          lines = []
-          current_line = []
-          current_length = 0
-          for word in words:
-            addition = len(word) + (1 if current_line else 0)
-            if current_line and current_length + addition <= chars_per_line:
-              current_line.append(word)
-              current_length += addition
-            else:
-              if current_line:
-                lines.append(' '.join(current_line))
-              current_line = [word]
-              current_length = len(word)
-          if current_line:
-            lines.append(' '.join(current_line))
-
-          if not lines:
+          text = " ".join(str(value).split())
+          if not text:
             continue
 
-          print(f"    [Explain] chars_per_line={chars_per_line}, lines={len(lines)}, box={bbox_width}x{bbox_height}, avail={available_width}x{available_height}")
+          # Single batch call with one item → one image
+          line_images_bytes = generate_handwriting_images_batch([text], "http://localhost:8000/generate-batch")
+          if not line_images_bytes:
+            continue
 
-          line_images_bytes = generate_handwriting_images_batch(lines, "http://localhost:8000/generate-batch")
-          line_images = []
-          for line_img_bytes in line_images_bytes:
-            line_img = Image.open(BytesIO(line_img_bytes)).convert("RGBA")
-            line_img.load()
-            line_img = crop_to_text(line_img)
-            line_images.append(line_img)
+          img = Image.open(BytesIO(line_images_bytes[0])).convert("RGBA")
+          img.load()
+          img = crop_to_text(img)
+          w, h = img.size
 
-          if line_images:
-            paste_x = int(bbox[0]) + h_margin
-            paste_y = int(bbox[1]) + label_reserve + top_margin
+          # Scale to fill full width of container (one scale factor, no extra shrinking)
+          scale = available_width / max(1, w)
+          new_w = max(1, int(w * scale))
+          new_h = max(1, int(h * scale))
+          # If that would exceed height, scale down to fit (single fit-within-box)
+          if new_h > available_height:
+            scale = available_height / max(1, new_h)
+            new_w = max(1, int(new_w * scale))
+            new_h = max(1, int(new_h * scale))
+          img = img.resize((new_w, new_h))
 
-            # Step 1: Scale each line to fit available_width (maintaining aspect ratio)
-            scaled_images = []
-            for img in line_images:
-              w, h = img.size
-              if w > available_width:
-                scale = available_width / w
-                img = img.resize((int(w * scale), max(1, int(h * scale))))
-              scaled_images.append(img)
-
-            # Step 2: Calculate spacing and total height
-            avg_h = sum(img.size[1] for img in scaled_images) / len(scaled_images)
-            spacing = max(2, int(avg_h * 0.15))
-            total_h = sum(img.size[1] for img in scaled_images) + spacing * (len(scaled_images) - 1)
-
-            # Step 3: If total height exceeds available, scale everything down uniformly
-            if total_h > available_height:
-              s = available_height / total_h
-              final_images = []
-              for img in scaled_images:
-                w, h = img.size
-                final_images.append(img.resize((max(1, int(w * s)), max(1, int(h * s)))))
-              scaled_images = final_images
-              spacing = max(1, int(spacing * s))
-              print(f"    [Explain] Height overflow: {total_h}px > {available_height}px, extra scale={s:.2f}")
-
-            final_total = sum(img.size[1] for img in scaled_images) + spacing * (len(scaled_images) - 1)
-            print(f"    [Explain] Final: {len(scaled_images)} lines, avg_h={sum(img.size[1] for img in scaled_images)/len(scaled_images):.0f}px, total_h={final_total}px/{available_height}px, spacing={spacing}px")
-
-            # Step 4: Paste lines onto template
-            current_y = paste_y
-            for img in scaled_images:
-              template_image.paste(img, (paste_x, current_y), mask=img)
-              current_y += img.size[1] + spacing
+          paste_x = int(bbox[0]) + h_margin
+          paste_y = int(bbox[1]) + label_reserve + top_margin
+          template_image.paste(img, (paste_x, paste_y), mask=img)
+          print(f"    [Explain] single pass, {len(text)} chars, scaled to {new_w}x{new_h}, avail={available_width}x{available_height}")
           continue
         
         # Create an image for this text
