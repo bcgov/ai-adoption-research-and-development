@@ -49,6 +49,21 @@ The form generation pipeline relies on a Deno service to generate handwriting im
   - Generate random form data and save it as `output/form_data_{index}.json`
   - Generate a composed form image as `output/form_image_{index}.jpg`
 
+### Complete Fill Mode
+
+To generate forms where all fields are filled with proper data, use the `--complete-fill` (or `-c`) flag:
+
+ ```sh
+ python build_test_form.py <num> --complete-fill
+ ```
+
+When complete fill mode is enabled:
+- All income fields are populated with non-zero monetary values
+- Spouse information is always included (spouse fields are always filled)
+- All applicable fields contain realistic data
+
+This is useful for generating forms with comprehensive data for testing scenarios where you need fully populated forms.
+
 ### Parallel Generation
 
 When generating multiple forms, they are generated in parallel for faster performance:

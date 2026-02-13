@@ -217,12 +217,13 @@ def build_test_form(data, number=0, use_batch=True):
   print(f"[Form {number}] Total form processing time: {form_total_time:.3f}s (save: {save_time:.3f}s)")
 
 
-def generate_single_form(i, use_batch=True):
+def generate_single_form(i, use_batch=True, complete_fill=False):
     """
     Generate a single form - thread-safe wrapper for parallel execution.
     Args:
         i: Form number/index
         use_batch: Whether to use batch API
+        complete_fill: If True, ensures all fields are filled with proper data
     Returns:
         Form number (for tracking)
     """
@@ -231,10 +232,12 @@ def generate_single_form(i, use_batch=True):
     
     loop_start = time.time()
     print(f"\n[Form {i}] Starting form generation...")
+    if complete_fill:
+        print(f"[Form {i}] Using complete fill mode - all fields will be populated")
     
     try:
         data_gen_start = time.time()
-        data = generate_data()
+        data = generate_data(complete_fill=complete_fill)
         data_gen_time = time.time() - data_gen_start
         print(f"[Form {i}] Data generation: {data_gen_time:.3f}s")
         
@@ -267,6 +270,9 @@ if __name__ == "__main__":
     except (IndexError, ValueError):
         num_loops = 1
     
+    # Check for complete fill mode flag
+    complete_fill = '--complete-fill' in sys.argv or '-c' in sys.argv
+    
     # Get parallelism setting (environment variable or default)
     # MAX_PARALLEL_FORMS controls how many forms to generate concurrently
     # Default: 4 (optimal for Deno service)
@@ -278,17 +284,19 @@ if __name__ == "__main__":
     
     overall_start = time.time()
     print(f"[Overall] Starting generation of {num_loops} form(s)...")
+    if complete_fill:
+        print(f"[Overall] Complete fill mode enabled - all fields will be populated")
     print(f"[Overall] Parallelism: {max_workers} worker(s) (set MAX_PARALLEL_FORMS env var to change)")
     
     # Generate forms in parallel if more than 1 form
     if num_loops == 1 or max_workers == 1:
         # Sequential generation (single form or parallelism disabled)
-        generate_single_form(0, use_batch=True)
+        generate_single_form(0, use_batch=True, complete_fill=complete_fill)
     else:
         # Parallel generation
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             # Submit all form generation tasks
-            futures = {executor.submit(generate_single_form, i, use_batch=True): i 
+            futures = {executor.submit(generate_single_form, i, use_batch=True, complete_fill=complete_fill): i 
                       for i in range(num_loops)}
             
             # Wait for completion and handle results

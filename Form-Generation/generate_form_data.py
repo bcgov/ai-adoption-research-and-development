@@ -101,7 +101,14 @@ def generate_signature_from_name(full_name):
     ]
     return random.choice(styles)
 
-def generate_data():
+def generate_data(complete_fill=False):
+  """
+  Generate form data with realistic values.
+  
+  Args:
+    complete_fill: If True, ensures all fields are filled with proper data.
+                   If False, uses probabilistic rules (default behavior).
+  """
   test_data = {}
   
   # Checkboxes Section
@@ -168,7 +175,8 @@ def generate_data():
 
   # Spouse Check Boxes
   # Roll to see if they have a spouse
-  hasSpouse = roll100(50)
+  # In complete_fill mode, always include spouse
+  hasSpouse = True if complete_fill else roll100(50)
   if (hasSpouse):
     # Employment Changes
     if roll100(50):
@@ -205,12 +213,16 @@ def generate_data():
   # For each field, we'll roll to see if anything is filled here
   # If it is, we roll to see if it's just a 0.
   def valueOrZero():
-       # Is filled?
-       if roll100(30):
-            # Is that a non-zero amount?
-            return generate_money_value() if roll100(80) else 0
+       if complete_fill:
+            # In complete fill mode, always return a non-zero money value
+            return generate_money_value()
        else:
-            return None
+            # Is filled?
+            if roll100(30):
+                 # Is that a non-zero amount?
+                 return generate_money_value() if roll100(80) else 0
+            else:
+                 return None
        
   # Applicant Area
   for i in range(1, 19):
