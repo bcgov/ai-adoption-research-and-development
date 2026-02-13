@@ -42,6 +42,21 @@ def generate_short_text(max_length=20):
 	text = faker.sentence(nb_words=8)
 	return text if len(text) <= max_length else text[:max_length]
 
+def generate_long_text(min_words=30, max_words=60):
+	"""
+	Generate a longer text string suitable for multi-line fields.
+	"""
+	num_words = random.randint(min_words, max_words)
+	# Generate multiple sentences to create natural paragraph-like text
+	sentences = []
+	words_remaining = num_words
+	while words_remaining > 0:
+		sentence_words = min(random.randint(8, 15), words_remaining)
+		sentence = faker.sentence(nb_words=sentence_words)
+		sentences.append(sentence)
+		words_remaining -= sentence_words
+	return " ".join(sentences)
+
 def generate_date(format_str=None):
     """
     Generate a date string in a variable format.
@@ -171,7 +186,10 @@ def generate_data(complete_fill=False):
        test_data['checkbox_warrant_no'] = True
 
   # Explain changes
-  test_data['explain_changes'] = generate_short_text()
+  if complete_fill:
+      test_data['explain_changes'] = generate_long_text()
+  else:
+      test_data['explain_changes'] = generate_short_text()
 
   # Spouse Check Boxes
   # Roll to see if they have a spouse

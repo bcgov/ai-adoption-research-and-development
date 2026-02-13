@@ -4,7 +4,7 @@ from generate_form_data import generate_data
 import time
 
 
-def build_test_form(data, number=0, use_batch=True):
+def build_test_form(data, number=0, use_batch=True, complete_fill=False):
   # Load template image
   template_path = "template.jpg"
   template_image = Image.open(template_path)
@@ -158,7 +158,87 @@ def build_test_form(data, number=0, use_batch=True):
         bbox_width = int(bbox[2])
         bbox_height = int(bbox[3])
         orig_width, orig_height = text_img.size
-        if name == 'explain_changes':
+        if name == 'explain_changes' and complete_fill:
+            # Multi-line rendering for complete fill mode
+            # Split text into lines that fit within the bbox width
+            
+            # Estimate character width from the first generated image
+            # Use a conservative estimate: assume average character width is about 1/15th of image width
+            # This is approximate and will be adjusted based on actual line width
+            estimated_char_width = max(orig_width / max(len(str(value)), 1), 10)
+            chars_per_line = max(int(bbox_width * 0.9 / estimated_char_width), 20)  # 90% of width, min 20 chars
+            
+            # Split text into words and build lines
+            words = str(value).split()
+            lines = []
+            current_line = []
+            current_length = 0
+            
+            for word in words:
+                word_length = len(word) + 1  # +1 for space
+                if current_length + word_length <= chars_per_line and current_line:
+                    current_line.append(word)
+                    current_length += word_length
+                else:
+                    if current_line:
+                        lines.append(' '.join(current_line))
+                    current_line = [word]
+                    current_length = len(word)
+            
+            if current_line:
+                lines.append(' '.join(current_line))
+            
+            # Generate handwriting images for each line
+            line_images = []
+            for line_text in lines:
+                line_img_bytes = generate_handwriting_image(line_text, use_cache=False)
+                from io import BytesIO
+                line_img = Image.open(BytesIO(line_img_bytes)).convert("RGBA")
+                line_img.load()
+                line_img = crop_to_text(line_img)
+                line_images.append(line_img)
+            
+            # Calculate line height from first line (or use average)
+            if line_images:
+                avg_line_height = sum(img.size[1] for img in line_images) / len(line_images)
+                line_spacing = int(avg_line_height * 0.2)  # 20% spacing between lines
+                
+                # Scale lines to fit width if needed
+                available_width = int(bbox_width * 0.95)  # 95% of bbox width
+                available_height = int(bbox_height * 0.95)  # 95% of bbox height
+                
+                scaled_line_images = []
+                for line_img in line_images:
+                    line_w, line_h = line_img.size
+                    if line_w > available_width:
+                        # Scale down to fit width
+                        scale = available_width / line_w
+                        new_w = int(line_w * scale)
+                        new_h = int(line_h * scale)
+                        line_img = line_img.resize((new_w, new_h))
+                    scaled_line_images.append(line_img)
+                
+                # Paste lines starting from top-left
+                paste_x = int(bbox[0]) + int(bbox_width * 0.02)  # 2% padding from left
+                paste_y = int(bbox[1]) + int(bbox_height * 0.02)  # 2% padding from top
+                
+                current_y = paste_y
+                for line_img in scaled_line_images:
+                    if current_y + line_img.size[1] > int(bbox[1]) + available_height:
+                        break  # Stop if we exceed available height
+                    template_image.paste(line_img, (paste_x, current_y), mask=line_img)
+                    current_y += line_img.size[1] + line_spacing
+            else:
+                # Fallback to single line if no lines generated
+                scale = min(bbox_width * 0.9 / orig_width, bbox_height * 0.9 / orig_height)
+                new_width = max(1, int(orig_width * scale))
+                new_height = max(1, int(orig_height * scale))
+                text_img = text_img.resize((new_width, new_height))
+                paste_x = int(bbox[0]) + int(bbox_width * 0.02)
+                paste_y = int(bbox[1]) + int(bbox_height * 0.02)
+                template_image.paste(text_img, (paste_x, paste_y), mask=text_img)
+        elif name == 'explain_changes':
+            # Single-line rendering for normal mode
             # Use a standard bounding box, but maintain aspect ratio
             max_width = 600  # desired max width
             max_height = 200  # desired max height
@@ -168,6 +248,7 @@ def build_test_form(data, number=0, use_batch=True):
             text_img = text_img.resize((new_width, new_height))
             paste_x = int(bbox[0]) + max((bbox_width - new_width) // 2, 0)
             paste_y = int(bbox[1]) + max((bbox_height - new_height) // 2, 0)
+            template_image.paste(text_img, (paste_x, paste_y), mask=text_img)
         elif 'income' in name.lower():
             # Use a fixed target height for all income fields, with horizontal padding
             fixed_height = 32  # Set your desired fixed height in pixels
@@ -202,8 +283,8 @@ def build_test_form(data, number=0, use_batch=True):
             text_img = text_img.resize((new_width, new_height))
             paste_x = int(bbox[0]) + horizontal_padding + max((available_width - new_width) // 2, 0)
             paste_y = int(bbox[1]) + field_label_offset + max((available_height - new_height) // 2, 0)
-        # Paste text_img onto template_image at bbox (x, y), using mask to preserve transparency
-        template_image.paste(text_img, (paste_x, paste_y), mask=text_img)
+            # Paste text_img onto template_image at bbox (x, y), using mask to preserve transparency
+            template_image.paste(text_img, (paste_x, paste_y), mask=text_img)
 
   # Save the composed template image
   output_path = f"output/form_image_{number}.jpg"
@@ -249,7 +330,7 @@ def generate_single_form(i, use_batch=True, complete_fill=False):
         print(f"[Form {i}] Saved data to {json_path}")
         
         # Build and save form image
-        build_test_form(data, number=i, use_batch=use_batch)
+        build_test_form(data, number=i, use_batch=use_batch, complete_fill=complete_fill)
         
         loop_time = time.time() - loop_start
         print(f"[Form {i}] Complete loop time: {loop_time:.3f}s")

@@ -61,6 +61,7 @@ When complete fill mode is enabled:
 - All income fields are populated with non-zero monetary values
 - Spouse information is always included (spouse fields are always filled)
 - All applicable fields contain realistic data
+- The "explain changes" field contains longer, multi-line text that fills the text box starting from the top-left and wrapping across multiple lines
 
 This is useful for generating forms with comprehensive data for testing scenarios where you need fully populated forms.
 
