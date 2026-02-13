@@ -35,6 +35,7 @@ The form generation pipeline relies on a Node service to generate handwriting im
  ```
 
 - The service runs at <http://localhost:8000>
+- **Optional**: To tune how many images are generated in parallel per batch, set `HANDWRITING_WORKERS` when starting the server (default is 2× CPU cores). See `handwriting-generator/README.md` for details.
 
 ## 3. Generate Form Images
 
@@ -68,20 +69,25 @@ This is useful for generating forms with comprehensive data for testing scenario
 
 ### Parallel Generation
 
-When generating multiple forms, they are generated in parallel for faster performance:
+There are two levels of parallelism:
 
-- **Default**: Up to 4 forms generated concurrently
-- **Control**: Set `MAX_PARALLEL_FORMS` environment variable to change parallelism:
-  ```sh
-  MAX_PARALLEL_FORMS=3 python build_test_form.py 10  # Generate 10 forms, 3 at a time
-  MAX_PARALLEL_FORMS=1 python build_test_form.py 5  # Disable parallelism (sequential)
-  MAX_PARALLEL_FORMS=8 python build_test_form.py 20  # More aggressive parallelism
-  ```
+1. **Form-level (Python)** – How many forms are built at the same time.
+   - **Default**: Up to 4 forms generated concurrently.
+   - **Control**: Set `MAX_PARALLEL_FORMS`:
+     ```sh
+     MAX_PARALLEL_FORMS=3 python build_test_form.py 10  # 10 forms, 3 at a time
+     MAX_PARALLEL_FORMS=1 python build_test_form.py 5   # Sequential (no form parallelism)
+     MAX_PARALLEL_FORMS=8 python build_test_form.py 20  # 8 forms at a time
+     ```
 
-**Performance**:
-- 3 forms: ~28s → ~10s (2.8× faster)
-- 5 forms: ~48s → ~15s (3.2× faster)
-- 10 forms: ~95s → ~30s (3.2× faster)
+2. **Batch-level (Node server)** – How many handwriting images are generated in parallel inside each batch request.
+   - **Default**: 2× CPU cores (reported in server startup logs).
+   - **Control**: Start the server with `HANDWRITING_WORKERS` (e.g. `HANDWRITING_WORKERS=8 node server-node.js`). See `handwriting-generator/README.md`.
+
+**Performance** (with default server and form parallelism):
+- Single form: ~8–9s (batch + compose)
+- 4 forms in parallel: ~13–14s total (~3–4s per form)
+- 10 forms: ~30s total with default parallelism
 
 ## Notes
 

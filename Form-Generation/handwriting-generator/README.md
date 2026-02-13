@@ -19,6 +19,18 @@ Node HTTP service for generating handwriting images from text using the local pa
 
    Listens on [http://localhost:8000](http://localhost:8000).
 
+## Performance and tuning
+
+The server uses a **worker thread pool** to generate multiple handwriting images in parallel within each batch request:
+
+- **Default**: Pool size = 2× CPU cores (minimum 1). The actual size used for a request is `min(batch size, pool size)`.
+- **Override**: Set the `HANDWRITING_WORKERS` environment variable to fix the pool size:
+  ```sh
+  HANDWRITING_WORKERS=8 node server-node.js
+  ```
+- At startup, the server logs the effective worker count (default or from `HANDWRITING_WORKERS`).
+- Repeated texts (with no `options`) are served from an in-memory cache, which speeds up multi-form runs that share content (e.g. many "X" checkmarks).
+
 ## Running form generation
 
 1. Start the server (see above), then from `Form-Generation`:
@@ -26,6 +38,13 @@ Node HTTP service for generating handwriting images from text using the local pa
    ```sh
    python build_test_form.py 1 --complete-fill
    ```
+
+   To generate multiple forms (multi-page) in parallel:
+   ```sh
+   python build_test_form.py 4              # 4 forms, default parallelism
+   MAX_PARALLEL_FORMS=8 python build_test_form.py 8 --complete-fill
+   ```
+   Form-level parallelism is controlled by `MAX_PARALLEL_FORMS` (see Form-Generation/README.md).
 
    Or use `./start_handwriting_server.sh` from `Form-Generation` to start the server in one terminal, then run the Python script in another.
 

@@ -12,26 +12,25 @@ const { Worker } = require("worker_threads");
 
 const HANDWRITTEN_PATH = process.env.HANDWRITTEN_PATH || path.join(__dirname, "..", "handwritten.js");
 const PORT = 8000;
+// Worker pool size: HANDWRITING_WORKERS (default: 2× CPU cores, min 1). Cap by batch size.
+const DEFAULT_WORKERS = Math.max(1, (os.cpus().length || 4) * 2);
 
 // In-memory cache: text -> base64 image (skip when request has options, e.g. lineWidth)
 const cache = new Map();
 
-// Worker pool (lazy-init on first batch)
-let workers = [];
-let workerIndex = 0;
-
-function getWorkers(count) {
-  if (workers.length >= count) return workers.slice(0, count);
-  workers.forEach((w) => w.terminate());
-  workers = [];
-  const numWorkers = Math.min(count, Math.max(1, (os.cpus().length || 4) * 2));
+// Create a fresh worker pool for one batch. Caller must terminate these workers when done.
+// Using per-request pools avoids concurrent batches killing each other's workers.
+function createWorkerPool(count) {
+  const wanted = process.env.HANDWRITING_WORKERS ? Math.max(1, parseInt(process.env.HANDWRITING_WORKERS, 10)) : DEFAULT_WORKERS;
+  const numWorkers = Math.min(count, wanted);
+  const pool = [];
   for (let i = 0; i < numWorkers; i++) {
     const w = new Worker(path.join(__dirname, "worker-node.js"), {
       workerData: { handwrittenPath: HANDWRITTEN_PATH },
     });
-    workers.push(w);
+    pool.push(w);
   }
-  return workers;
+  return pool;
 }
 
 function log(level, msg, ...args) {
@@ -77,7 +76,7 @@ async function handleBatch(body) {
   const hasOptions = options && Object.keys(options).length > 0;
 
   const startTime = Date.now();
-  const pool = getWorkers(texts.length);
+  const pool = createWorkerPool(texts.length);
   const numWorkers = pool.length;
   log("INFO", `Batch: start count=${texts.length} workers=${numWorkers}`);
 
@@ -120,11 +119,12 @@ async function handleBatch(body) {
     images = await Promise.all(promises);
   } catch (e) {
     log("ERROR", "Batch failed:", e.message);
-    pool.forEach((w) => w.off("message", handler));
     return { status: 500, body: { error: e.message } };
+  } finally {
+    pool.forEach((w) => w.off("message", handler));
+    pool.forEach((w) => w.terminate());
   }
 
-  pool.forEach((w) => w.off("message", handler));
   const elapsed = Date.now() - startTime;
   log("INFO", `Batch: done count=${texts.length} elapsed=${elapsed} ms avg=${(elapsed / texts.length).toFixed(0)} ms/image workers=${numWorkers}`);
   return { status: 200, body: { images } };
@@ -166,5 +166,6 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   log("INFO", `Handwriting service (Node, workers+cache) listening on http://localhost:${PORT}`);
+  log("INFO", `Worker pool: ${process.env.HANDWRITING_WORKERS ? process.env.HANDWRITING_WORKERS + " (from HANDWRITING_WORKERS)" : DEFAULT_WORKERS + " (default 2×CPU, set HANDWRITING_WORKERS to override)"}`);
   log("INFO", "Endpoints: POST /generate, POST /generate-batch");
 });
