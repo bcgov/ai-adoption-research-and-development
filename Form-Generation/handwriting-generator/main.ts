@@ -54,44 +54,64 @@ async function handler(req: Request): Promise<Response> {
       
       // Create workers and distribute work
       const workers: Worker[] = [];
-      const pending = new Map<number, { resolve: (value: string) => void; reject: (error: any) => void }>();
+      // Use array to store resolvers in correct order (indexed by id)
+      const resolvers: Array<{ resolve: (value: string) => void; reject: (error: any) => void } | null> = new Array(texts.length).fill(null);
       
       // Initialize workers
+      const completionOrder: number[] = []; // Track order of completion for debugging
       for (let i = 0; i < maxWorkers; i++) {
         const worker = new Worker(workerScript, { type: "module" });
         worker.onmessage = (e: MessageEvent) => {
           const { id, success, image, error } = e.data;
-          const resolver = pending.get(id);
+          completionOrder.push(id); // Track completion order
+          const resolver = resolvers[id];
           if (resolver) {
-            pending.delete(id);
+            resolvers[id] = null; // Clear to prevent double resolution
             if (success) {
               resolver.resolve(image);
             } else {
               resolver.reject(new Error(error));
             }
+          } else {
+            console.error(`[Batch] No resolver found for id ${id}`);
           }
         };
         workers.push(worker);
       }
       
       // Distribute work across workers (round-robin)
+      // Create promises in order and ensure they resolve in order
       const workPromises = texts.map((text, index) => {
         return new Promise<string>((resolve, reject) => {
-          pending.set(index, { resolve, reject });
+          resolvers[index] = { resolve, reject };
           const workerIndex = index % maxWorkers;
-          workers[workerIndex].postMessage({ id: index, text });
+          // Send message with explicit index to ensure correct mapping
+          workers[workerIndex].postMessage({ id: index, text, index });
         });
       });
       
       // Wait for all work to complete
-      // Promise.all preserves order even if workers complete out of order
+      // Promise.all preserves order of the promises array, not resolution order
+      // This means results[0] will always be the result of workPromises[0], etc.
       const images = await Promise.all(workPromises);
+      
+      // Verify order (debugging)
+      if (images.length !== texts.length) {
+        console.error(`[Batch] Mismatch: expected ${texts.length} images, got ${images.length}`);
+      }
       
       // Clean up workers
       workers.forEach(worker => worker.terminate());
       
       const elapsed = Date.now() - startTime;
       console.log(`[Batch] Generated ${texts.length} images in ${elapsed}ms using ${maxWorkers} workers (avg: ${(elapsed/texts.length).toFixed(1)}ms per image)`);
+      console.log(`[Batch] Completion order: [${completionOrder.join(', ')}]`);
+      console.log(`[Batch] Expected order: [${texts.map((_, i) => i).join(', ')}]`);
+      
+      // Verify images array length matches texts
+      if (images.length !== texts.length) {
+        console.error(`[Batch] ERROR: Images length (${images.length}) doesn't match texts length (${texts.length})`);
+      }
       
       return new Response(JSON.stringify({ images: images }), {
         status: 200,

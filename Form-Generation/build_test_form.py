@@ -59,6 +59,9 @@ def build_test_form(data, number=0, use_batch=True):
         text_value = str(value)
         texts_to_generate.append(text_value)
         field_info_map[(name, 'text')] = idx
+        # Debug: log text fields being collected
+        if len(texts_to_generate) <= 10:  # Only log first 10 to avoid spam
+          print(f"    [Debug] Collected text field '{name}': '{text_value}' at idx {idx}")
   
   # Batch generate all handwriting images
   handwriting_images = None
@@ -66,6 +69,8 @@ def build_test_form(data, number=0, use_batch=True):
     batch_start = time.time()
     print(f"[Form {number}] Generating {len(texts_to_generate)} handwriting images in batch...")
     print(f"[Form {number}] Sample texts: {texts_to_generate[:5]}...")  # Debug: show first 5 texts
+    print(f"[Form {number}] All texts: {texts_to_generate}")  # Debug: show ALL texts
+    print(f"[Form {number}] Field map sample: {list(field_info_map.items())[:10]}")  # Debug: show mapping
     try:
       handwriting_images = generate_handwriting_images_batch(texts_to_generate, "http://localhost:8000/generate-batch")
       batch_time = time.time() - batch_start
@@ -130,7 +135,11 @@ def build_test_form(data, number=0, use_batch=True):
             # Debug: verify we're using the right image
             expected_text = texts_to_generate[idx] if idx < len(texts_to_generate) else None
             if expected_text != str(value):
-              print(f"    [WARNING] Field '{name}': Expected text '{str(value)}' but got image for '{expected_text}' (idx={idx})")
+              print(f"    [ERROR] Field '{name}': Expected text '{str(value)}' but got image for '{expected_text}' (idx={idx})")
+            else:
+              # Only log first few to verify it's working
+              if name in ['name', 'signature', 'date', 'phone', 'sin', 'explain_changes']:
+                print(f"    [Debug] Field '{name}': Using idx {idx}, text='{str(value)}', matches expected='{expected_text}'")
           else:
             print(f"    [WARNING] Field '{name}': No batch image found (idx={idx}, len={len(handwriting_images)})")
             text_img_bytes = generate_handwriting_image(str(value))
