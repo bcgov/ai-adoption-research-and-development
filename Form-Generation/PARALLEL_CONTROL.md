@@ -30,7 +30,7 @@ Total: 10s (3× faster!)
 
 Control how many forms are generated concurrently using the `MAX_PARALLEL_FORMS` environment variable.
 
-**Default**: 4 workers (optimal for Deno service)
+**Default**: 4 workers
 
 **Examples**:
 
@@ -77,7 +77,7 @@ This means:
 
 ### Why Not More Workers?
 
-- **Deno Service Capacity**: Each batch request uses 8 workers internally
+- **Service capacity**: The Node server processes batch requests sequentially
 - **Resource Limits**: Too many concurrent requests can cause:
   - Memory pressure (each form uses ~110MB)
   - CPU saturation
@@ -133,14 +133,14 @@ Based on testing:
 **Symptom**: Parallel generation is slower than expected
 
 **Possible Causes**:
-1. **Too many workers**: Deno service is overloaded
+1. **Too many workers**: Handwriting service is overloaded
    - **Solution**: Reduce `MAX_PARALLEL_FORMS` to 3-4
 
 2. **System resource limits**: CPU or memory constrained
    - **Solution**: Reduce `MAX_PARALLEL_FORMS` to 2-3
 
 3. **Network issues**: HTTP requests timing out
-   - **Solution**: Check Deno service is running and responsive
+   - **Solution**: Check the handwriting service is running and responsive
 
 ### Memory Issues
 

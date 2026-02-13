@@ -8,7 +8,7 @@ The batch API (`/generate-batch`) is returning images in an incorrect order, cau
 
 ### The Issue
 
-The problem lies in the Deno worker implementation (`handwriting-generator/main.ts` and `worker.ts`). When multiple messages are sent to workers concurrently, there's a potential race condition in how responses are handled.
+(Historical note: the issue was in a previous worker-based implementation. The current Node server (`server-node.js`) processes batch items sequentially, so ordering is preserved.) When multiple messages are sent to workers concurrently, there's a potential race condition in how responses are handled.
 
 ### Current Implementation Flow
 
@@ -68,7 +68,7 @@ This should work! Promise.all() will return `[result0, result1, ..., result7]` i
 
 ### The Real Problem
 
-After careful analysis, I believe the issue is that **the Deno service is returning images wrapped in arrays** (`[base64]` instead of `base64`), and there might be an issue with how these are being processed. However, the Python code handles this correctly.
+After careful analysis, I believe the issue was that **the service was returning images wrapped in arrays** (`[base64]` instead of `base64`), and there might be an issue with how these are being processed. However, the Python code handles this correctly.
 
 **More likely**: The issue is that `handwritten.js` generates **randomized** handwriting each time, so even if the ordering is correct, the images look different. But the user reports "symbols and nonsense", which suggests wrong images, not just different-looking correct images.
 
@@ -80,8 +80,7 @@ After careful analysis, I believe the issue is that **the Deno service is return
 
 ## Code Locations
 
-- **Main service**: `handwriting-generator/main.ts` (lines 55-89)
-- **Worker script**: `handwriting-generator/worker.ts`
+- **Service**: `handwriting-generator/server-node.js` (processes batch sequentially)
 - **Python client**: `generate_text_image.py` (lines 78-123)
 - **Form builder**: `build_test_form.py` (lines 43-77, 126-145)
 
@@ -126,14 +125,14 @@ Added completion order tracking to verify that Promise.all() is preserving order
 
 ### Testing
 
-After restarting the Deno service, the batch API should return images in the correct order. The debug logs will show:
+With the Node server (sequential batch processing), the batch API returns images in the correct order. The debug logs will show:
 - Completion order (when each worker finished)
 - Expected order (the correct order)
 - Any mismatches
 
 ## Next Steps
 
-1. **Restart Deno service** to apply the worker queue fix
+1. **Restart the Node service** if you change the server code
 2. **Test form generation** and verify images match fields
 3. **Check debug logs** to confirm ordering is correct
 4. **If still failing**, the issue may be elsewhere (image decoding, field mapping, etc.)

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Node server that uses the local patched handwritten.js (with lineWidth support).
- * Same API as the Deno server: POST /generate, POST /generate-batch.
+ * API: POST /generate, POST /generate-batch.
  * Run: node server-node.js   (from handwriting-generator dir, or set HANDWRITTEN_PATH)
  */
 

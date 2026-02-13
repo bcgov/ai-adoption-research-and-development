@@ -1,11 +1,8 @@
-
 # Handwriting Generator Service
 
-This directory contains HTTP services for generating handwriting images from text using handwritten.js.
+Node HTTP service for generating handwriting images from text using the local patched **handwritten.js** (supports `lineWidth` for the explain_changes field).
 
-## Option A: Node server (recommended for form generation)
-
-Uses the **local patched** `Form-Generation/handwritten.js` clone, which supports the `lineWidth` option for the explain_changes field (more words per line).
+## Setup
 
 1. **Install dependencies in the local handwritten.js clone** (once):
 
@@ -13,48 +10,31 @@ Uses the **local patched** `Form-Generation/handwritten.js` clone, which support
    cd Form-Generation/handwritten.js && npm install && cd ../handwriting-generator
    ```
 
-2. **Start the Node server:**
+2. **Start the server:**
 
    ```sh
    cd Form-Generation/handwriting-generator
    node server-node.js
    ```
 
-   - Listens on [http://localhost:8000](http://localhost:8000), same API as the Deno service.
+   Listens on [http://localhost:8000](http://localhost:8000).
 
-## Option B: Deno service
+## Running form generation
 
-Uses the stock npm `handwritten.js` (no `lineWidth`; explain_changes will wrap at ~5 words per line).
-
-- **Requirements:** [Deno](https://deno.land/) (v1.28+)
-- **Run:** from this directory, `deno task start`
-- Service starts on [http://localhost:8000](http://localhost:8000)
-
-## How to Run the Form (complete-fill)
-
-1. Start either server (Node or Deno) on port 8000.
-2. From `Form-Generation`:
+1. Start the server (see above), then from `Form-Generation`:
 
    ```sh
    python build_test_form.py 1 --complete-fill
    ```
 
-   Use the **Node server** if you want the explain_changes paragraph to use `lineWidth: 95` (patched local clone).
+   Or use `./start_handwriting_server.sh` from `Form-Generation` to start the server in one terminal, then run the Python script in another.
 
-4. **Test the service:**
-   - Send a POST request to `http://localhost:8000/generate` with JSON body:
+## API
 
-     ```json
-     { "text": "Your text here" }
-     ```
+- **POST /generate** – Single text: `{ "text": "Your text here" }` → `{ "image": "data:image/png;base64,..." }`
+- **POST /generate-batch** – Batch: `{ "texts": ["...", "..."], "options": { "lineWidth": 95 } }` → `{ "images": ["data:image/png;base64,...", ...] }`
 
-   - The response will be a JSON object with a base64-encoded PNG image:
-
-     ```json
-     { "image": "data:image/png;base64,..." }
-     ```
-
-## Example: Python Client
+## Example: Python client
 
 ```python
 import requests
@@ -74,5 +54,4 @@ else:
     print(resp.json())
 ```
 
----
-For more details, see the code in `main.ts`.
+For more details, see `server-node.js`.

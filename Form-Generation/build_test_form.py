@@ -367,7 +367,7 @@ if __name__ == "__main__":
     
     # Get parallelism setting (environment variable or default)
     # MAX_PARALLEL_FORMS controls how many forms to generate concurrently
-    # Default: 4 (optimal for Deno service)
+    # Default: 4
     # Set to 1 to disable parallelism
     max_parallel = int(os.environ.get('MAX_PARALLEL_FORMS', '4'))
     

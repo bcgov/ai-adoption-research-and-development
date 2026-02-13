@@ -1,6 +1,6 @@
 # Form Generation Pipeline
 
-This directory contains scripts and tools for generating synthetic form images with handwritten text, using both Python and a Deno-based handwriting service.
+This directory contains scripts and tools for generating synthetic form images with handwritten text, using Python and a Node-based handwriting service.
 
 ## 1. Python Environment Setup
 
@@ -19,21 +19,22 @@ This directory contains scripts and tools for generating synthetic form images w
 
 ## 2. Start the Handwriting Generator Service
 
-The form generation pipeline relies on a Deno service to generate handwriting images from text.
+The form generation pipeline relies on a Node service to generate handwriting images from text.
 
-1. **Navigate to the Deno service directory:**
+1. **Start the server** (from this directory):
+
+ ```sh
+ ./start_handwriting_server.sh
+ ```
+
+   Or from the service directory:
 
  ```sh
  cd handwriting-generator
+ node server-node.js
  ```
 
-1. **Start the service:**
-
- ```sh
- deno task start
- ```
-
-- The service will run at <http://localhost:8000>
+- The service runs at <http://localhost:8000>
 
 ## 3. Generate Form Images
 
@@ -61,7 +62,7 @@ When complete fill mode is enabled:
 - All income fields are populated with non-zero monetary values
 - Spouse information is always included (spouse fields are always filled)
 - All applicable fields contain realistic data
-- The "explain changes" field contains longer, multi-line text that fills the text box starting from the top-left and wrapping across multiple lines
+- The "explain changes" field contains longer text that fills the text box (single-pass with configurable line width)
 
 This is useful for generating forms with comprehensive data for testing scenarios where you need fully populated forms.
 
@@ -69,7 +70,7 @@ This is useful for generating forms with comprehensive data for testing scenario
 
 When generating multiple forms, they are generated in parallel for faster performance:
 
-- **Default**: Up to 4 forms generated concurrently (optimal for Deno service)
+- **Default**: Up to 4 forms generated concurrently
 - **Control**: Set `MAX_PARALLEL_FORMS` environment variable to change parallelism:
   ```sh
   MAX_PARALLEL_FORMS=3 python build_test_form.py 10  # Generate 10 forms, 3 at a time
@@ -84,7 +85,7 @@ When generating multiple forms, they are generated in parallel for faster perfor
 
 ## Notes
 
-- The script uses the Deno handwriting service for handwriting image generation. Make sure it is running before executing the Python script.
+- The script uses the Node handwriting service for handwriting image generation. Make sure it is running before executing the Python script.
 - This case is highly specialized to the Montly Report Form, but components outside of the `build_test_form.py` file should all be reusable for other forms.
 
 ## Previous Attempts

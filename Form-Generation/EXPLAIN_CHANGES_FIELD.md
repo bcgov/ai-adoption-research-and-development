@@ -1,6 +1,6 @@
 # explain_changes Field — Detailed Documentation
 
-This document describes how the **explain_changes** form field is generated, rendered, and composited when using **`--complete-fill`** mode. It covers the full pipeline from data generation through the Python script and the Deno handwriting worker, and explains the known issues (too many lines, too few characters per line, and text overlapping the label) and how to fix them.
+This document describes how the **explain_changes** form field is generated, rendered, and composited when using **`--complete-fill`** mode. It covers the full pipeline from data generation through the Python script and the Node handwriting service, and explains the known issues (too many lines, too few characters per line, and text overlapping the label) and how to fix them.
 
 ---
 

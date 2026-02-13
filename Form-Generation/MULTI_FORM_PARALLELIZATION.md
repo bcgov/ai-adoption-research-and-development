@@ -67,13 +67,13 @@ Form 2: [Batch API: 13s] (parallel)
 
 **Implementation**:
 - Use `concurrent.futures.ThreadPoolExecutor` to make multiple HTTP requests
-- Deno service can handle multiple concurrent requests (it's already using workers)
+- Node service can handle multiple concurrent requests (it's already using workers)
 - Each request gets its own batch of texts
 
 **Expected Speedup**: 
 - 3 forms: ~51s → ~17s (3× faster)
 - 5 forms: ~85s → ~17s (5× faster)
-- Limited by Deno service capacity (CPU cores, memory)
+- Limited by Node service capacity (CPU cores, memory)
 
 ### 3. **Parallel Image Processing**
 
@@ -116,10 +116,10 @@ This gives us:
 
 ## Constraints & Limitations
 
-### Deno Service Capacity
+### Node Service Capacity
 
 **Current Setup**:
-- 8 workers in Deno service
+- 8 workers in Node service
 - Each worker processes messages sequentially
 - Can handle multiple concurrent batch requests
 
@@ -192,9 +192,9 @@ with ThreadPoolExecutor(max_workers=3) as executor:
 # Determine optimal parallelism based on:
 # - Number of forms to generate
 # - Available CPU cores
-# - Deno service capacity
+# - Node service capacity
 
-optimal_workers = min(num_loops, 4)  # Don't overload Deno service
+optimal_workers = min(num_loops, 4)  # Don't overload Node service
 with ThreadPoolExecutor(max_workers=optimal_workers) as executor:
     executor.map(generate_form_parallel, range(num_loops))
 ```
@@ -246,7 +246,7 @@ async def main():
 - **Average: 0.58s per request** (vs 2.43s sequential)
 
 **Key Findings**:
-1. ✅ Deno service handles 3-4 concurrent requests excellently
+1. ✅ Node service handles 3-4 concurrent requests excellently
 2. ✅ Each request gets its own worker pool (8 workers per request)
 3. ⚠️ Some queuing occurs with 5+ concurrent requests
 4. ✅ Still much faster than sequential even with queuing
@@ -268,12 +268,12 @@ async def main():
 **Optimal Strategy**: 
 - Use **3-4 workers** for best performance
 - Each form generation is independent
-- Deno service handles 3-4 concurrent requests excellently
+- Node service handles 3-4 concurrent requests excellently
 - Beyond 4, some queuing occurs but still faster than sequential
 
 ## Risks & Considerations
 
-### 1. **Deno Service Overload**
+### 1. **Node Service Overload**
 - Too many concurrent requests → requests queue up
 - Workers get saturated → no speedup
 - **Mitigation**: Limit parallelism to 3-5 forms
@@ -329,7 +329,7 @@ async def main():
 - **Speedup: 43× faster!** 🚀
 
 This demonstrates that:
-1. ✅ Deno service handles concurrent requests excellently
+1. ✅ Node service handles concurrent requests excellently
 2. ✅ Each batch request gets its own worker pool
 3. ✅ No blocking between requests
 4. ✅ Massive speedup potential
@@ -351,7 +351,7 @@ This demonstrates that:
 
 **Risk Level**: Low - code is thread-safe, simple change
 
-**Optimal Worker Count**: 3-4 workers for best performance (avoids Deno service queuing)
+**Optimal Worker Count**: 3-4 workers for best performance (avoids Node service queuing)
 
 This is a **high-impact, low-risk** optimization that should work excellently!
 
@@ -371,7 +371,7 @@ def generate_single_form(i):
     return i
 
 # Parallel generation
-optimal_workers = min(num_loops, 4)  # Don't overload Deno service
+optimal_workers = min(num_loops, 4)  # Don't overload Node service
 with ThreadPoolExecutor(max_workers=optimal_workers) as executor:
     executor.map(generate_single_form, range(num_loops))
 ```

@@ -43,11 +43,11 @@ The `handwritten.js` library is CPU-bound and takes ~567ms per image. This is th
 **Solution**: Use 2× CPU cores (8 workers) - handwritten.js is CPU-bound but can benefit from hyperthreading
 **Expected Gain**: 30-50% faster for CPU-bound work
 **Risk**: Medium - May cause context switching overhead if too many workers
-**Implementation**: `const maxWorkers = Math.min(texts.length, (Deno.systemCpuInfo?.cores || 4) * 2)`
+**Implementation**: `const maxWorkers = Math.min(texts.length, (Node.systemCpuInfo?.cores || 4) * 2)`
 
 ### 3. **Service-Level Caching** ⚡ HIGH IMPACT
 **Current Issue**: Identical texts generate new images every time
-**Solution**: Add in-memory cache in Deno service (Map<string, base64>)
+**Solution**: Add in-memory cache in Node service (Map<string, base64>)
 **Expected Gain**: 50-90% faster for repeated values (e.g., "X", "0", common dates)
 **Risk**: Low - Simple Map-based cache
 **Implementation**: Cache before worker dispatch, check cache first
@@ -145,8 +145,8 @@ Breakdown:
 - Monitor memory if generating many forms
 
 ### Scalability
-- Current: Single Deno process, limited by CPU cores
-- Future: Could run multiple Deno instances behind load balancer
+- Current: Single Node process, limited by CPU cores
+- Future: Could run multiple Node instances behind load balancer
 - Future: Could use distributed workers (Redis queue, etc.)
 
 ### Quality vs Speed Trade-offs

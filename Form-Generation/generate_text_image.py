@@ -21,7 +21,7 @@ def _generate_handwriting_image_cached(text, api_url):
 
 def _generate_handwriting_image_impl(text, api_url="http://localhost:8000/generate"):
     """
-    Internal implementation: Sends a POST request to the Deno handwriting service.
+    Internal implementation: Sends a POST request to the handwriting service.
     Returns PNG image bytes (from base64 JSON response).
     """
     start_time = time.time()
@@ -59,11 +59,11 @@ def _generate_handwriting_image_impl(text, api_url="http://localhost:8000/genera
 
 def generate_handwriting_image(text, api_url="http://localhost:8000/generate", use_cache=True):
     """
-    Sends a POST request to the Deno handwriting service and returns the PNG image bytes.
+    Sends a POST request to the handwriting service and returns the PNG image bytes.
     Uses caching for repeated strings.
     Args:
         text (str): The text to render.
-        api_url (str): The Deno service endpoint URL.
+        api_url (str): The handwriting service endpoint URL.
         use_cache (bool): Whether to use LRU cache for repeated strings.
     Returns:
         bytes: PNG image bytes.
@@ -80,7 +80,7 @@ def generate_handwriting_images_batch(texts, api_url="http://localhost:8000/gene
     Batch API: Generate multiple handwriting images in a single request.
     Args:
         texts (list[str]): List of texts to render.
-        api_url (str): The Deno service endpoint URL (should be /generate-batch).
+        api_url (str): The handwriting service endpoint URL (should be /generate-batch).
         options (dict, optional): Passed to handwritten.js (e.g. {"lineWidth": 95} if using a patched build).
     Returns:
         list[bytes]: List of PNG image bytes.

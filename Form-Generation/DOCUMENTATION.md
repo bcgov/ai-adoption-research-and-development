@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Form Generation Pipeline is a comprehensive system for generating synthetic form images with realistic handwritten text. It combines Python-based data generation, a Deno-based handwriting service, and image composition techniques to create filled-out form images that can be used for training and testing document processing systems.
+The Form Generation Pipeline is a comprehensive system for generating synthetic form images with realistic handwritten text. It combines Python-based data generation, a Node-based handwriting service, and image composition techniques to create filled-out form images that can be used for training and testing document processing systems.
 
 ## System Architecture
 
@@ -35,7 +35,8 @@ The system consists of three main components working together:
                                   ▼
                     ┌─────────────────────────┐
                     │ handwriting-generator/   │
-                    │    (Deno Service)       │
+                    │  (Node handwriting     │
+                    │   service)             │
                     │                         │
                     │ • handwritten.js        │
                     │ • Port 8000            │
@@ -50,10 +51,9 @@ The system consists of three main components working together:
 - **NumPy** - Image array processing for text cropping
 - **Requests** - HTTP client for communicating with handwriting service
 
-### Deno Service
-- **Deno Runtime** - TypeScript runtime for the handwriting service
-- **handwritten.js** - NPM package that generates handwritten-style text images
-- **Deno Standard Library** - HTTP server implementation
+### Handwriting Service (Node)
+- **Node.js** - Runs the handwriting HTTP server
+- **handwritten.js** - Local patched clone that generates handwritten-style text images (supports lineWidth)
 
 ### Data Format
 - **JSON** - Template annotations (COCO format) and generated form data
@@ -94,21 +94,18 @@ The system uses an optimized batch approach:
    - Collects all text values that need handwriting generation
    - Creates mapping from field names to text indices
 
-2. **Batch HTTP Request to Deno Service:**
+2. **Batch HTTP Request to handwriting service:**
    ```python
    POST http://localhost:8000/generate-batch
    Body: {"texts": ["John Doe", "123-456-7890", "X", ...]}
    ```
 
-3. **Deno Service Processing (`handwriting-generator/main.ts`):**
-   - **Batch Endpoint**: Receives array of texts via POST request
-   - **Parallel Workers**: Distributes work across Deno Web Workers
-   - **Worker Processing** (`handwriting-generator/worker.ts`):
-     - Each worker processes texts in parallel
-     - Calls `handwritten.js` library for each text
-     - Returns base64-encoded PNG images
-   - **Response Format**: `{"images": ["base64...", "base64...", ...]}`
-   - **Fallback**: If batch fails, falls back to individual requests
+3. **Handwriting service processing (`handwriting-generator/server-node.js`):**
+   - **Batch endpoint**: Receives array of texts (and optional options like lineWidth) via POST request
+   - Processes each text with the local patched handwritten.js
+   - Returns base64-encoded PNG images
+   - **Response format**: `{"images": ["base64...", "base64...", ...]}`
+   - **Fallback**: If batch fails, script falls back to individual requests
 
 4. **Image Processing:**
    - Decodes base64 to PNG bytes for each image
@@ -261,9 +258,8 @@ Form-Generation/
 ├── output/                     # Generated forms and data
 │   ├── form_data_0.json
 │   └── form_image_0.jpg
-└── handwriting-generator/       # Deno service
-    ├── main.ts                 # HTTP server with batch endpoint
-    ├── worker.ts               # Worker script for parallel generation
+└── handwriting-generator/       # Node handwriting service
+    ├── server-node.js          # HTTP server with /generate and /generate-batch
     └── dev_deps.ts             # Development dependencies
 ```
 
@@ -312,7 +308,7 @@ The `template.json` file uses COCO (Common Objects in Context) annotation format
 - **Request Body**: `{"texts": ["text1", "text2", ...]}`
 - **Response**: `{"images": ["base64...", "base64...", ...]}`
 - **Use Case**: Generating multiple texts efficiently
-- **Performance**: Uses parallel Deno Workers for concurrent generation
+- **Performance**: Node server processes batch requests; Python uses parallel form workers
 
 ### handwritten.js Library
 - Generates handwritten-style text using SVG paths
@@ -323,28 +319,19 @@ The `template.json` file uses COCO (Common Objects in Context) annotation format
 
 ### Service Architecture
 
-**Main Process** (`main.ts`):
-- HTTP server handling requests
-- Routes to appropriate endpoint
-- Manages worker pool for batch requests
+**Node server** (`server-node.js`):
+- HTTP server on port 8000
+- POST /generate: single text → single image
+- POST /generate-batch: array of texts (and optional options like lineWidth) → array of images
+- Uses local patched handwritten.js from `../handwritten.js`
 
-**Worker Process** (`worker.ts`):
-- Handles individual text generation
-- Runs in parallel with other workers
-- Communicates via message passing
-
-**Worker Pool**:
-- Automatically sized based on CPU cores (`navigator.hardwareConcurrency`)
-- Distributes work round-robin across workers
-- Cleans up after batch completion
-
-### Service Startup
+### Service startup
 ```bash
 cd handwriting-generator
-deno task start
+node server-node.js
 ```
 
-The service runs continuously, handling batch requests with parallel workers for optimal performance.
+Or from Form-Generation: `./start_handwriting_server.sh`
 
 ## Image Processing Details
 
@@ -379,8 +366,8 @@ When pasting text onto template:
 
 ```bash
 # 1. Start handwriting service
-cd handwriting-generator
-deno task start
+./start_handwriting_server.sh
+# or: cd handwriting-generator && node server-node.js
 
 # 2. Generate forms (in another terminal)
 cd Form-Generation
@@ -426,7 +413,7 @@ elif name == 'your_field_name':
 ### Changing Handwriting Style
 
 The handwriting style is determined by `handwritten.js`. To change:
-- Modify the Deno service to use different parameters
+- Modify the Node server or patched handwritten.js to use different parameters
 - Or replace `handwritten.js` with alternative library
 - Update API response format if needed
 
@@ -450,11 +437,10 @@ The system has been optimized for performance with several key improvements:
 - **Benefit**: Caches repeated strings (e.g., "X", common dates) to avoid redundant generation
 - **Location**: `generate_text_image.py` - `_generate_handwriting_image_cached()`
 
-### Parallel Generation (Deno Workers)
-- **Implementation**: Uses Deno Web Workers to parallelize CPU-bound handwriting generation
-- **Benefit**: Utilizes multiple CPU cores for concurrent image generation
-- **Configuration**: Automatically detects CPU cores (`navigator.hardwareConcurrency`)
-- **Location**: `handwriting-generator/worker.ts` and batch endpoint in `main.ts`
+### Batch processing (Node server)
+- **Implementation**: Node server processes batch requests; each text is generated sequentially in the batch
+- **Benefit**: Single HTTP round-trip for many images
+- **Location**: `handwriting-generator/server-node.js`
 
 ### Performance Metrics
 - **Before optimization**: ~2.1s per text × 22 fields = ~46s (timed out)
@@ -464,7 +450,7 @@ The system has been optimized for performance with several key improvements:
 
 ### Performance Considerations
 
-- **Handwriting Service**: Now uses parallel workers for CPU-bound generation
+- **Handwriting service**: Processes batch requests; form-level parallelism is in Python (multiple forms at once)
 - **Image Processing**: NumPy operations are efficient for cropping
 - **Composition**: PIL paste operations are fast for single images
 - **Bottleneck**: CPU-bound handwriting generation (mitigated by workers)
