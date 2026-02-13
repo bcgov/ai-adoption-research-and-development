@@ -1,9 +1,10 @@
 from PIL import Image
-from generate_text_image import generate_handwriting_image, crop_to_text
+from generate_text_image import generate_handwriting_image, generate_handwriting_images_batch, crop_to_text
 from generate_form_data import generate_data
+import time
 
 
-def build_test_form(data, number=0):
+def build_test_form(data, number=0, use_batch=True):
   # Load template image
   template_path = "template.jpg"
   template_image = Image.open(template_path)
@@ -37,7 +38,42 @@ def build_test_form(data, number=0):
   # Some assumptions here, if it's a boolean value, it's a checkbox
   # Anything else, we need to generate text
 
-
+  form_start_time = time.time()
+  
+  # Collect all texts that need to be generated, with mapping to their field info
+  texts_to_generate = []
+  field_info_map = {}  # Maps (name, value_key) to index in texts_to_generate
+  
+  for c in categories:
+    name = c['name']
+    value = data.get(name)
+    annotation = get_annotation_by_category_name(name)
+    if value is not None and annotation is not None:
+      if isinstance(value, bool):
+        if value:
+          idx = len(texts_to_generate)
+          texts_to_generate.append('X')
+          field_info_map[(name, 'checkbox')] = idx
+      else:
+        idx = len(texts_to_generate)
+        texts_to_generate.append(str(value))
+        field_info_map[(name, 'text')] = idx
+  
+  # Batch generate all handwriting images
+  handwriting_images = None
+  if use_batch and texts_to_generate:
+    batch_start = time.time()
+    print(f"[Form {number}] Generating {len(texts_to_generate)} handwriting images in batch...")
+    try:
+      handwriting_images = generate_handwriting_images_batch(texts_to_generate, "http://localhost:8000/generate-batch")
+      batch_time = time.time() - batch_start
+      print(f"[Form {number}] Batch generation completed in {batch_time:.3f}s")
+    except Exception as e:
+      print(f"[Form {number}] Batch API failed, falling back to individual requests: {e}")
+      use_batch = False
+      handwriting_images = None
+  
+  # Process each category and compose on template
   for c in categories:
     name = c['name']
     value = data.get(name)
@@ -49,11 +85,25 @@ def build_test_form(data, number=0):
           bbox = annotation['bbox']
           bbox_width = int(bbox[2])
           bbox_height = int(bbox[3])
-          x_img_bytes = generate_handwriting_image('X')
+          
+          # Use batch result if available, otherwise generate individually
+          if use_batch and handwriting_images:
+            idx = field_info_map.get((name, 'checkbox'))
+            if idx is not None and idx < len(handwriting_images):
+              x_img_bytes = handwriting_images[idx]
+            else:
+              x_img_bytes = generate_handwriting_image('X')
+          else:
+            x_img_bytes = generate_handwriting_image('X')
+          
           from io import BytesIO
+          img_start = time.time()
           x_img = Image.open(BytesIO(x_img_bytes)).convert("RGBA")
           x_img.load()
           x_img = crop_to_text(x_img)
+          img_time = time.time() - img_start
+          if img_time > 0.01:
+            print(f"    [Image Processing] PIL open/convert: {img_time:.3f}s")
           # Shrink the checkbox image to % of the bbox size, centered
           scale_factor = 0.7
           new_height = int(bbox_height * scale_factor)
@@ -69,11 +119,24 @@ def build_test_form(data, number=0):
           template_image.paste(x_img, (paste_x, paste_y), mask=x_img)
       else:
         # Create an image for this text
-        text_img_bytes = generate_handwriting_image(str(value))
+        # Use batch result if available, otherwise generate individually
+        if use_batch and handwriting_images:
+          idx = field_info_map.get((name, 'text'))
+          if idx is not None and idx < len(handwriting_images):
+            text_img_bytes = handwriting_images[idx]
+          else:
+            text_img_bytes = generate_handwriting_image(str(value))
+        else:
+          text_img_bytes = generate_handwriting_image(str(value))
+        
         from io import BytesIO
+        img_start = time.time()
         text_img = Image.open(BytesIO(text_img_bytes)).convert("RGBA")
         text_img.load()
         text_img = crop_to_text(text_img)
+        img_time = time.time() - img_start
+        if img_time > 0.01:
+          print(f"    [Image Processing] PIL open/convert: {img_time:.3f}s")
         bbox = annotation['bbox']
         bbox_width = int(bbox[2])
         bbox_height = int(bbox[3])
@@ -129,8 +192,12 @@ def build_test_form(data, number=0):
   output_path = f"output/form_image_{number}.jpg"
   import os
   os.makedirs(os.path.dirname(output_path), exist_ok=True)
+  save_start = time.time()
   template_image.save(output_path)
-  print(f"Saved composed image to {output_path}")
+  save_time = time.time() - save_start
+  form_total_time = time.time() - form_start_time
+  print(f"[Form {number}] Saved composed image to {output_path}")
+  print(f"[Form {number}] Total form processing time: {form_total_time:.3f}s (save: {save_time:.3f}s)")
 
 
 if __name__ == "__main__":
@@ -141,13 +208,31 @@ if __name__ == "__main__":
         num_loops = int(sys.argv[1])
     except Exception:
         num_loops = 1
+    
+    overall_start = time.time()
+    print(f"[Overall] Starting generation of {num_loops} form(s)...")
+    
     for i in range(num_loops):
+        loop_start = time.time()
+        print(f"\n[Form {i}] Starting form generation...")
+        
+        data_gen_start = time.time()
         data = generate_data()
+        data_gen_time = time.time() - data_gen_start
+        print(f"[Form {i}] Data generation: {data_gen_time:.3f}s")
+        
         # Save data as JSON
         os.makedirs("output", exist_ok=True)
         json_path = f"output/form_data_{i}.json"
         with open(json_path, "w") as f:
             json.dump(data, f, indent=2)
-        print(f"Saved data to {json_path}")
+        print(f"[Form {i}] Saved data to {json_path}")
+        
         # Build and save form image
-        build_test_form(data, number=i)
+        build_test_form(data, number=i, use_batch=True)
+        
+        loop_time = time.time() - loop_start
+        print(f"[Form {i}] Complete loop time: {loop_time:.3f}s\n")
+    
+    overall_time = time.time() - overall_start
+    print(f"[Overall] Generated {num_loops} form(s) in {overall_time:.3f}s (avg: {overall_time/num_loops:.3f}s per form)")
