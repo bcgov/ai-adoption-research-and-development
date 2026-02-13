@@ -1,32 +1,60 @@
 #!/usr/bin/env node
 /**
  * Node server that uses the local patched handwritten.js (with lineWidth support).
+ * Optimized: parallel worker pool (2× CPU cores) + in-memory cache for repeated texts.
  * API: POST /generate, POST /generate-batch.
- * Run: node server-node.js   (from handwriting-generator dir, or set HANDWRITTEN_PATH)
  */
 
 const http = require("http");
 const path = require("path");
+const os = require("os");
+const { Worker } = require("worker_threads");
 
 const HANDWRITTEN_PATH = process.env.HANDWRITTEN_PATH || path.join(__dirname, "..", "handwritten.js");
-const handwritten = require(HANDWRITTEN_PATH);
-
 const PORT = 8000;
+
+// In-memory cache: text -> base64 image (skip when request has options, e.g. lineWidth)
+const cache = new Map();
+
+// Worker pool (lazy-init on first batch)
+let workers = [];
+let workerIndex = 0;
+
+function getWorkers(count) {
+  if (workers.length >= count) return workers.slice(0, count);
+  workers.forEach((w) => w.terminate());
+  workers = [];
+  const numWorkers = Math.min(count, Math.max(1, (os.cpus().length || 4) * 2));
+  for (let i = 0; i < numWorkers; i++) {
+    const w = new Worker(path.join(__dirname, "worker-node.js"), {
+      workerData: { handwrittenPath: HANDWRITTEN_PATH },
+    });
+    workers.push(w);
+  }
+  return workers;
+}
 
 function log(level, msg, ...args) {
   const ts = new Date().toISOString();
   console.log(`[${ts}] [${level}] ${msg}`, ...args);
 }
 
+// Single /generate: use cache if no options, else call handwritten directly
 async function handleGenerate(body) {
   const { text, options = {} } = body;
   if (!text || typeof text !== "string") {
     return { status: 400, body: { error: "Missing or invalid 'text' field" } };
   }
+  const hasOptions = options && Object.keys(options).length > 0;
+  if (!hasOptions && cache.has(text)) {
+    return { status: 200, body: { image: cache.get(text) } };
+  }
   const start = Date.now();
   try {
+    const handwritten = require(HANDWRITTEN_PATH);
     const base64 = await handwritten(text, { outputType: "png/b64", ...options });
     const result = Array.isArray(base64) ? base64[0] : base64;
+    if (!hasOptions) cache.set(text, result);
     log("INFO", `Single /generate: done in ${Date.now() - start} ms`);
     return { status: 200, body: { image: result } };
   } catch (e) {
@@ -40,25 +68,65 @@ async function handleBatch(body) {
   if (!Array.isArray(texts) || texts.length === 0) {
     return { status: 400, body: { error: "Missing or invalid 'texts' (must be non-empty array)" } };
   }
-  const options = batchOptions && typeof batchOptions === "object" ? batchOptions : undefined;
-  const startTime = Date.now();
-  log("INFO", `Batch: start count=${texts.length}`);
-  const images = [];
-  for (let i = 0; i < texts.length; i++) {
-    const text = texts[i];
-    if (typeof text !== "string") {
+  for (const t of texts) {
+    if (typeof t !== "string") {
       return { status: 400, body: { error: "All items in 'texts' must be strings" } };
     }
-    try {
-      const base64 = await handwritten(text, { outputType: "png/b64", ...options });
-      images.push(Array.isArray(base64) ? base64[0] : base64);
-    } catch (e) {
-      log("ERROR", `Batch item ${i} failed:`, e.message);
-      return { status: 500, body: { error: e.message } };
-    }
   }
+  const options = batchOptions && typeof batchOptions === "object" ? batchOptions : undefined;
+  const hasOptions = options && Object.keys(options).length > 0;
+
+  const startTime = Date.now();
+  const pool = getWorkers(texts.length);
+  const numWorkers = pool.length;
+  log("INFO", `Batch: start count=${texts.length} workers=${numWorkers}`);
+
+  const resolvers = new Array(texts.length).fill(null);
+  const promises = texts.map((text, index) => {
+    return new Promise((resolve, reject) => {
+      resolvers[index] = { resolve, reject };
+      // Cache hit (only when no options) – resolve immediately, do not send to worker
+      if (!hasOptions && cache.has(text)) {
+        setImmediate(() => {
+          if (resolvers[index]) {
+            resolvers[index].resolve(cache.get(text));
+            resolvers[index] = null;
+          }
+        });
+        return;
+      }
+      // Cache miss: send to worker (round-robin)
+      const worker = pool[index % numWorkers];
+      worker.postMessage({ id: index, text, options });
+    });
+  });
+
+  const handler = (msg) => {
+    const { id, success, image, error } = msg;
+    const r = resolvers[id];
+    if (!r) return;
+    resolvers[id] = null;
+    if (success) {
+      if (!hasOptions) cache.set(texts[id], image);
+      r.resolve(image);
+    } else {
+      r.reject(new Error(error));
+    }
+  };
+  pool.forEach((w) => w.on("message", handler));
+
+  let images;
+  try {
+    images = await Promise.all(promises);
+  } catch (e) {
+    log("ERROR", "Batch failed:", e.message);
+    pool.forEach((w) => w.off("message", handler));
+    return { status: 500, body: { error: e.message } };
+  }
+
+  pool.forEach((w) => w.off("message", handler));
   const elapsed = Date.now() - startTime;
-  log("INFO", `Batch: done count=${texts.length} elapsed=${elapsed} ms`);
+  log("INFO", `Batch: done count=${texts.length} elapsed=${elapsed} ms avg=${(elapsed / texts.length).toFixed(0)} ms/image workers=${numWorkers}`);
   return { status: 200, body: { images } };
 }
 
@@ -97,6 +165,6 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  log("INFO", `Handwriting service (Node, local patched) listening on http://localhost:${PORT}`);
-  log("INFO", "Endpoints: POST /generate (single), POST /generate-batch (batch)");
+  log("INFO", `Handwriting service (Node, workers+cache) listening on http://localhost:${PORT}`);
+  log("INFO", "Endpoints: POST /generate, POST /generate-batch");
 });
