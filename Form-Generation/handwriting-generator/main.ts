@@ -4,6 +4,15 @@
 import { serve } from "https://deno.land/std@0.203.0/http/server.ts";
 import handwritten from "npm:handwritten.js";
 
+function log(level: string, msg: string, ...args: unknown[]) {
+  const ts = new Date().toISOString();
+  if (args.length > 0) {
+    console.log(`[${ts}] [${level}] ${msg}`, ...args);
+  } else {
+    console.log(`[${ts}] [${level}] ${msg}`);
+  }
+}
+
 // Service-level cache for repeated texts (persists across requests)
 const cache = new Map<string, string>();
 
@@ -16,10 +25,13 @@ async function handler(req: Request): Promise<Response> {
     try {
       const { text } = await req.json();
       if (!text || typeof text !== "string") {
+        log("ERROR", "Single /generate: missing or invalid 'text' field");
         return new Response(JSON.stringify({ error: "Missing or invalid 'text' field" }), { status: 400 });
       }
-      // Generate handwriting image using handwritten.js
+      log("INFO", `Single /generate: text length=${text.length} preview=${text.slice(0, 30)}`);
+      const start = Date.now();
       const base64 = await handwritten(text, { outputType: 'png/b64' });
+      log("INFO", `Single /generate: done in ${Date.now() - start} ms`);
       return new Response(JSON.stringify({ image: base64 }), {
         status: 200,
         headers: {
@@ -27,6 +39,7 @@ async function handler(req: Request): Promise<Response> {
         }
       });
     } catch (e: any) {
+      log("ERROR", "Single /generate failed: " + e.message);
       return new Response(JSON.stringify({ error: e.message }), { status: 500 });
     }
   }
@@ -36,17 +49,20 @@ async function handler(req: Request): Promise<Response> {
     try {
       const { texts } = await req.json();
       if (!Array.isArray(texts) || texts.length === 0) {
+        log("ERROR", "Batch: missing or invalid 'texts' (must be non-empty array)");
         return new Response(JSON.stringify({ error: "Missing or invalid 'texts' field (must be non-empty array)" }), { status: 400 });
       }
       
-      // Validate all texts are strings
       for (const text of texts) {
         if (typeof text !== "string") {
+          log("ERROR", "Batch: non-string item in 'texts' array");
           return new Response(JSON.stringify({ error: "All items in 'texts' array must be strings" }), { status: 400 });
         }
       }
 
       const startTime = Date.now();
+      const maxWorkersLog = Math.min(texts.length, (Deno.systemCpuInfo?.cores || 4) * 2);
+      log("INFO", `Batch: start count=${texts.length} workers=${maxWorkersLog}`);
       
       // Use workers for parallel CPU-bound generation
       // Use 2× CPU cores for better CPU utilization (hyperthreading benefit)
@@ -81,7 +97,7 @@ async function handler(req: Request): Promise<Response> {
               resolver.reject(new Error(error));
             }
           } else {
-            console.error(`[Batch] No resolver found for id ${id} (resolvers length: ${resolvers.length})`);
+            log("ERROR", `Batch: no resolver for id=${id} resolversLen=${resolvers.length}`);
           }
         };
         workers.push(worker);
@@ -134,8 +150,7 @@ async function handler(req: Request): Promise<Response> {
         if (cache.has(text)) {
           const cachedImage = cache.get(text);
           if (cachedImage !== image) {
-            console.error(`[Batch] CRITICAL ORDER ERROR: Index ${i}, text '${text.substring(0, 20)}...' - image doesn't match cache!`);
-            // Don't throw, but log the error
+            log("ERROR", `Batch: order error index=${i} text="${text.substring(0, 20)}..." image != cache`);
           }
         }
       }
@@ -149,14 +164,13 @@ async function handler(req: Request): Promise<Response> {
           // Verify cached image matches (sanity check)
           const cachedImage = cache.get(text);
           if (cachedImage !== image) {
-            console.warn(`[Batch] Cache mismatch for text '${text}' at index ${index}`);
+            log("WARN", `Batch: cache mismatch index=${index} text="${text.slice(0, 30)}..."`);
           }
         }
       });
       
-      // Verify order (debugging)
       if (images.length !== texts.length) {
-        console.error(`[Batch] Mismatch: expected ${texts.length} images, got ${images.length}`);
+        log("ERROR", `Batch: image count mismatch expected=${texts.length} got=${images.length}`);
       }
       
       // Clean up workers
@@ -164,28 +178,10 @@ async function handler(req: Request): Promise<Response> {
       
       const elapsed = Date.now() - startTime;
       const cacheHitRate = cacheHits.length / texts.length * 100;
-      console.log(`[Batch] Generated ${texts.length} images in ${elapsed}ms using ${maxWorkers} workers (avg: ${(elapsed/texts.length).toFixed(1)}ms per image)`);
-      console.log(`[Batch] Cache: ${cacheHits.length} hits, ${cacheMisses.length} misses (${cacheHitRate.toFixed(1)}% hit rate)`);
-      console.log(`[Batch] Completion order: [${completionOrder.join(', ')}]`);
-      console.log(`[Batch] Expected order: [${texts.map((_, i) => i).join(', ')}]`);
-      
-      // Verify images array length matches texts
-      if (images.length !== texts.length) {
-        console.error(`[Batch] ERROR: Images length (${images.length}) doesn't match texts length (${texts.length})`);
-      }
-      
-      // Verify order: check first few images match expected texts
-      const verifyCount = Math.min(5, texts.length);
-      for (let i = 0; i < verifyCount; i++) {
-        const text = texts[i];
-        const image = images[i];
-        // If this text was cached, verify the image matches
-        if (cache.has(text)) {
-          const cachedImage = cache.get(text);
-          if (cachedImage !== image) {
-            console.error(`[Batch] ORDER ERROR: Image at index ${i} doesn't match cached image for text '${text}'`);
-          }
-        }
+      log("INFO", `Batch: done count=${texts.length} elapsed=${elapsed} ms avg=${(elapsed / texts.length).toFixed(1)} ms/image workers=${maxWorkers}`);
+      log("INFO", `Batch: cache hits=${cacheHits.length} misses=${cacheMisses.length} (${cacheHitRate.toFixed(1)}% hit rate)`);
+      if (texts.length <= 15) {
+        log("DEBUG", "Batch: completion order=" + completionOrder.join(", "));
       }
       
       return new Response(JSON.stringify({ images: images }), {
@@ -195,15 +191,15 @@ async function handler(req: Request): Promise<Response> {
         }
       });
     } catch (e: any) {
+      log("ERROR", "Batch failed: " + e.message);
       return new Response(JSON.stringify({ error: e.message }), { status: 500 });
     }
   }
 
+  log("WARN", `Not found: ${req.method} ${pathname}`);
   return new Response("Not found", { status: 404 });
 }
 
-console.log("Deno Handwriting service running on http://localhost:8000");
-console.log("Endpoints:");
-console.log("  POST /generate      - Single text generation (backward compatible)");
-console.log("  POST /generate-batch - Batch generation (optimized)");
+log("INFO", "Handwriting service listening on http://localhost:8000");
+log("INFO", "Endpoints: POST /generate (single), POST /generate-batch (batch)");
 serve(handler, { port: 8000 });
