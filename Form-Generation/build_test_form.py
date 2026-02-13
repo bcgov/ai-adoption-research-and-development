@@ -138,14 +138,46 @@ def build_test_form(data, number=0, use_batch=True, complete_fill=False):
           bbox_width = int(bbox[2])
           bbox_height = int(bbox[3])
 
-          # Available area - minimal top margin (label text is above the bbox)
-          top_margin = int(bbox_height * 0.05)
-          h_margin = int(bbox_width * 0.02)
+          # Reserve space for printed label (inside top ~20% of bbox) + small padding below label
+          label_reserve = int(0.20 * bbox_height)   # ~45px for bbox_h ~226
+          top_margin = int(0.03 * bbox_height)      # ~6px extra padding below label
+          h_margin = int(0.02 * bbox_width)
           available_width = bbox_width - 2 * h_margin
-          available_height = bbox_height - top_margin
+          available_height = bbox_height - label_reserve - top_margin
 
           text = str(value)
           text_length = len(text)
+
+          # Calibrate handwriting metrics from worker output (avoids wrong wrap → height overflow)
+          def _calibrate_handwriting_metrics():
+            sample = "The quick brown fox jumps over the lazy dog 1234567890."
+            sample = sample[:60]
+            try:
+              img_bytes = generate_handwriting_image(
+                sample,
+                api_url="http://localhost:8000/generate",
+                use_cache=True,
+              )
+              img = Image.open(BytesIO(img_bytes)).convert("RGBA")
+              img.load()
+              img = crop_to_text(img)
+              w, h = img.size
+              if w <= 0 or h <= 0:
+                return None
+              px_per_char = w / max(1, len(sample))
+              line_height = float(h)
+              px_per_char = max(10.0, min(px_per_char, 120.0))
+              line_height = max(15.0, min(line_height, 250.0))
+              return px_per_char, line_height
+            except Exception as e:
+              print(f"    [Explain] Calibration failed, using defaults: {e}")
+              return None
+
+          metrics = _calibrate_handwriting_metrics()
+          if metrics:
+            PX_PER_CHAR, LINE_HEIGHT = metrics
+          else:
+            PX_PER_CHAR, LINE_HEIGHT = 33, 60
 
           # Calculate optimal chars per line to fill the box well.
           # handwritten.js renders ~PX_PER_CHAR pixels per character, ~LINE_HEIGHT pixels tall.
@@ -153,13 +185,11 @@ def build_test_form(data, number=0, use_batch=True, complete_fill=False):
           #   LINE_HEIGHT * available_width / (chars * PX_PER_CHAR)
           # With N = text_length/chars lines, total height should ≈ available_height.
           # Solving: chars ≈ sqrt(LINE_HEIGHT * available_width * text_length / (PX_PER_CHAR * available_height))
-          PX_PER_CHAR = 33
-          LINE_HEIGHT = 60
           optimal_chars = int(math.sqrt(
               LINE_HEIGHT * available_width * text_length /
               (PX_PER_CHAR * available_height * 0.85)  # 0.85 accounts for line spacing
           ))
-          chars_per_line = max(25, min(optimal_chars, 90))
+          chars_per_line = max(45, min(optimal_chars, 140))
 
           # Word wrap
           words = text.split()
@@ -194,7 +224,7 @@ def build_test_form(data, number=0, use_batch=True, complete_fill=False):
 
           if line_images:
             paste_x = int(bbox[0]) + h_margin
-            paste_y = int(bbox[1]) + top_margin
+            paste_y = int(bbox[1]) + label_reserve + top_margin
 
             # Step 1: Scale each line to fit available_width (maintaining aspect ratio)
             scaled_images = []
