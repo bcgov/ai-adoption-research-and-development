@@ -217,22 +217,22 @@ def build_test_form(data, number=0, use_batch=True):
   print(f"[Form {number}] Total form processing time: {form_total_time:.3f}s (save: {save_time:.3f}s)")
 
 
-if __name__ == "__main__":
-    import sys
+def generate_single_form(i, use_batch=True):
+    """
+    Generate a single form - thread-safe wrapper for parallel execution.
+    Args:
+        i: Form number/index
+        use_batch: Whether to use batch API
+    Returns:
+        Form number (for tracking)
+    """
     import json
     import os
+    
+    loop_start = time.time()
+    print(f"\n[Form {i}] Starting form generation...")
+    
     try:
-        num_loops = int(sys.argv[1])
-    except Exception:
-        num_loops = 1
-    
-    overall_start = time.time()
-    print(f"[Overall] Starting generation of {num_loops} form(s)...")
-    
-    for i in range(num_loops):
-        loop_start = time.time()
-        print(f"\n[Form {i}] Starting form generation...")
-        
         data_gen_start = time.time()
         data = generate_data()
         data_gen_time = time.time() - data_gen_start
@@ -246,10 +246,61 @@ if __name__ == "__main__":
         print(f"[Form {i}] Saved data to {json_path}")
         
         # Build and save form image
-        build_test_form(data, number=i, use_batch=True)
+        build_test_form(data, number=i, use_batch=use_batch)
         
         loop_time = time.time() - loop_start
-        print(f"[Form {i}] Complete loop time: {loop_time:.3f}s\n")
+        print(f"[Form {i}] Complete loop time: {loop_time:.3f}s")
+        return i
+    except Exception as e:
+        print(f"[Form {i}] ERROR: {e}")
+        raise
+
+
+if __name__ == "__main__":
+    import sys
+    import os
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    
+    # Parse command line arguments
+    try:
+        num_loops = int(sys.argv[1])
+    except (IndexError, ValueError):
+        num_loops = 1
+    
+    # Get parallelism setting (environment variable or default)
+    # MAX_PARALLEL_FORMS controls how many forms to generate concurrently
+    # Default: 4 (optimal for Deno service)
+    # Set to 1 to disable parallelism
+    max_parallel = int(os.environ.get('MAX_PARALLEL_FORMS', '4'))
+    
+    # Don't use more workers than forms to generate
+    max_workers = min(num_loops, max_parallel)
+    
+    overall_start = time.time()
+    print(f"[Overall] Starting generation of {num_loops} form(s)...")
+    print(f"[Overall] Parallelism: {max_workers} worker(s) (set MAX_PARALLEL_FORMS env var to change)")
+    
+    # Generate forms in parallel if more than 1 form
+    if num_loops == 1 or max_workers == 1:
+        # Sequential generation (single form or parallelism disabled)
+        generate_single_form(0, use_batch=True)
+    else:
+        # Parallel generation
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            # Submit all form generation tasks
+            futures = {executor.submit(generate_single_form, i, use_batch=True): i 
+                      for i in range(num_loops)}
+            
+            # Wait for completion and handle results
+            completed = 0
+            for future in as_completed(futures):
+                form_num = futures[future]
+                try:
+                    result = future.result()
+                    completed += 1
+                    print(f"[Overall] Completed {completed}/{num_loops} forms")
+                except Exception as e:
+                    print(f"[Overall] Form {form_num} failed: {e}")
     
     overall_time = time.time() - overall_start
-    print(f"[Overall] Generated {num_loops} form(s) in {overall_time:.3f}s (avg: {overall_time/num_loops:.3f}s per form)")
+    print(f"\n[Overall] Generated {num_loops} form(s) in {overall_time:.3f}s (avg: {overall_time/num_loops:.3f}s per form)")
