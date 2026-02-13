@@ -28,7 +28,7 @@ async function handler(req: Request): Promise<Response> {
     }
   }
 
-  // Batch generation endpoint (new, optimized)
+  // Batch generation endpoint (new, optimized with parallel workers)
   if (req.method === "POST" && pathname === "/generate-batch") {
     try {
       const { texts } = await req.json();
@@ -43,15 +43,55 @@ async function handler(req: Request): Promise<Response> {
         }
       }
 
-      // Generate all images in parallel using Promise.all
       const startTime = Date.now();
-      const imagePromises = texts.map(text => 
-        handwritten(text, { outputType: 'png/b64' })
-      );
-      const images = await Promise.all(imagePromises);
-      const elapsed = Date.now() - startTime;
       
-      console.log(`[Batch] Generated ${texts.length} images in ${elapsed}ms (avg: ${(elapsed/texts.length).toFixed(1)}ms per image)`);
+      // Use workers for parallel CPU-bound generation
+      // Limit concurrent workers to avoid overwhelming the system
+      // Deno doesn't have navigator.hardwareConcurrency, use reasonable default
+      const cpuCores = Deno.systemCpuInfo?.cores || 4;
+      const maxWorkers = Math.min(texts.length, cpuCores);
+      const workerScript = new URL("./worker.ts", import.meta.url).href;
+      
+      // Create workers and distribute work
+      const workers: Worker[] = [];
+      const pending = new Map<number, { resolve: (value: string) => void; reject: (error: any) => void }>();
+      
+      // Initialize workers
+      for (let i = 0; i < maxWorkers; i++) {
+        const worker = new Worker(workerScript, { type: "module" });
+        worker.onmessage = (e: MessageEvent) => {
+          const { id, success, image, error } = e.data;
+          const resolver = pending.get(id);
+          if (resolver) {
+            pending.delete(id);
+            if (success) {
+              resolver.resolve(image);
+            } else {
+              resolver.reject(new Error(error));
+            }
+          }
+        };
+        workers.push(worker);
+      }
+      
+      // Distribute work across workers (round-robin)
+      const workPromises = texts.map((text, index) => {
+        return new Promise<string>((resolve, reject) => {
+          pending.set(index, { resolve, reject });
+          const workerIndex = index % maxWorkers;
+          workers[workerIndex].postMessage({ id: index, text });
+        });
+      });
+      
+      // Wait for all work to complete
+      // Promise.all preserves order even if workers complete out of order
+      const images = await Promise.all(workPromises);
+      
+      // Clean up workers
+      workers.forEach(worker => worker.terminate());
+      
+      const elapsed = Date.now() - startTime;
+      console.log(`[Batch] Generated ${texts.length} images in ${elapsed}ms using ${maxWorkers} workers (avg: ${(elapsed/texts.length).toFixed(1)}ms per image)`);
       
       return new Response(JSON.stringify({ images: images }), {
         status: 200,

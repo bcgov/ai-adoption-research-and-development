@@ -87,29 +87,38 @@ The `generate_data()` function creates a dictionary of form field values using p
 
 ### Step 2: Handwriting Image Generation (`generate_text_image.py`)
 
-For each text value in the generated data:
+The system uses an optimized batch approach:
 
-1. **HTTP Request to Deno Service:**
+1. **Collect All Texts:**
+   - Iterates through all form fields
+   - Collects all text values that need handwriting generation
+   - Creates mapping from field names to text indices
+
+2. **Batch HTTP Request to Deno Service:**
    ```python
-   POST http://localhost:8000/generate
-   Body: {"text": "John Doe"}
+   POST http://localhost:8000/generate-batch
+   Body: {"texts": ["John Doe", "123-456-7890", "X", ...]}
    ```
 
-2. **Deno Service Processing (`handwriting-generator/main.ts`):**
-   - Receives text via POST request
-   - Calls `handwritten.js` library with text
-   - Returns base64-encoded PNG image
-   - Response format: `{"image": "data:image/png;base64,..."}`
+3. **Deno Service Processing (`handwriting-generator/main.ts`):**
+   - **Batch Endpoint**: Receives array of texts via POST request
+   - **Parallel Workers**: Distributes work across Deno Web Workers
+   - **Worker Processing** (`handwriting-generator/worker.ts`):
+     - Each worker processes texts in parallel
+     - Calls `handwritten.js` library for each text
+     - Returns base64-encoded PNG images
+   - **Response Format**: `{"images": ["base64...", "base64...", ...]}`
+   - **Fallback**: If batch fails, falls back to individual requests
 
-3. **Image Processing:**
-   - Decodes base64 to PNG bytes
+4. **Image Processing:**
+   - Decodes base64 to PNG bytes for each image
    - Converts to PIL Image (RGBA format)
    - **Crops to text bounds** using `crop_to_text()`:
      - Uses NumPy to find non-background pixels (RGB > 180 threshold)
      - Calculates bounding box of text content
      - Removes excess white space around text
 
-**Output:** PIL Image object with transparent background, cropped to text content
+**Output:** List of PIL Image objects with transparent backgrounds, cropped to text content
 
 ### Step 3: Form Composition (`build_test_form.py`)
 
@@ -239,9 +248,13 @@ The `build_test_form()` function orchestrates the composition:
 
 ```
 Form-Generation/
-├── build_test_form.py          # Main orchestration script
+├── build_test_form.py          # Main orchestration script (with batch support)
 ├── generate_form_data.py       # Data generation logic
 ├── generate_text_image.py      # Handwriting API client & image processing
+│                                # - Batch API support
+│                                # - Connection pooling (Session)
+│                                # - LRU caching
+│                                # - Performance timing logs
 ├── template.jpg                # Base form template image
 ├── template.json               # Field annotations (COCO format)
 ├── requirements                # Python dependencies
@@ -249,7 +262,8 @@ Form-Generation/
 │   ├── form_data_0.json
 │   └── form_image_0.jpg
 └── handwriting-generator/       # Deno service
-    ├── main.ts                 # HTTP server
+    ├── main.ts                 # HTTP server with batch endpoint
+    ├── worker.ts               # Worker script for parallel generation
     └── dev_deps.ts             # Development dependencies
 ```
 
@@ -283,17 +297,46 @@ The `template.json` file uses COCO (Common Objects in Context) annotation format
 
 ## Handwriting Service Details
 
-### API Endpoint
+### API Endpoints
+
+#### Single Text Generation (Backward Compatible)
 - **URL**: `http://localhost:8000/generate`
 - **Method**: POST
 - **Request Body**: `{"text": "string to render"}`
 - **Response**: `{"image": "base64-encoded-png"}`
+- **Use Case**: Individual text generation, fallback when batch fails
+
+#### Batch Generation (Optimized)
+- **URL**: `http://localhost:8000/generate-batch`
+- **Method**: POST
+- **Request Body**: `{"texts": ["text1", "text2", ...]}`
+- **Response**: `{"images": ["base64...", "base64...", ...]}`
+- **Use Case**: Generating multiple texts efficiently
+- **Performance**: Uses parallel Deno Workers for concurrent generation
 
 ### handwritten.js Library
 - Generates handwritten-style text using SVG paths
 - Converts to PNG format for Python compatibility
 - Each call produces slightly different handwriting style
 - Supports any ASCII text input
+- CPU-bound operation (benefits from parallel workers)
+
+### Service Architecture
+
+**Main Process** (`main.ts`):
+- HTTP server handling requests
+- Routes to appropriate endpoint
+- Manages worker pool for batch requests
+
+**Worker Process** (`worker.ts`):
+- Handles individual text generation
+- Runs in parallel with other workers
+- Communicates via message passing
+
+**Worker Pool**:
+- Automatically sized based on CPU cores (`navigator.hardwareConcurrency`)
+- Distributes work round-robin across workers
+- Cleans up after batch completion
 
 ### Service Startup
 ```bash
@@ -301,7 +344,7 @@ cd handwriting-generator
 deno task start
 ```
 
-The service runs continuously, handling multiple requests sequentially.
+The service runs continuously, handling batch requests with parallel workers for optimal performance.
 
 ## Image Processing Details
 
@@ -387,25 +430,79 @@ The handwriting style is determined by `handwritten.js`. To change:
 - Or replace `handwritten.js` with alternative library
 - Update API response format if needed
 
-## Performance Considerations
+## Performance Optimizations
 
-- **Handwriting Service**: Single-threaded, processes requests sequentially
+The system has been optimized for performance with several key improvements:
+
+### Batch API (`/generate-batch`)
+- **Purpose**: Reduces HTTP overhead by generating multiple images in a single request
+- **Implementation**: Accepts array of texts, returns array of images
+- **Benefit**: Eliminates N HTTP round-trips, reducing per-text overhead from ~2.1s to ~0.8s
+- **Usage**: Automatically used by `build_test_form.py` when `use_batch=True`
+
+### Connection Pooling
+- **Implementation**: Uses `requests.Session()` for HTTP connection reuse
+- **Benefit**: Eliminates TCP connection overhead for subsequent requests
+- **Location**: `generate_text_image.py` - `get_session()` function
+
+### LRU Caching
+- **Implementation**: `@lru_cache(maxsize=100)` decorator on handwriting generation
+- **Benefit**: Caches repeated strings (e.g., "X", common dates) to avoid redundant generation
+- **Location**: `generate_text_image.py` - `_generate_handwriting_image_cached()`
+
+### Parallel Generation (Deno Workers)
+- **Implementation**: Uses Deno Web Workers to parallelize CPU-bound handwriting generation
+- **Benefit**: Utilizes multiple CPU cores for concurrent image generation
+- **Configuration**: Automatically detects CPU cores (`navigator.hardwareConcurrency`)
+- **Location**: `handwriting-generator/worker.ts` and batch endpoint in `main.ts`
+
+### Performance Metrics
+- **Before optimization**: ~2.1s per text × 22 fields = ~46s (timed out)
+- **After batch API**: ~0.8s per text in batch, ~35s total per form
+- **After workers**: Further reduction depending on CPU cores available
+- **Timing logs**: Detailed performance breakdown available in console output
+
+### Performance Considerations
+
+- **Handwriting Service**: Now uses parallel workers for CPU-bound generation
 - **Image Processing**: NumPy operations are efficient for cropping
 - **Composition**: PIL paste operations are fast for single images
-- **Bottleneck**: HTTP requests to handwriting service (network latency)
+- **Bottleneck**: CPU-bound handwriting generation (mitigated by workers)
 
-For batch generation, consider:
-- Parallelizing handwriting requests (requires service modifications)
-- Caching common text values
-- Pre-generating handwriting images
+For further optimization:
+- Increase worker count if more CPU cores available
+- Expand cache size for more repeated values
+- Pre-generate common handwriting images
 
 ## Error Handling
 
-The system includes error handling for:
-- Missing template files
-- HTTP errors from handwriting service
-- Invalid JSON responses
-- Image processing failures
-- Missing field annotations (warnings printed)
+The system includes comprehensive error handling:
 
-All errors are logged to console with descriptive messages.
+- **Missing template files**: Clear error messages
+- **HTTP errors from handwriting service**: Detailed error logging with status codes
+- **Batch API failures**: Automatic fallback to individual requests
+- **Invalid JSON responses**: Error messages with raw response for debugging
+- **Image processing failures**: Graceful error handling
+- **Missing field annotations**: Warnings printed, processing continues
+- **Worker failures**: Individual worker errors don't crash batch processing
+
+All errors are logged to console with descriptive messages and timing information.
+
+## Performance Monitoring
+
+The system includes detailed timing logs:
+
+- **Per-field timing**: HTTP request time, decode time, total time
+- **Batch timing**: Total batch time, average per-text time
+- **Image processing**: PIL operations, cropping operations
+- **Form-level timing**: Total form processing time, breakdown by stage
+- **Overall timing**: Multi-form generation statistics
+
+Example output:
+```
+[Form 0] Generating 36 handwriting images in batch...
+  [Batch Timing] 36 texts: HTTP=28.570s, decode=0.007s, total=28.577s (0.794s per text)
+[Form 0] Batch generation completed in 28.577s
+[Form 0] Total form processing time: 34.605s (save: 0.013s)
+[Overall] Generated 1 form(s) in 34.618s (avg: 34.618s per form)
+```
