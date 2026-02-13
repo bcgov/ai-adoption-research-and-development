@@ -22,10 +22,10 @@ EXPLAIN_TOP_MARGIN_FRAC = 0.03
 #   Horizontal margin (fraction of bbox width) on left/right inside the box.
 EXPLAIN_H_MARGIN_FRAC = 0.02
 #   Characters per line for wrapping (used only with patched handwritten.js; see HANDWRITING_LINE_WIDTH.md).
-EXPLAIN_LINE_WIDTH = 70
+EXPLAIN_LINE_WIDTH = 50
 #   Length of the generated paragraph in complete-fill mode (word count range; Faker sentences).
-EXPLAIN_MIN_WORDS = 60
-EXPLAIN_MAX_WORDS = 60
+EXPLAIN_MIN_WORDS = 30
+EXPLAIN_MAX_WORDS = 30
 
 # Other text fields (name, date, phone, income, etc.):
 #   Target height in pixels for single-line text.
