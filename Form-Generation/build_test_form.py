@@ -1,6 +1,6 @@
 from PIL import Image
 from generate_text_image import generate_handwriting_image, generate_handwriting_images_batch, crop_to_text
-from generate_form_data import generate_data
+from generate_form_data import generate_data, ALL_INCOME_FIELDS
 import time
 
 # -----------------------------------------------------------------------------
@@ -90,11 +90,12 @@ def build_test_form(data, number=0, use_batch=True, complete_fill=False):
       # Skip explain_changes from batch collection in complete_fill mode (will be handled separately)
       if name == 'explain_changes' and complete_fill:
         continue
-      if isinstance(value, bool):
-        if value:
+      if value == 'selected':
           idx = len(texts_to_generate)
           texts_to_generate.append('X')
           field_info_map[(name, 'checkbox')] = idx
+      elif value == 'unselected':
+        pass  # No image needed for unselected checkboxes
       else:
         idx = len(texts_to_generate)
         text_value = str(value)
@@ -128,9 +129,7 @@ def build_test_form(data, number=0, use_batch=True, complete_fill=False):
     value = data.get(name)
     annotation = get_annotation_by_category_name(name)
     if value is not None and annotation is not None:
-      if isinstance(value, bool):
-        # If true, generate and paste an 'X' image in the bbox
-        if value:
+      if value == 'selected':
           bbox = annotation['bbox']
           bbox_width = int(bbox[2])
           bbox_height = int(bbox[3])
@@ -165,6 +164,8 @@ def build_test_form(data, number=0, use_batch=True, complete_fill=False):
           paste_x = int(bbox[0]) + (bbox_width - final_width) // 2
           paste_y = int(bbox[1]) + (bbox_height - final_height) // 2
           template_image.paste(x_img, (paste_x, paste_y), mask=x_img)
+      elif value == 'unselected':
+        pass  # No image needed for unselected checkboxes
       else:
         # Handle explain_changes separately in complete_fill mode (skip batch image)
         if name == 'explain_changes' and complete_fill:
@@ -257,7 +258,7 @@ def build_test_form(data, number=0, use_batch=True, complete_fill=False):
             paste_x = int(bbox[0]) + max((bbox_width - new_width) // 2, 0)
             paste_y = int(bbox[1]) + max((bbox_height - new_height) // 2, 0)
             template_image.paste(text_img, (paste_x, paste_y), mask=text_img)
-        elif 'income' in name.lower():
+        elif name in ALL_INCOME_FIELDS:
             fixed_height = TEXT_FIXED_HEIGHT
             horizontal_padding = int(bbox_width * INCOME_H_PADDING_FRAC)
             available_width = bbox_width - 2 * horizontal_padding
@@ -294,7 +295,7 @@ def build_test_form(data, number=0, use_batch=True, complete_fill=False):
             template_image.paste(text_img, (paste_x, paste_y), mask=text_img)
 
   # Save the composed template image
-  output_path = f"output/form_image_{number}.jpg"
+  output_path = f"output/form_{number}.jpg"
   import os
   os.makedirs(os.path.dirname(output_path), exist_ok=True)
   save_start = time.time()
@@ -333,11 +334,24 @@ def generate_single_form(i, use_batch=True, complete_fill=False):
         data_gen_time = time.time() - data_gen_start
         print(f"[Form {i}] Data generation: {data_gen_time:.3f}s")
         
-        # Save data as JSON
+        # Save data as JSON (convert income strings to numeric values)
         os.makedirs("output", exist_ok=True)
-        json_path = f"output/form_data_{i}.json"
+        json_data = {}
+        for key, val in data.items():
+            if key.startswith('_'):
+                continue  # Skip internal keys
+            if key in ALL_INCOME_FIELDS and isinstance(val, str):
+                numeric = float(val.replace(',', ''))
+                json_data[key] = int(numeric) if numeric == int(numeric) else numeric
+            elif key == 'date' and '_date_iso' in data:
+                json_data[key] = data['_date_iso']
+            elif key == 'spouse_date' and '_spouse_date_iso' in data:
+                json_data[key] = data['_spouse_date_iso']
+            else:
+                json_data[key] = val
+        json_path = f"output/form_{i}.json"
         with open(json_path, "w") as f:
-            json.dump(data, f, indent=2)
+            json.dump(json_data, f, indent=2)
         print(f"[Form {i}] Saved data to {json_path}")
         
         # Build and save form image

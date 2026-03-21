@@ -76,7 +76,7 @@ def generate_date(format_str=None):
         else:
             format_str = random.choice(other_formats)
     date = faker.date_this_century()
-    return date.strftime(format_str)
+    return date.strftime(format_str), date.strftime("%Y-%m-%d")
 
 def generate_sin(pattern=None):
     """
@@ -116,6 +116,50 @@ def generate_signature_from_name(full_name):
     ]
     return random.choice(styles)
 
+APPLICANT_INCOME_FIELDS = [
+    "applicant_net_employment_income",
+    "applicant_employment_insurance",
+    "applicant_spousal_support_alimony",
+    "applicant_child_support",
+    "applicant_workbc_financial_support",
+    "applicant_student_funding_loans_bursaries",
+    "applicant_rental_income",
+    "applicant_room_board_income",
+    "applicant_workers_compensation",
+    "applicant_private_pensions_retirement_disability",
+    "applicant_oas_gis",
+    "applicant_trust_income",
+    "applicant_canada_pension_plan_cpp",
+    "applicant_tax_credits_gst_credit",
+    "applicant_child_tax_benefits",
+    "applicant_income_tax_refund",
+    "applicant_other_income_money_received",
+    "applicant_income_of_dependent_children",
+]
+
+SPOUSE_INCOME_FIELDS = [
+    "spouse_net_employment_income",
+    "spouse_employment_insurance",
+    "spouse_spousal_support_alimony",
+    "spouse_child_support",
+    "spouse_workbc_financial_support",
+    "spouse_student_funding_loans_bursaries",
+    "spouse_rental_income",
+    "spouse_room_board_income",
+    "spouse_workers_compensation",
+    "spouse_private_pensions_retirement_disability",
+    "spouse_oas_gis",
+    "spouse_trust_income",
+    "spouse_canada_pension_plan_cpp",
+    "spouse_tax_credits_gst_credit",
+    "spouse_child_tax_benefits",
+    "spouse_income_tax_refund",
+    "spouse_other_income_money_received",
+    # spouse_income_of_dependent_children is intentionally excluded — always blank on the form
+]
+
+ALL_INCOME_FIELDS = set(APPLICANT_INCOME_FIELDS + SPOUSE_INCOME_FIELDS)
+
 def generate_data(complete_fill=False, explain_min_words=30, explain_max_words=60):
   """
   Generate form data with realistic values.
@@ -132,60 +176,81 @@ def generate_data(complete_fill=False, explain_min_words=30, explain_max_words=6
   # For each pair of checkboxes, we'll have percentage-based rules to determine
   # if the Yes or No should be checked
 
+  selected = "selected"
+  unselected = "unselected"
+
   # In need of assistance
   if roll100(70):
-      test_data['checkbox_need_assistance_yes'] = True
+      test_data['checkbox_need_assistance_yes'] = selected
+      test_data['checkbox_need_assistance_no'] = unselected
   else:
-      test_data['checkbox_need_assistance_no'] = True
-			
+      test_data['checkbox_need_assistance_yes'] = unselected
+      test_data['checkbox_need_assistance_no'] = selected
+
   # Received assets
   if roll100(50):
-      test_data['checkbox_family_assets_yes'] = True
+      test_data['checkbox_family_assets_yes'] = selected
+      test_data['checkbox_family_assets_no'] = unselected
   else:
-      test_data['checkbox_family_assets_no'] = True
+      test_data['checkbox_family_assets_yes'] = unselected
+      test_data['checkbox_family_assets_no'] = selected
 
   # Shelter cost change
   if roll100(50):
-      test_data['checkbox_shelter_yes'] = True
+      test_data['checkbox_shelter_yes'] = selected
+      test_data['checkbox_shelter_no'] = unselected
   else:
-      test_data['checkbox_shelter_no'] = True
+      test_data['checkbox_shelter_yes'] = unselected
+      test_data['checkbox_shelter_no'] = selected
 
   # Dependants
   if roll100(50):
-      test_data['checkbox_dependants_yes'] = True
+      test_data['checkbox_dependants_yes'] = selected
+      test_data['checkbox_dependants_no'] = unselected
   else:
-      test_data['checkbox_dependants_no'] = True
+      test_data['checkbox_dependants_yes'] = unselected
+      test_data['checkbox_dependants_no'] = selected
 
   # Applicant Check Boxes
   # Employment Changes
   if roll100(50):
-       test_data['checkbox_employment_changes_yes'] = True
+       test_data['checkbox_employment_changes_yes'] = selected
+       test_data['checkbox_employment_changes_no'] = unselected
   else:
-       test_data['checkbox_employment_changes_no'] = True
-  
+       test_data['checkbox_employment_changes_yes'] = unselected
+       test_data['checkbox_employment_changes_no'] = selected
+
   # Attending School
   if roll100(50):
-       test_data['checkbox_school_yes'] = True
+       test_data['checkbox_school_yes'] = selected
+       test_data['checkbox_school_no'] = unselected
   else:
-       test_data['checkbox_school_no'] = True
-  
+       test_data['checkbox_school_yes'] = unselected
+       test_data['checkbox_school_no'] = selected
+
   # Looking for work
   if roll100(50):
-       test_data['checkbox_work_yes'] = True
+       test_data['checkbox_work_yes'] = selected
+       test_data['checkbox_work_no'] = unselected
   else:
-       test_data['checkbox_work_no'] = True
+       test_data['checkbox_work_yes'] = unselected
+       test_data['checkbox_work_no'] = selected
 
   # Moved
   if roll100(50):
-       test_data['checkbox_moved_yes'] = True
+       test_data['checkbox_moved_yes'] = selected
+       test_data['checkbox_moved_no'] = unselected
   else:
-       test_data['checkbox_moved_no'] = True
+       test_data['checkbox_moved_yes'] = unselected
+       test_data['checkbox_moved_no'] = selected
 
   # Warrants
   if roll100(20):
-       test_data['checkbox_warrant_yes'] = True
+       test_data['checkbox_warrant_yes'] = selected
+       test_data['checkbox_warrant_no'] = unselected
   else:
-       test_data['checkbox_warrant_no'] = True
+       test_data['checkbox_warrant_yes'] = unselected
+       test_data['checkbox_warrant_no'] = selected
 
   # Explain changes
   if complete_fill:
@@ -200,33 +265,43 @@ def generate_data(complete_fill=False, explain_min_words=30, explain_max_words=6
   if (hasSpouse):
     # Employment Changes
     if roll100(50):
-        test_data['checkbox_employment_changes_spouse_yes'] = True
+        test_data['checkbox_employment_changes_spouse_yes'] = selected
+        test_data['checkbox_employment_changes_spouse_no'] = unselected
     else:
-        test_data['checkbox_employment_changes_spouse_no'] = True
-    
+        test_data['checkbox_employment_changes_spouse_yes'] = unselected
+        test_data['checkbox_employment_changes_spouse_no'] = selected
+
     # Attending School
     if roll100(50):
-        test_data['checkbox_school_spouse_yes'] = True
+        test_data['checkbox_school_spouse_yes'] = selected
+        test_data['checkbox_school_spouse_no'] = unselected
     else:
-        test_data['checkbox_school_spouse_no'] = True
-    
+        test_data['checkbox_school_spouse_yes'] = unselected
+        test_data['checkbox_school_spouse_no'] = selected
+
     # Looking for work
     if roll100(50):
-        test_data['checkbox_work_spouse_yes'] = True
+        test_data['checkbox_work_spouse_yes'] = selected
+        test_data['checkbox_work_spouse_no'] = unselected
     else:
-        test_data['checkbox_work_spouse_no'] = True
+        test_data['checkbox_work_spouse_yes'] = unselected
+        test_data['checkbox_work_spouse_no'] = selected
 
     # Moved
     if roll100(50):
-        test_data['checkbox_moved_spouse_yes'] = True
+        test_data['checkbox_moved_spouse_yes'] = selected
+        test_data['checkbox_moved_spouse_no'] = unselected
     else:
-        test_data['checkbox_moved_spouse_no'] = True
+        test_data['checkbox_moved_spouse_yes'] = unselected
+        test_data['checkbox_moved_spouse_no'] = selected
 
     # Warrants
     if roll100(20):
-        test_data['checkbox_warrant_spouse_yes'] = True
+        test_data['checkbox_warrant_spouse_yes'] = selected
+        test_data['checkbox_warrant_spouse_no'] = unselected
     else:
-        test_data['checkbox_warrant_spouse_no'] = True
+        test_data['checkbox_warrant_spouse_yes'] = unselected
+        test_data['checkbox_warrant_spouse_no'] = selected
 
   # Income Section
   # This can help identify fields: https://raw.githubusercontent.com/bcgov/ai-adoption-research-and-development/refs/heads/main/Template-alignment/outputs/visualizations/extraction_visualization.jpg
@@ -245,19 +320,20 @@ def generate_data(complete_fill=False, explain_min_words=30, explain_max_words=6
                  return None
        
   # Applicant Area
-  for i in range(1, 19):
-      test_data[f'income{i}'] = valueOrZero()
+  for field_name in APPLICANT_INCOME_FIELDS:
+      test_data[field_name] = valueOrZero()
   # Spouse
   if (hasSpouse):
-    # One less, b/c that field is intended blank
-    for i in range(1, 18):
-      test_data[f'spouse_income{i}'] = valueOrZero()
+    for field_name in SPOUSE_INCOME_FIELDS:
+      test_data[field_name] = valueOrZero()
 
   # Declaration Section
   # Applicant
   name = generate_full_name()
   test_data['signature'] = generate_signature_from_name(name)
-  test_data['date'] = generate_date()
+  date_display, date_iso = generate_date()
+  test_data['date'] = date_display
+  test_data['_date_iso'] = date_iso
   test_data['name'] = name
   test_data['phone'] = generate_telephone()
   test_data['sin'] = generate_sin()
@@ -266,7 +342,9 @@ def generate_data(complete_fill=False, explain_min_words=30, explain_max_words=6
   if (hasSpouse):
     spouse_name = generate_full_name()
     test_data['spouse_signature'] = generate_signature_from_name(spouse_name)
-    test_data['spouse_date'] = generate_date()
+    spouse_date_display, spouse_date_iso = generate_date()
+    test_data['spouse_date'] = spouse_date_display
+    test_data['_spouse_date_iso'] = spouse_date_iso
     test_data['spouse_name'] = spouse_name
     test_data['spouse_phone'] = generate_telephone()
     test_data['spouse_sin'] = generate_sin()

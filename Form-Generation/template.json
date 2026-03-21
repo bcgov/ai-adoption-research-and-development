@@ -1300,147 +1300,147 @@
     },
     {
       "id": 34,
-      "name": "income1"
+      "name": "applicant_net_employment_income"
     },
     {
       "id": 35,
-      "name": "income2"
+      "name": "applicant_employment_insurance"
     },
     {
       "id": 36,
-      "name": "income3"
+      "name": "applicant_spousal_support_alimony"
     },
     {
       "id": 37,
-      "name": "income4"
+      "name": "applicant_child_support"
     },
     {
       "id": 38,
-      "name": "income5"
+      "name": "applicant_workbc_financial_support"
     },
     {
       "id": 39,
-      "name": "income6"
+      "name": "applicant_student_funding_loans_bursaries"
     },
     {
       "id": 40,
-      "name": "income7"
+      "name": "applicant_rental_income"
     },
     {
       "id": 41,
-      "name": "income8"
+      "name": "applicant_room_board_income"
     },
     {
       "id": 42,
-      "name": "income9"
+      "name": "applicant_workers_compensation"
     },
     {
       "id": 43,
-      "name": "income10"
+      "name": "applicant_private_pensions_retirement_disability"
     },
     {
       "id": 44,
-      "name": "income11"
+      "name": "applicant_oas_gis"
     },
     {
       "id": 45,
-      "name": "income12"
+      "name": "applicant_trust_income"
     },
     {
       "id": 46,
-      "name": "income13"
+      "name": "applicant_canada_pension_plan_cpp"
     },
     {
       "id": 47,
-      "name": "income14"
+      "name": "applicant_tax_credits_gst_credit"
     },
     {
       "id": 48,
-      "name": "income15"
+      "name": "applicant_child_tax_benefits"
     },
     {
       "id": 49,
-      "name": "income16"
+      "name": "applicant_income_tax_refund"
     },
     {
       "id": 50,
-      "name": "income17"
+      "name": "applicant_other_income_money_received"
     },
     {
       "id": 51,
-      "name": "income18"
+      "name": "applicant_income_of_dependent_children"
     },
     {
       "id": 52,
-      "name": "spouse_income1"
+      "name": "spouse_net_employment_income"
     },
     {
       "id": 53,
-      "name": "spouse_income2"
+      "name": "spouse_employment_insurance"
     },
     {
       "id": 54,
-      "name": "spouse_income3"
+      "name": "spouse_spousal_support_alimony"
     },
     {
       "id": 55,
-      "name": "spouse_income4"
+      "name": "spouse_child_support"
     },
     {
       "id": 56,
-      "name": "spouse_income5"
+      "name": "spouse_workbc_financial_support"
     },
     {
       "id": 57,
-      "name": "spouse_income6"
+      "name": "spouse_student_funding_loans_bursaries"
     },
     {
       "id": 58,
-      "name": "spouse_income7"
+      "name": "spouse_rental_income"
     },
     {
       "id": 59,
-      "name": "spouse_income8"
+      "name": "spouse_room_board_income"
     },
     {
       "id": 60,
-      "name": "spouse_income9"
+      "name": "spouse_workers_compensation"
     },
     {
       "id": 61,
-      "name": "spouse_income10"
+      "name": "spouse_private_pensions_retirement_disability"
     },
     {
       "id": 62,
-      "name": "spouse_income11"
+      "name": "spouse_oas_gis"
     },
     {
       "id": 63,
-      "name": "spouse_income12"
+      "name": "spouse_trust_income"
     },
     {
       "id": 64,
-      "name": "spouse_income13"
+      "name": "spouse_canada_pension_plan_cpp"
     },
     {
       "id": 65,
-      "name": "spouse_income14"
+      "name": "spouse_tax_credits_gst_credit"
     },
     {
       "id": 66,
-      "name": "spouse_income15"
+      "name": "spouse_child_tax_benefits"
     },
     {
       "id": 67,
-      "name": "spouse_income16"
+      "name": "spouse_income_tax_refund"
     },
     {
       "id": 68,
-      "name": "spouse_income17"
+      "name": "spouse_other_income_money_received"
     },
     {
       "id": 69,
-      "name": "spouse_income18"
+      "name": "spouse_income_of_dependent_children"
     },
     {
       "id": 70,
