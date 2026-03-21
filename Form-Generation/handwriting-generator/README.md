@@ -1,59 +1,45 @@
-# Handwriting Generator Service
 
-Node HTTP service for generating handwriting images from text using the local patched **handwritten.js** (supports `lineWidth` for the explain_changes field).
+# Handwriting Generator Deno Service
 
-## Setup
+This directory contains a Deno-based HTTP service for generating handwriting images from text using handwritten.js.
 
-1. **Install dependencies in the local handwritten.js clone** (once):
+## Requirements
 
-   ```sh
-   cd Form-Generation/handwritten.js && npm install && cd ../handwriting-generator
-   ```
+- [Deno](https://deno.land/) (v1.28+)
 
-2. **Start the server:**
+## How to Run the Service
+
+1. **Install Deno** (if not already installed):
+   - See <https://deno.land/manual/getting_started/installation>
+
+2. **Navigate to this service directory:**
 
    ```sh
    cd Form-Generation/handwriting-generator
-   node server-node.js
    ```
 
-   Listens on [http://localhost:8000](http://localhost:8000).
-
-## Performance and tuning
-
-The server uses a **worker thread pool** to generate multiple handwriting images in parallel within each batch request:
-
-- **Default**: Pool size = 2× CPU cores (minimum 1). The actual size used for a request is `min(batch size, pool size)`.
-- **Override**: Set the `HANDWRITING_WORKERS` environment variable to fix the pool size:
-  ```sh
-  HANDWRITING_WORKERS=8 node server-node.js
-  ```
-- At startup, the server logs the effective worker count (default or from `HANDWRITING_WORKERS`).
-- Repeated texts (with no `options`) are served from an in-memory cache, which speeds up multi-form runs that share content (e.g. many "X" checkmarks).
-
-## Running form generation
-
-1. Start the server (see above), then from `Form-Generation`:
+3. **Start the service:**
 
    ```sh
-   python build_test_form.py 1 --complete-fill
+   deno task start
    ```
 
-   To generate multiple forms (multi-page) in parallel:
-   ```sh
-   python build_test_form.py 4              # 4 forms, default parallelism
-   MAX_PARALLEL_FORMS=8 python build_test_form.py 8 --complete-fill
-   ```
-   Form-level parallelism is controlled by `MAX_PARALLEL_FORMS` (see Form-Generation/README.md).
+   - The service will start on [http://localhost:8000](http://localhost:8000)
 
-   Or use `./start_handwriting_server.sh` from `Form-Generation` to start the server in one terminal, then run the Python script in another.
+4. **Test the service:**
+   - Send a POST request to `http://localhost:8000/generate` with JSON body:
 
-## API
+     ```json
+     { "text": "Your text here" }
+     ```
 
-- **POST /generate** – Single text: `{ "text": "Your text here" }` → `{ "image": "data:image/png;base64,..." }`
-- **POST /generate-batch** – Batch: `{ "texts": ["...", "..."], "options": { "lineWidth": 95 } }` → `{ "images": ["data:image/png;base64,...", ...] }`
+   - The response will be a JSON object with a base64-encoded PNG image:
 
-## Example: Python client
+     ```json
+     { "image": "data:image/png;base64,..." }
+     ```
+
+## Example: Python Client
 
 ```python
 import requests
@@ -73,4 +59,5 @@ else:
     print(resp.json())
 ```
 
-For more details, see `server-node.js`.
+---
+For more details, see the code in `main.ts`.

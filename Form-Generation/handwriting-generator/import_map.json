@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "handwritten.js": "npm:handwritten.js"
+  }
+}

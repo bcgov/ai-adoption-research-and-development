@@ -1,6 +1,6 @@
 # Form Generation Pipeline
 
-This directory contains scripts and tools for generating synthetic form images with handwritten text, using both Python and a Deno-based handwriting service.
+This directory contains scripts and tools for generating synthetic form images with handwritten text, using Python and a Node-based handwriting service.
 
 ## 1. Python Environment Setup
 
@@ -19,21 +19,23 @@ This directory contains scripts and tools for generating synthetic form images w
 
 ## 2. Start the Handwriting Generator Service
 
-The form generation pipeline relies on a Deno service to generate handwriting images from text.
+The form generation pipeline relies on a Node service to generate handwriting images from text.
 
-1. **Navigate to the Deno service directory:**
+1. **Start the server** (from this directory):
+
+ ```sh
+ ./start_handwriting_server.sh
+ ```
+
+   Or from the service directory:
 
  ```sh
  cd handwriting-generator
+ node server-node.js
  ```
 
-1. **Start the service:**
-
- ```sh
- deno task start
- ```
-
-- The service will run at <http://localhost:8000>
+- The service runs at <http://localhost:8000>
+- **Optional**: To tune how many images are generated in parallel per batch, set `HANDWRITING_WORKERS` when starting the server (default is 2× CPU cores). See `handwriting-generator/README.md` for details.
 
 ## 3. Generate Form Images
 
@@ -49,9 +51,47 @@ The form generation pipeline relies on a Deno service to generate handwriting im
   - Generate random form data and save it as `output/form_data_{index}.json`
   - Generate a composed form image as `output/form_image_{index}.jpg`
 
+### Complete Fill Mode
+
+To generate forms where all fields are filled with proper data, use the `--complete-fill` (or `-c`) flag:
+
+ ```sh
+ python build_test_form.py <num> --complete-fill
+ ```
+
+When complete fill mode is enabled:
+- All income fields are populated with non-zero monetary values
+- Spouse information is always included (spouse fields are always filled)
+- All applicable fields contain realistic data
+- The "explain changes" field contains longer text that fills the text box (single-pass with configurable line width)
+
+This is useful for generating forms with comprehensive data for testing scenarios where you need fully populated forms.
+
+### Parallel Generation
+
+There are two levels of parallelism:
+
+1. **Form-level (Python)** – How many forms are built at the same time.
+   - **Default**: Up to 4 forms generated concurrently.
+   - **Control**: Set `MAX_PARALLEL_FORMS`:
+     ```sh
+     MAX_PARALLEL_FORMS=3 python build_test_form.py 10  # 10 forms, 3 at a time
+     MAX_PARALLEL_FORMS=1 python build_test_form.py 5   # Sequential (no form parallelism)
+     MAX_PARALLEL_FORMS=8 python build_test_form.py 20  # 8 forms at a time
+     ```
+
+2. **Batch-level (Node server)** – How many handwriting images are generated in parallel inside each batch request.
+   - **Default**: 2× CPU cores (reported in server startup logs).
+   - **Control**: Start the server with `HANDWRITING_WORKERS` (e.g. `HANDWRITING_WORKERS=8 node server-node.js`). See `handwriting-generator/README.md`.
+
+**Performance** (with default server and form parallelism):
+- Single form: ~8–9s (batch + compose)
+- 4 forms in parallel: ~13–14s total (~3–4s per form)
+- 10 forms: ~30s total with default parallelism
+
 ## Notes
 
-- The script uses the Deno handwriting service for handwriting image generation. Make sure it is running before executing the Python script.
+- The script uses the Node handwriting service for handwriting image generation. Make sure it is running before executing the Python script.
 - This case is highly specialized to the Montly Report Form, but components outside of the `build_test_form.py` file should all be reusable for other forms.
 
 ## Previous Attempts
