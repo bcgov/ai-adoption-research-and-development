@@ -1,0 +1,112 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "alias-rahil",
+      "name": "Rahil Kabani",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/59060219?v=4",
+      "profile": "https://alias-rahil.github.io/",
+      "contributions": [
+        "code",
+        "doc",
+        "maintenance"
+      ]
+    },
+    {
+      "login": "newyork-anthonyng",
+      "name": "Anthony Ng",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/14035529?v=4",
+      "profile": "http://anthonyng.me",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "MrBenJ",
+      "name": "Ben Junya",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/7918387?v=4",
+      "profile": "http://modernjsbyexample.net",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "hsrambo07",
+      "name": "Harsh SInghal",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/60664245?v=4",
+      "profile": "https://github.com/hsrambo07",
+      "contributions": [
+        "code",
+        "maintenance"
+      ]
+    },
+    {
+      "login": "etnnth",
+      "name": "etienne",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/46907310?v=4",
+      "profile": "https://github.com/etnnth",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ashikka",
+      "name": "Ashikka Gupta",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58368421?v=4",
+      "profile": "https://github.com/ashikka",
+      "contributions": [
+        "maintenance",
+        "code"
+      ]
+    },
+    {
+      "login": "SuyashSonawane",
+      "name": "Suyash Sonawane",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35629339?v=4",
+      "profile": "https://suyashsonawane.me",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "Vishal-sys-code",
+      "name": "Vishal Pandey",
+      "avatar_url": "https://avatars.githubusercontent.com/u/68536727?v=4",
+      "profile": "https://github.com/Vishal-sys-code",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "AnirudhBot",
+      "name": "Anirudh Sharma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/78658727?v=4",
+      "profile": "https://github.com/AnirudhBot",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "newtonmunene99",
+      "name": "Newton Munene",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29271333?v=4",
+      "profile": "https://www.newtonmunene.dev/",
+      "contributions": [
+        "bug",
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "handwritten.js",
+  "projectOwner": "alias-rahil",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}

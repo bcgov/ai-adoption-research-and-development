@@ -1,0 +1,8 @@
+docs/
+screenshots/
+.github/
+.eslintrc.json
+.eslintignore
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+.all-contributorsrc
