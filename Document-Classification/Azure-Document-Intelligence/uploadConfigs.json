@@ -1,0 +1,4 @@
+[
+  { "label": "monthly-report", "fromFolder": "./report_documents", "blobFolder": "monthly-reports" },
+  { "label": "other", "fromFolder": "./other_documents", "blobFolder": "other" }
+]

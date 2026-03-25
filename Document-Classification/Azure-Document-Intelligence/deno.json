@@ -1,0 +1,12 @@
+{
+  "tasks": {
+    "dev": "deno run --watch main.ts",
+    "launch": "deno run --env-file --allow-read --allow-write --allow-env --allow-net --allow-sys main.ts",
+    "demo": "deno run --env-file --allow-read --allow-write --allow-env --allow-net --allow-sys  demo/server.ts"
+  },
+  "imports": {
+    "@azure-rest/ai-document-intelligence": "npm:@azure-rest/ai-document-intelligence@^1.1.0",
+    "@azure/storage-blob": "npm:@azure/storage-blob@^12.30.0",
+    "@std/assert": "jsr:@std/assert@1"
+  }
+}
